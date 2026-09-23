@@ -47,8 +47,12 @@ def main(argv=None) -> int:
         parser.error("OPENAI_API_KEY is required; use --dry-run for offline verification")
 
     # This reader deliberately does not depend on matcher.data or its loader.
-    with args.csv.open(encoding="utf-8-sig", newline="") as handle:
-        descriptions = [row["description"] for row in csv.DictReader(handle)]
+    extra = args.csv.with_name("synthetic_extra.csv")
+    sources = [args.csv] + ([extra] if extra != args.csv and extra.exists() else [])
+    descriptions = []
+    for source in sources:
+        with source.open(encoding="utf-8-sig", newline="") as handle:
+            descriptions.extend(row["description"] for row in csv.DictReader(handle))
     sentences = [sentence for description in descriptions for sentence in split_sentences(description)]
     texts = list(dict.fromkeys([*descriptions, *sentences]))
     scorer = EmbeddingScorer(cache_path=args.output, client=ZeroEmbeddingsClient() if args.dry_run else None)
