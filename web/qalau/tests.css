@@ -1,0 +1,23 @@
+@font-face{font-family:Plex;src:url('/fonts/ibm-plex-sans.ttf') format('truetype');font-display:swap}
+@font-face{font-family:Serif;src:url('/fonts/source-serif-4.ttf') format('truetype');font-display:swap}
+#live-cases{padding:12px 0 40px;border-bottom:1px solid var(--line);margin-bottom:36px}
+.live-heading,.case-heading{display:flex;align-items:center;justify-content:space-between;gap:16px}
+.live-heading{margin-bottom:22px}.live-heading h2{font-size:28px}.live-heading .eyebrow{margin-bottom:8px}
+#run-cases{min-height:46px;padding:10px 22px;background:var(--accent);color:var(--bg);border:1px solid var(--accent);border-radius:7px;flex-shrink:0}
+#run-cases:disabled{opacity:.65;cursor:wait}#cases-summary{font-size:19px;color:var(--accent)}
+.live-meta{font-size:12px;color:var(--muted);overflow-wrap:anywhere}#cases-metadata{margin:8px 0 20px}
+#cases-notice{color:var(--muted);font-size:14px}#cases-notice:not(:empty){padding:0 0 20px}
+#case-list{display:grid;gap:20px}.live-case{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:24px;min-width:0;overflow-wrap:anywhere}
+.live-case.failed{border-color:var(--error)}.case-heading{align-items:flex-start;margin-bottom:8px}.case-heading .badge{flex-shrink:0}
+.request-chips{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;margin:18px 0}
+.request-chips li{font-size:13px;padding:5px 10px;border:1px solid var(--line);border-radius:20px;color:var(--muted)}
+.case-outcome{font-size:18px;font-weight:500;margin:22px 0 8px}.shortfall{font-size:14px;color:var(--muted)}
+.live-cards{list-style:none;padding:0;margin:20px 0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.live-card{min-width:0;padding:18px;background:var(--bg);border-radius:7px;border:1px solid var(--line)}
+.card-name{font-weight:500;font-size:17px}.card-price{color:var(--accent);margin-top:4px!important}.primary-reason{font-size:12px;margin:16px 0!important;color:var(--accent)}
+.primary-reason code{overflow-wrap:anywhere}.card-explanation{font-size:14px;margin-bottom:16px!important}
+.test-report .case-checks summary{color:var(--accent);font-size:14px}.case-checks ul{padding-left:20px;margin:8px 0}
+.case-checks li{font-size:12px;margin:12px 0}.case-checks li p{color:var(--muted);margin-top:5px}.check-ok strong{color:var(--accent)}.check-failed strong{color:var(--error)}
+.case-timing{margin-top:16px!important}.live-empty{padding:20px 0;color:var(--muted)}.pytest-title{margin-bottom:24px}
+@media(max-width:850px){.live-cards{grid-template-columns:1fr}}
+@media(max-width:600px){.live-heading{align-items:stretch;flex-direction:column}.live-case{padding:18px}.live-heading h2{font-size:25px}.case-heading h3{font-size:16px}.live-card{padding:16px}}

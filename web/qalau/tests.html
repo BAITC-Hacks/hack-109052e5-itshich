@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Результаты тестов — QALAU</title>
+  <link rel="stylesheet" href="/tests.css">
   <style>
 :root{color-scheme:dark;--bg:#191b19;--surface:#222521;--text:#eeeee7;--muted:#b2b9ae;--line:#42493f;--accent:#c6d4b1;--tint:#30392b;--error:#ffb5ac;font-family:Plex,'Segoe UI',sans-serif;color:var(--text);background:var(--bg)}*{box-sizing:border-box}body{margin:0}main{margin:auto}button{font:inherit;color:inherit;cursor:pointer}a{color:inherit;text-underline-offset:4px}a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:4px}h1,h2,h3,p{margin:0}h1{font-family:Serif,Georgia,serif;font-size:clamp(34px,4vw,52px);font-weight:450;line-height:1.12;letter-spacing:-.035em}h2{font-size:20px;font-weight:500}h3{font-size:17px;font-weight:500}p{line-height:1.6}.brand{font-size:25px;font-weight:600;text-decoration:none}.brand-dot{color:var(--accent)}
 .test-report main{max-width:1200px;padding:0 32px}.test-report nav{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:28px 0;border-bottom:1px solid var(--line)}.test-report nav>a:last-child{font-size:14px}.test-report header{padding:48px 0 28px}.eyebrow{color:var(--accent);font-size:13px;margin-bottom:14px}.test-report #metadata{color:var(--muted);margin-top:20px;font-size:14px}.test-report #notice{overflow-wrap:anywhere;color:var(--muted);line-height:1.7}.test-report #notice:not(:empty){padding:20px;border:1px solid var(--line);margin:20px 0}.test-report #metrics{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:12px 0 28px}.metric{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:20px}.metric>span{display:block;color:var(--muted);font-size:13px}.metric strong{display:block;font-weight:500;font-size:27px;margin-top:10px}.metric.passed strong{color:var(--accent)}.metric.failed strong{color:var(--error)}.filters{display:flex;gap:8px;margin-bottom:32px}.filters button{min-height:44px;padding:8px 20px;border:1px solid var(--line);border-radius:24px;background:transparent}.filters button[aria-pressed=true]{background:var(--accent);color:var(--bg);border-color:var(--accent)}.suite-section{margin-bottom:36px}.suite-section h2{margin-bottom:16px}.test-report table{width:100%;table-layout:fixed;border-collapse:collapse;font-size:14px}.test-report th{text-align:left;color:var(--muted);font-weight:400;font-size:12px}.test-report td,.test-report th{padding:16px 10px;border-bottom:1px solid var(--line);vertical-align:top}.test-report th:first-child{width:66%;padding-left:0}.test-report td:first-child{padding-left:0}.test-report th:last-child{width:14%}.suite-path{display:block;font-size:12px;color:var(--muted);margin-bottom:7px;overflow-wrap:anywhere}.test-name{overflow-wrap:anywhere}.badge{display:inline-block;padding:4px 8px;border-radius:5px;font-size:12px;background:#333832;color:var(--muted)}.badge.passed{background:var(--tint);color:var(--accent)}.badge.failed,.badge.error{background:#482a28;color:var(--error)}.duration{color:var(--muted);font-variant-numeric:tabular-nums}.test-report details{margin-top:10px}.test-report summary{cursor:pointer;color:var(--error);padding:10px 0;font-size:12px}.test-report pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;line-height:1.6}.demo-section{border-top:1px solid var(--line);padding-top:32px}.demo-section>p{color:var(--muted);margin:12px 0 24px;font-size:14px}#demos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}#demos article{padding:24px;border:1px solid var(--line);border-radius:8px;background:var(--surface);min-width:0}#demos article p{font-size:13px;overflow-wrap:anywhere}.ordered-ids{margin-top:8px;color:var(--accent)}.test-report footer{display:flex;justify-content:space-between;gap:20px;padding:24px 0 32px;color:var(--muted);font-size:13px}@media(max-width:600px){.test-report main{padding:0 20px}.test-report #metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.metric:last-child{grid-column:1/-1}.metric{padding:16px}.test-report th:first-child{width:52%}.test-report th:last-child{width:20%}.test-report td,.test-report th{padding:12px 4px}.badge{font-size:11px;padding:4px}.test-report table{font-size:12px}.test-report #demos{grid-template-columns:1fr}.test-report footer{display:block}.test-report footer a{display:block;margin-top:16px}.test-report header{padding-top:32px}}
@@ -13,6 +14,18 @@
   <main>
     <nav aria-label="Навигация"><a href="/" class="brand">QALAU<span class="brand-dot">.</span></a><a href="/docs-ui">Документация ↗</a></nav>
     <header><p class="eyebrow">Проверка качества</p><h1>Результаты тестов</h1><p id="metadata">Загружаем отчёт…</p></header>
+    <section id="live-cases" aria-labelledby="live-title">
+      <div class="live-heading"><div><p class="eyebrow">Настоящие запросы · фактические ответы</p><h2 id="live-title">Живые тест-кейсы</h2></div><button id="run-cases" type="button">Прогнать сейчас</button></div>
+      <p id="cases-summary" aria-live="polite">Загружаем живые кейсы…</p>
+      <p id="cases-metadata" class="live-meta"></p>
+      <p id="cases-notice" role="status" aria-live="polite"></p>
+      <div class="filters" role="group" aria-label="Фильтр живых кейсов">
+        <button type="button" data-case-filter="all" aria-pressed="true">Все</button>
+        <button type="button" data-case-filter="failed" aria-pressed="false">Ошибки</button>
+      </div>
+      <div id="case-list"></div>
+    </section>
+    <h2 class="pytest-title">Автоматические тесты · pytest</h2>
     <div id="notice" role="status" aria-live="polite"></div>
     <section id="metrics" aria-label="Итоги запуска"></section>
     <div class="filters" role="group" aria-label="Фильтр тестов">
@@ -40,7 +53,7 @@ function seconds(value) { return `${Number(value || 0).toLocaleString('ru-RU', {
 function renderSuites() {
   $('#suites').replaceChildren();
   $('#notice').textContent = '';
-  if (!report.suites.length) {
+  if (!report.suites?.length) {
     $('#notice').textContent = 'отчёт ещё не сформирован: uv run python scripts/test_report.py';
     return;
   }
@@ -76,7 +89,7 @@ function renderSuites() {
 }
 function render() {
   $('#metadata').textContent = `Коммит ${report.git_sha} · ${new Date(report.generated_at).toLocaleString('ru-RU')} · время вашего устройства`;
-  const s = report.summary;
+  const s = report.summary || {passed:0,failed:0,errors:0,skipped:0,total:0,duration_s:0};
   for (const [label, value, cls] of [['Пройдено',s.passed,'passed'],['Ошибки',s.failed+s.errors,'failed'],['Пропущено',s.skipped,'skipped'],['Всего',s.total,''],['Время тестов',seconds(s.duration_s),'']]) {
     const tile = el('div', undefined, `metric ${cls}`); tile.append(el('span',label), el('strong',value)); $('#metrics').append(tile);
   }
@@ -95,6 +108,89 @@ for (const button of document.querySelectorAll('[data-filter]')) button.addEvent
   for (const other of document.querySelectorAll('[data-filter]')) other.setAttribute('aria-pressed', String(other === button));
   if (report) renderSuites();
 });
+let liveReport = {cases: []}, caseFilter = 'all';
+const outcomeTitles = {matched:'Подобрали', no_category_in_city:'В этом городе такой категории нет', none_eligible:'Кандидаты есть, но…', request_error:'Ошибка запроса 422'};
+const money = value => Number(value).toLocaleString('ru-RU') + ' ₸';
+function renderCases() {
+  const cases = liveReport.cases || [], summary = liveReport.summary;
+  $('#cases-summary').textContent = summary
+    ? `Пройдено ${summary.passed} · Ошибок ${summary.failed} · Всего ${summary.total}`
+    : 'Запусков пока нет';
+  $('#cases-metadata').textContent = liveReport.generated_at
+    ? `${new Date(liveReport.generated_at).toLocaleString('ru-RU')} · время вашего устройства · коммит ${liveReport.git_sha}` : '';
+  const list = $('#case-list'); list.replaceChildren();
+  for (const item of cases.filter(c => caseFilter !== 'failed' || c.status === 'failed')) {
+    const block = el('article', undefined, `live-case ${item.status}`);
+    const heading = el('div', undefined, 'case-heading');
+    heading.append(el('h3', item.title), el('span', statuses[item.status] || item.status, `badge ${item.status}`));
+    block.append(heading, el('p', item.id, 'live-meta'));
+    const request = item.request, chips = el('ul', undefined, 'request-chips');
+    for (const value of [request.city, request.event_date, request.event_format, request.category,
+      money(request.budget_kzt), request.duration_hours == null ? null : `${request.duration_hours} ч`, request.language]) {
+      if (value != null) chips.append(el('li', value));
+    }
+    block.append(chips);
+    const response = item.response, outcome = response.status_code === 422 ? 'request_error' : response.outcome;
+    block.append(el('h4', outcomeTitles[outcome] || response.outcome_title_ru || 'Ошибка запуска', 'case-outcome'));
+    if (response.shortfall_note || response.detail) block.append(el('p', response.shortfall_note || response.detail, 'shortfall'));
+    const cards = el('ol', undefined, 'live-cards');
+    for (const [index, card] of (response.cards || []).entries()) {
+      const row = el('li', undefined, 'live-card');
+      row.append(el('p', `${index + 1}. ${card.name}`, 'card-name'), el('p', `от ${money(card.price_from_kzt)}`, 'card-price'));
+      const reasons = card.facts?.reasons || item.card_reasons?.[card.id] || [];
+      const primary = reasons.find(reason => reason.primary);
+      const reasonLine = el('p', undefined, 'primary-reason');
+      reasonLine.append(el('span', 'Главная причина: '), el('code', primary?.code || 'не передана'));
+      const phrase = primary?.phrase || primary?.label || primary?.text;
+      if (phrase) reasonLine.append(el('span', ` · ${phrase}`));
+      row.append(reasonLine, el('p', card.explanation || 'Объяснение отсутствует', 'card-explanation'),
+        el('p', `${card.id} · explanation_source: ${card.explanation_source || '—'}`, 'live-meta'));
+      cards.append(row);
+    }
+    if (cards.children.length) block.append(cards);
+    const checks = el('details', undefined, 'case-checks');
+    checks.open = item.status === 'failed';
+    checks.append(el('summary', `Проверки ожиданий · ${item.checks.filter(c => c.ok).length}/${item.checks.length}`));
+    const checkList = el('ul');
+    for (const check of item.checks) {
+      const row = el('li', undefined, check.ok ? 'check-ok' : 'check-failed');
+      row.append(el('strong', `${check.ok ? '✓ OK' : '✕ FAIL'} · ${check.name}`), el('p', check.detail));
+      checkList.append(row);
+    }
+    checks.append(checkList); block.append(checks);
+    block.append(el('p', `${Number(item.timing_ms).toLocaleString('ru-RU')} мс · semantic_backend: ${item.semantic_backend || '—'} · explanation_source: ${(item.explanation_source || []).join(', ') || '—'}`, 'live-meta case-timing'));
+    list.append(block);
+  }
+  if (!list.children.length) list.append(el('p', caseFilter === 'failed' && cases.length
+    ? 'Ошибок нет: все ожидания выполнены.' : liveReport.note || 'Кейсы ещё не запущены. Нажмите «Прогнать сейчас».', 'live-empty'));
+}
+async function loadCases(run = false) {
+  const button = $('#run-cases');
+  button.disabled = true;
+  button.textContent = run ? 'Выполняем…' : 'Загружаем…';
+  $('#live-cases').setAttribute('aria-busy', 'true');
+  $('#cases-notice').textContent = run ? 'Подбор и объяснения для всех кейсов. Свежий запуск может занять около минуты; предыдущий отчёт остаётся ниже.' : '';
+  try {
+    const response = await fetch(run ? '/api/cases/run' : '/api/cases', {method:run ? 'POST' : 'GET', cache:'no-store'});
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    liveReport = await response.json();
+    renderCases();
+    $('#cases-notice').textContent = run ? 'Запуск завершён. Ниже свежие результаты.' : '';
+  } catch (error) {
+    $('#cases-notice').textContent = `Не удалось ${run ? 'запустить' : 'загрузить'} кейсы (${error.message}). Можно повторить запуск.`;
+    if (!liveReport.summary) $('#cases-summary').textContent = 'Отчёт недоступен';
+  } finally {
+    button.disabled = false; button.textContent = 'Прогнать сейчас';
+    $('#live-cases').setAttribute('aria-busy', 'false');
+  }
+}
+$('#run-cases').addEventListener('click', () => loadCases(true));
+for (const button of document.querySelectorAll('[data-case-filter]')) button.addEventListener('click', () => {
+  caseFilter = button.dataset.caseFilter;
+  for (const other of document.querySelectorAll('[data-case-filter]')) other.setAttribute('aria-pressed', String(other === button));
+  renderCases();
+});
+loadCases();
 fetch('/api/tests', {cache:'no-store'}).then(response => {
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
   return response.json();
