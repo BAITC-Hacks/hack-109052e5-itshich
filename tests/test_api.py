@@ -230,10 +230,46 @@ def test_demo_returns_file_contents_or_an_empty_list(client, monkeypatch, tmp_pa
     assert response.json() == (DEMOS if file_exists else [])
 
 
-def test_home_serves_a_self_contained_russian_page(client):
-    response = client.get("/")
+def test_legacy_serves_a_self_contained_russian_page(client):
+    response = client.get("/legacy")
     assert response.status_code == 200
     assert response.headers["content-type"].startswith("text/html")
     assert '<html lang="ru">' in response.text
     assert "Подбор подрядчиков" in response.text and "Подобрать" in response.text
     assert '<script src=' not in response.text
+
+
+def test_home_serves_qalau_and_docs_keep_separate_routes(client):
+    response = client.get("/")
+    assert response.status_code == 200
+    assert "QALAU" in response.text
+    assert 'src="app.mjs"' in response.text
+    assert "Для разработчиков" in client.get("/docs-ui").text
+    assert "swagger-ui" in client.get("/docs").text
+
+
+@pytest.mark.parametrize("asset", ["style.css", "app.mjs", "api.mjs", "services.mjs",
+                                    "docs.css", "docs.mjs", "fonts/OFL.txt",
+                                    "assets/generated/service-host.png"])
+def test_qalau_assets_are_served(client, asset):
+    response = client.get("/" + asset)
+    assert response.status_code == 200
+    assert len(response.content) > 0
+
+
+@pytest.mark.parametrize("file_exists", [False, True])
+def test_report_routes_read_optional_files(client, monkeypatch, tmp_path, file_exists):
+    import app
+    monkeypatch.setattr(app, "ROOT", tmp_path)
+    report = {"runs": [{"name": "demo", "passed": True}]}
+    if file_exists:
+        (tmp_path / "data").mkdir()
+        (tmp_path / "data/test_report.json").write_text(json.dumps(report), encoding="utf-8")
+        (tmp_path / "web/qalau").mkdir(parents=True)
+        (tmp_path / "web/qalau/tests.html").write_text("<h1>Результаты проверок</h1>", encoding="utf-8")
+    response = client.get("/api/tests")
+    assert response.status_code == 200
+    assert response.json() == (report if file_exists else {"runs": [], "note": "отчёт ещё не сформирован"})
+    page = client.get("/tests")
+    assert page.status_code == (200 if file_exists else 404)
+    assert ("Результаты проверок" if file_exists else "ещё не") in page.text
