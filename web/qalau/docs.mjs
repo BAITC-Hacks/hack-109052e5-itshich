@@ -16,20 +16,24 @@ function highlight(code, language) {
 document.querySelectorAll('pre code').forEach(code=>highlight(code,code.dataset.language));
 const input=document.querySelector('#snippet-input'),language=document.querySelector('#snippet-language'),status=document.querySelector('#format-status');
 const preview=document.querySelector('#formatting .code-block');
-document.querySelector('#format-code').addEventListener('click',()=>{
+function applyFormatting(){
  let source=input.value;
  try{
   if(language.value==='JSON')source=JSON.stringify(JSON.parse(source),null,2);
   const code=preview.querySelector('code');code.textContent=source;code.dataset.language=language.value;highlight(code,language.value);
   preview.querySelector('.language').textContent=language.value;
   input.value=source;input.removeAttribute('aria-invalid');status.className='';
-  status.textContent=language.value==='JSON'?'JSON отформатирован. Предпросмотр обновлён.':'Предпросмотр обновлён. Исходные отступы сохранены.';
+  status.textContent=language.value==='JSON'?'JSON отформатирован. Предпросмотр обновлён.':language.value==='JavaScript'?'JavaScript подсвечен, исходные отступы сохранены.':'Показано как текст, без подсветки.';
+  return true;
  }catch{
   input.setAttribute('aria-invalid','true');status.className='error';status.textContent='Не удалось разобрать JSON. Проверьте кавычки, запятые и скобки. Предыдущий предпросмотр сохранён.';
+  return false;
  }
-});
+}
+document.querySelector('#format-code').addEventListener('click',applyFormatting);
 input.setAttribute('aria-describedby','format-status');
-language.addEventListener('change',()=>{status.className='';input.removeAttribute('aria-invalid');status.textContent=language.value==='JSON'?'JSON будет отформатирован с отступом в два пробела.':'Код будет показан с исходными отступами. Выполнение отключено.';});
+// Formatting follows the selected language immediately; the button re-applies it after edits.
+language.addEventListener('change',applyFormatting);
 document.querySelectorAll('.copy-code').forEach(button=>button.addEventListener('click',async()=>{
  const code=button.closest('.code-block').querySelector('code');
  try{
