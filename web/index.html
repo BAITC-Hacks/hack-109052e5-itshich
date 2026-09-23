@@ -163,7 +163,7 @@
     $('rejections-list').replaceChildren(...result.rejections.map(item =>
       node('li', '', `${item.name} — ${item.reasons.map(reason => reason.label).join('; ')}`)));
     $('result-footer').hidden = false;
-    $('result-footer').textContent = `семантика: ${result.semantic_backend} · ответ за ${Math.round(result.timing_ms)} мс · источник объяснений: ${result.cards[0]?.explanation_source || 'template'}`;
+    $('result-footer').textContent = `семантика: ${result.semantic_backend} · ответ за ${Math.round(result.timing_ms)} мс · источник объяснений: ${result.cards.length ? result.cards[0].explanation_source : 'карточек нет'}`;
   }
   function setBusy(value) {
     busy = value;
