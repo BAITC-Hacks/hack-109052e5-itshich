@@ -130,16 +130,113 @@ class TemplateExplainer:
 
 
 SYSTEM_PROMPT = (
-    'Ты получаешь уже отобранные карточки подрядчиков и проверенные факты. '
-    'Напиши по-русски 1–2 предложения (40–350 символов) для каждой карточки. '
-    'Приводи конкретные числа: цену от, бюджет, запас, часы, дату. '
-    'Объясни, что отличает именно эту карточку от других показанных. '
-    'Не используй общие похвалы; не выдумывай ничего, чего нет в фактах. '
-    'Каждое число должно быть из фактов этой карточки, укажи минимум два факта. '
-    'Не повторяй один текст для разных карточек. Не меняй порядок. '
-    'Верни только JSON {"explanations":[{"id":"...","text":"..."}]} '
-    'в заданном порядке. Запрещённые фразы: ' + '; '.join(BANNED_PHRASES)
+    "Ты помощник площадки event-подрядчиков. Кандидаты уже отобраны и упорядочены кодом; "
+    "ты только объясняешь заказчику, почему каждая карточка здесь и чем она отличается от соседних. "
+    "Для каждой карточки напиши по-русски 1–2 предложения (60–300 символов), живым языком, как консультант заказчику.\n"
+    "Правила:\n"
+    "1. Только факты карточки и её блок «чем отличается». Ничего не добавляй и не обобщай.\n"
+    "2. Обязательно: цена от и запас по бюджету (если запас 0 %, скажи «ровно в бюджет»). Плюс минимум один факт: часы, язык, цитата, дата, оговорка.\n"
+    "3. Начинай с самого сильного отличия этой карточки, а не с цены. Не пиши «отличается тем, что» и «лучший суммарный балл»; "
+    "вместо балла говори, за счёт чего он: запас по бюджету, близость описания к запросу, лимит часов.\n"
+    "4. Разная структура у разных карточек: одну начни с цитаты, другую с часов или языка, третью с цены. Дату и формат не повторяй в каждой карточке одинаково.\n"
+    "5. Числа как в фактах: «900 000 ₸», «04.10.2026», «55 %». Без KZT, ISO-дат, английских слов (imputed, synthetic). "
+    "Оговорки только готовыми формулировками из поля «оговорки».\n"
+    "6. Без оценочных прилагательных и общих похвал. Цитату приводи дословно в «кавычках», можно сократить, но не менять слова.\n"
+    "Пример хорошего текста: «Единственный из тройки ведёт на английском, что важно для международного корпоратива; при цене от 900 000 ₸ остаётся 55 % бюджета, а лимит 10 ч закрывает запрошенные 4 ч с запасом.»\n"
+    "Верни только JSON {\"explanations\":[{\"id\":\"...\",\"text\":\"...\"}]} в заданном порядке карточек. "
+    "Запрещённые фразы: " + "; ".join(BANNED_PHRASES)
 )
+
+REASON_RU = {
+    "busy_on_date": "заняты на эту дату",
+    "over_budget": "цена «от» выше бюджета",
+    "format_not_supported": "не берут этот формат",
+    "language_not_supported": "не работают на нужном языке",
+    "duration_exceeds_max": "максимум часов меньше запрошенной длительности",
+}
+CAVEAT_RU = {
+    "price_imputed": "цена проставлена при подготовке датасета, уточняйте",
+    "city_imputed": "город проставлен при подготовке датасета",
+    "synthetic": "синтетический профиль",
+}
+
+
+def _distinctions(result: MatchResult) -> dict[str, list[str]]:
+    """Code-derived, verifiable differences between the shown cards."""
+    cards = result.cards
+    out: dict[str, list[str]] = {c.contractor.id: [] for c in cards}
+    if not cards:
+        return out
+    if len(cards) == 1:
+        note = "единственный подходящий вариант"
+        if result.pool_size > 1:
+            note += f" из {result.pool_size} в категории"
+        out[cards[0].contractor.id].append(note)
+        return out
+    prices = [c.contractor.price_from_kzt for c in cards]
+    cheapest, dearest = min(prices), max(prices)
+    for c in cards:
+        cid, con = c.contractor.id, c.contractor
+        if con.price_from_kzt == cheapest and prices.count(cheapest) == 1:
+            out[cid].append("самая низкая цена «от» среди показанных")
+        if con.price_from_kzt == dearest and prices.count(dearest) == 1 and cheapest != dearest:
+            out[cid].append("самая высокая цена «от» среди показанных")
+        for lang in con.languages:
+            if sum(lang in o.contractor.languages for o in cards) == 1:
+                out[cid].append(f"единственный из показанных работает на языке: {lang}")
+        if con.max_hours is None and sum(o.contractor.max_hours is None for o in cards) == 1:
+            out[cid].append("единственный, чья работа не привязана к присутствию на площадке")
+        hours = [o.contractor.max_hours for o in cards if o.contractor.max_hours is not None]
+        if con.max_hours is not None and hours and con.max_hours == max(hours) and hours.count(con.max_hours) == 1:
+            out[cid].append(f"самый большой лимит часов среди показанных: {con.max_hours} ч")
+        sem = [o.semantic_score for o in cards]
+        if c.semantic_score == max(sem) and sem.count(c.semantic_score) == 1:
+            out[cid].append("описание ближе всего к запросу")
+        if c.rank == 1:
+            out[cid].append("выше всех по сумме баллов (запас по бюджету + близость описания + часы)")
+        if not out[cid]:
+            out[cid].append("средний по цене вариант среди показанных")
+    return out
+
+
+def build_prompt_payload(result: MatchResult) -> dict:
+    req = result.request
+    distinct = _distinctions(result)
+    cards = []
+    for f in result.cards:
+        con = f.contractor
+        facts = {
+            "цена от": money(con.price_from_kzt),
+            "бюджет": money(f.budget_kzt),
+            "запас по бюджету": f"{f.budget_headroom_pct} %",
+            "формат": f.format_matched,
+            "свободен": format_date(f.free_on_date),
+            "языки": ", ".join(con.languages),
+        }
+        if f.requested_hours is not None:
+            facts["запрошено часов"] = f"{f.requested_hours} ч"
+        if con.max_hours is None:
+            facts["часы"] = "работа не привязана к присутствию на площадке"
+        else:
+            facts["максимум часов"] = f"{con.max_hours} ч"
+        if f.semantic_snippet:
+            facts["цитата из описания"] = f.semantic_snippet
+        caveats = [CAVEAT_RU[c] for c in f.caveats if c in CAVEAT_RU]
+        if caveats:
+            facts["оговорки"] = "; ".join(caveats)
+        cards.append({"id": con.id, "позиция": f.rank, "имя": con.name, "категория": req.category,
+                      "город": con.city, "факты": facts, "чем отличается": distinct[con.id]})
+    counts = Counter(r.value for rej in result.rejections for r in rej.reasons)
+    summary = [f"{n} {REASON_RU[k]}" for k, n in counts.items()]
+    request = {"город": req.city, "дата": format_date(req.event_date), "формат": req.event_format,
+               "категория": req.category, "бюджет": money(req.budget_kzt)}
+    if req.duration_hours:
+        request["длительность"] = f"{req.duration_hours} ч"
+    if req.language:
+        request["язык"] = req.language
+    return {"запрос": request, "карточки": cards,
+            "отсеяно из категории": {"всего в категории": result.pool_size, "показано": len(result.cards),
+                                       "причины": summary}}
 
 
 def _json(value) -> str:
@@ -163,14 +260,7 @@ class LLMExplainer:
         return self._cache[key]
 
     def _explain(self, result: MatchResult) -> tuple[Explanation, ...]:
-        cards = []
-        for facts in result.cards:
-            card = asdict(facts)
-            card["contractor"].pop("description")
-            card["contractor"].pop("busy_dates")
-            cards.append(card)
-        payload = {"request": asdict(result.request), "cards": cards,
-                   "rejection_summary": dict(Counter(reason.value for rejection in result.rejections for reason in rejection.reasons))}
+        payload = build_prompt_payload(result)
         try:
             if self.client is None:
                 self.client = create_client(self.api_key)

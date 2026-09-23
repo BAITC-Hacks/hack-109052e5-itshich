@@ -178,9 +178,13 @@ def test_llm_returns_valid_ordered_explanations_and_uses_compact_grounded_prompt
     assert (call["temperature"], call["seed"], call["timeout"]) == (0, 42, 8)
     assert call["response_format"] == {"type": "json_object"}
     payload = json.loads(call["messages"][1]["content"])
-    assert set(payload) == {"request", "cards", "rejection_summary"}
-    assert [c["contractor"]["id"] for c in payload["cards"]] == ["c1", "c2", "c3"]
-    assert all("description" not in c["contractor"] for c in payload["cards"])
+    assert set(payload) == {"запрос", "карточки", "отсеяно из категории"}
+    assert [c["id"] for c in payload["карточки"]] == ["c1", "c2", "c3"]
+    # Only pre-formatted facts reach the model: no raw description, no raw flags.
+    for c in payload["карточки"]:
+        assert "description" not in json.dumps(c, ensure_ascii=False)
+        assert "цена от" in c["факты"] and "запас по бюджету" in c["факты"]
+        assert isinstance(c["чем отличается"], list) and c["чем отличается"]
 
 
 @pytest.mark.parametrize("failure", ["json", "shape", "banned", "digits", "timeout", "api", "count", "order", "type"])
@@ -239,3 +243,19 @@ def test_template_distinguishes_imputed_offsite_cards_even_without_optional_fact
     match = result(*cards)
     texts = [e.text for e in TemplateExplainer().explain(match)]
     assert validate_explanations(match, texts) == []
+
+
+def test_distinctions_are_code_derived_and_verifiable():
+    from matcher.explain import _distinctions
+
+    match = result(card(), card(2), card(3))
+    distinct = _distinctions(match)
+    assert set(distinct) == {c.contractor.id for c in match.cards}
+    assert all(notes for notes in distinct.values())
+    prices = {c.contractor.id: c.contractor.price_from_kzt for c in match.cards}
+    cheapest = min(prices.values())
+    if list(prices.values()).count(cheapest) == 1:
+        cheapest_id = next(i for i, p in prices.items() if p == cheapest)
+        assert any("самая низкая цена" in n for n in distinct[cheapest_id])
+    single = result(card())
+    assert any("единственный" in n for n in _distinctions(single)[single.cards[0].contractor.id])
