@@ -8,6 +8,7 @@ from hypothesis import given, settings, strategies as st
 
 from matcher import ranking, reasons
 from matcher.data import load_contractors
+from matcher.embeddings import EmbeddingScorer, content_key, request_text, split_sentences
 from matcher.filtering import filter_pool
 from matcher.lexical import LexicalScorer
 from matcher.model import (
@@ -15,6 +16,7 @@ from matcher.model import (
     Contractor, MatchRequest, MatchResult, Outcome, ReasonFamily, RejectReason,
 )
 from matcher.service import run
+from tests.test_embeddings import MODEL, write_cache
 
 
 CATEGORIES = ("Ведущий", "Ведущий церемонии", "Флорист", "Декоратор", "Ресторан")
@@ -24,7 +26,6 @@ PROPERTY = settings(max_examples=200, deadline=None)
 
 def subset(values):
     return st.lists(st.sampled_from(values), min_size=1, max_size=len(values), unique=True).map(tuple)
-
 
 @st.composite
 def contractors(draw):
@@ -46,7 +47,6 @@ def contractors(draw):
         )),
     )
 
-
 REQUESTS = st.builds(
     MatchRequest, city=st.sampled_from(CITIES), event_date=DAYS,
     event_format=st.sampled_from(EVENT_FORMATS), category=st.sampled_from(CATEGORIES),
@@ -54,7 +54,6 @@ REQUESTS = st.builds(
     duration_hours=st.one_of(st.none(), st.integers(min_value=1, max_value=24)),
     language=st.one_of(st.none(), st.sampled_from(LANGUAGES)),
 )
-
 
 @st.composite
 def cases(draw, min_eligible=1):
@@ -169,17 +168,28 @@ def test_unspecified_max_hours_never_rejects_for_duration(candidate, request, ho
 
 
 @PROPERTY
-@given(cases(min_eligible=4))
-def test_booking_top_card_removes_it_without_reordering_survivors(case):
+@given(cases(min_eligible=4), st.booleans())
+def test_booking_top_card_removes_it_without_reordering_survivors(case, embeddings):
     catalogue, request = case
-    before = run(request, catalogue, LexicalScorer())
+    scorer = LexicalScorer()
+    if embeddings:
+        texts = [request_text(request), *(text for c in catalogue for text in [c.description, *split_sentences(c.description)])]
+        with TemporaryDirectory() as directory:
+            path = Path(directory) / "cache.json"
+            write_cache(path, {text: [int(content_key(MODEL, text)[:6], 16) / 0xFFFFFF, 1.0] for text in texts},
+                        anchors=(0.6, 1.0, len(texts) * len(catalogue)))
+            scorer = EmbeddingScorer(cache_path=path, model=MODEL, dimensions=2, api_key="")
+    before = run(request, catalogue, scorer)
+    all_before = ranking.score_all(filter_pool(catalogue, request)[1], request, scorer)
     top_id = before.cards[0].contractor.id
     booked = [replace(c, busy_dates=c.busy_dates | {request.event_date}) if c.id == top_id else c for c in catalogue]
-    after = run(request, booked, LexicalScorer())
+    after = run(request, booked, scorer)
     assert top_id not in {card.contractor.id for card in after.cards}
     assert [card.contractor.id for card in after.cards[:2]] == [card.contractor.id for card in before.cards[1:]]
     assert [card.score for card in after.cards[:2]] == [card.score for card in before.cards[1:]]
     assert after.eligible_count == before.eligible_count - 1
+    all_after = ranking.score_all(filter_pool(booked, request)[1], request, scorer)
+    assert [(c.contractor.id, c.score) for c in all_after] == [(c.contractor.id, c.score) for c in all_before if c.contractor.id != top_id]
     rejection, = [r for r in after.rejections if r.contractor.id == top_id]
     assert rejection.reasons == (RejectReason.BUSY_ON_DATE,)
 

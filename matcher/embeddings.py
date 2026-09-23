@@ -1,4 +1,5 @@
 """OpenAI similarity with a portable content-addressed vector cache."""
+from dataclasses import asdict, dataclass
 from hashlib import sha256
 import json
 import math
@@ -15,7 +16,20 @@ EMBEDDING_DIMENSIONS = 1024
 
 
 class SemanticUnavailable(RuntimeError):
-    """A required vector could not be obtained; use the lexical scorer."""
+    """Required vectors or catalogue anchors are unavailable; use the lexical scorer."""
+
+
+@dataclass(frozen=True)
+class CatalogueAnchors:
+    low: float
+    high: float
+    pairs: int
+
+    def __post_init__(self):
+        if (not all(isinstance(value, (int, float)) and not isinstance(value, bool)
+                    and math.isfinite(value) for value in (self.low, self.high))
+                or self.high <= self.low or type(self.pairs) is not int or self.pairs <= 0):
+            raise ValueError("Некорректные якоря семантической шкалы")
 
 
 def request_text(request: MatchRequest) -> str:
@@ -46,6 +60,13 @@ def _cosine(left: list[float], right: list[float]) -> float:
     return max(-1.0, min(1.0, math.fsum(a * b for a, b in zip(left, right)) / length))
 
 
+def _percentile(ordered: list[float], fraction: float) -> float:
+    """Inclusive percentile with linear interpolation at (n - 1) * fraction."""
+    position = (len(ordered) - 1) * fraction
+    lower = int(position)
+    return ordered[lower] + (ordered[min(lower + 1, len(ordered) - 1)] - ordered[lower]) * (position - lower)
+
+
 class EmbeddingScorer:
     name = "embeddings"
 
@@ -57,6 +78,7 @@ class EmbeddingScorer:
         self.cache_path = Path(cache_path) if cache_path is not None else Path(__file__).resolve().parents[1] / "data/embeddings.json"
         self.client, self.api_key = client, api_key
         self._vectors = {}
+        self._anchors: CatalogueAnchors | None = None
         try:
             data = json.loads(self.cache_path.read_text(encoding="utf-8"))
             if (data["model"] == self.model and data["dimensions"] == self.dimensions
@@ -64,15 +86,22 @@ class EmbeddingScorer:
                 self._vectors = {key: [round(value, 6) for value in vector]
                                  for key, vector in data["vectors"].items()
                                  if _valid_vector(vector) and len(vector) == self.dimensions}
+                self._anchors = CatalogueAnchors(**data["anchors"])
         except (OSError, ValueError, KeyError, TypeError):
             pass  # A missing or damaged cache is a cache miss, not a ranking error.
 
     def score(self, request: MatchRequest, contractors: list[Contractor]) -> dict[str, float]:
         if not contractors:
             return {}
+        if self._anchors is None:
+            raise SemanticUnavailable(
+                "В кэше нет корректных якорей каталога; выполните scripts/build_embeddings.py --anchors")
         self.cache_texts([request_text(request), *(c.description for c in contractors)])
         query = self._vectors[content_key(self.model, request_text(request), self.dimensions)]
-        return {c.id: round((_cosine(query, self._vectors[content_key(self.model, c.description, self.dimensions)]) + 1) / 2, 3)
+        low, high = self._anchors.low, self._anchors.high
+        return {c.id: round(max(0.0, min(1.0, (
+                    _cosine(query, self._vectors[content_key(self.model, c.description, self.dimensions)]) - low
+                ) / (high - low))), 3)
                 for c in contractors}
 
     def snippet(self, request: MatchRequest, contractor: Contractor) -> str | None:
@@ -110,6 +139,21 @@ class EmbeddingScorer:
         self._persist()
         return len(missing)
 
+    def calibrate_anchors(self, queries: list[str], descriptions: list[str]) -> CatalogueAnchors:
+        """Explicit catalogue build step; never called from scoring or filtering."""
+        queries, descriptions = sorted(set(queries)), sorted(set(descriptions))
+        if not queries or not descriptions:
+            raise SemanticUnavailable("Для расчёта якорей нужны запросы и описания каталога")
+        self.cache_texts([*queries, *descriptions])
+        vectors = {text: self._vectors[content_key(self.model, text, self.dimensions)]
+                   for text in (*queries, *descriptions)}
+        similarities = sorted(_cosine(vectors[query], vectors[description])
+                              for query in queries for description in descriptions)
+        low = _percentile(similarities, 0.05)
+        self._anchors = CatalogueAnchors(low, max(_percentile(similarities, 0.95), low + 0.10), len(similarities))
+        self._persist()
+        return self._anchors
+
     def _persist(self) -> None:
         temporary = None
         try:
@@ -119,8 +163,10 @@ class EmbeddingScorer:
             with NamedTemporaryFile(mode="w", encoding="utf-8", dir=self.cache_path.parent,
                                     prefix=".embeddings-", delete=False) as handle:
                 temporary = Path(handle.name)
-                json.dump({"model": self.model, "dimensions": self.dimensions, "vectors": self._vectors}, handle,
-                          sort_keys=True, separators=(",", ":"))
+                data = {"model": self.model, "dimensions": self.dimensions, "vectors": self._vectors}
+                if self._anchors is not None:
+                    data["anchors"] = asdict(self._anchors)
+                json.dump(data, handle, sort_keys=True, separators=(",", ":"))
             temporary.replace(self.cache_path)
         except OSError:
             pass  # Read-only deployments can still reuse vectors in memory.

@@ -2,8 +2,8 @@ from dataclasses import replace
 
 import pytest
 
-from matcher.model import ScoreBreakdown
-from matcher.ranking import rank
+from matcher.model import FEATURES, ScoreBreakdown
+from matcher.ranking import rank, weights_for
 
 
 class GivenScorer:
@@ -27,7 +27,7 @@ def test_rank_materializes_weighted_facts(contractor, match_request):
     assert len(cards) == 1
     card = cards[0]
     assert card.contractor == candidate and card.rank == 1
-    assert card.score == ScoreBreakdown(0.75, 0.6, 1.0, 0.5, 0.25, 0.6475)
+    assert card.score == ScoreBreakdown(0.75, 0.6, 1.0, 0.5, 0.25, 0.5925)
     assert card.budget_kzt == 800_000 and card.budget_headroom_pct == 75
     assert card.format_matched == "корпоратив"
     assert card.requested_language == "казахский"
@@ -133,5 +133,33 @@ def test_lexical_snippet_ties_fallback_and_contract_limit(contractor, match_requ
 def test_rounded_total_ties_use_id_even_with_different_unrounded_scores(contractor, match_request):
     candidates = [replace(contractor, id="z"), replace(contractor, id="a", price_from_kzt=200_001)]
     cards = rank(candidates, match_request, GivenScorer())
-    assert [card.score.total for card in cards] == [0.6892, 0.6892]
+    assert [card.score.total for card in cards] == [0.6861, 0.6861]
+    assert [card.contractor.id for card in cards] == ["a", "z"]
+
+
+@pytest.mark.parametrize("categories,with_hours,without_hours", [
+    (("Фотограф", "Неизвестная"), (0.25, 0.55, 0, 0.05, 0.15), (0.2632, 0.5789, 0, 0, 0.1579)),
+    (("Банкетный зал", "Ресторан", "Отель", "Загородная площадка"),
+     (0.25, 0.60, 0, 0.05, 0.10), (0.2632, 0.6315, 0, 0, 0.1053)),
+    (("Ведущий", "Ведущий церемонии"), (0.25, 0.55, 0, 0.10, 0.10), (0.2778, 0.6111, 0, 0, 0.1111)),
+    (("Флорист", "Декоратор", "Подарки и сувениры"), (0.25, 0.60, 0, 0, 0.15), (0.25, 0.60, 0, 0, 0.15)),
+])
+def test_category_profiles_and_optional_duration_are_normalized(match_request, categories, with_hours, without_hours):
+    for category in categories:
+        for hours, expected in ((4, with_hours), (None, without_hours)):
+            request = replace(match_request, category=category, duration_hours=hours)
+            weights = weights_for(request)
+            assert set(weights) == set(FEATURES)
+            assert tuple(weights[f] for f in FEATURES) == expected
+            assert sum(weights.values()) == pytest.approx(1, abs=1e-12)
+            assert all(value == round(value, 4) for value in weights.values())
+            weights["semantic"] = 99
+            assert weights_for(request)["semantic"] == expected[1]
+
+
+def test_unsolicited_languages_cannot_change_ranking(contractor, match_request):
+    candidates = [replace(contractor, id="a", languages=("русский",)),
+                  replace(contractor, id="z", languages=("русский", "казахский", "английский"))]
+    cards = rank(candidates, match_request, GivenScorer())
+    assert cards[0].score.total == cards[1].score.total
     assert [card.contractor.id for card in cards] == ["a", "z"]

@@ -70,8 +70,25 @@ Score each eligible contractor; components in [0,1]:
   clamp(1 - hours/max_hours, 0, 1) (headroom); if max_hours None => 0.5;
   if not requested => 0.5
 - data_quality = 1 - 0.5*price_imputed - 0.25*city_imputed - 0.25*synthetic
-- total = round(0.35*budget_fit + 0.35*semantic + 0.10*language_fit
-              + 0.10*duration_fit + 0.10*data_quality, 4)
+- total = round(sum(weights_for(request)[f] * feature[f] for f in FEATURES), 4)
+
+`weights_for()` returns a fresh dict with exactly the FEATURES keys. The
+plain constant `CATEGORY_GROUPS` selects these category priors:
+
+| Group | Categories | budget | semantic | language | duration | quality |
+| --- | --- | ---: | ---: | ---: | ---: | ---: |
+| general | all other / unknown categories | 0.25 | 0.55 | 0.00 | 0.05 | 0.15 |
+| venue | Банкетный зал, Ресторан, Отель, Загородная площадка | 0.25 | 0.60 | 0.00 | 0.05 | 0.10 |
+| host | Ведущий, Ведущий церемонии | 0.25 | 0.55 | 0.00 | 0.10 | 0.10 |
+| no_presence | Флорист, Декоратор, Подарки и сувениры | 0.25 | 0.60 | 0.00 | 0.00 | 0.15 |
+
+Language remains a hard filter and a displayed fact, with zero ranking weight.
+When duration is not requested, set its weight to zero and renormalize the
+remaining weights to sum to one, rounded to four decimals. Any rounding
+residue goes into semantic, the largest weight (venue without duration:
+0.2632 / 0.6315 / 0 / 0 / 0.1053). Reasons use this same function for exact
+feature contributions; weights never depend on the eligible pool.
+
 Order: `sorted(key=(-total, id))`. Take first MAX_CARDS. Build CardFacts:
 budget_headroom_pct = round((budget - price)/budget*100); languages_matched =
 (language,) if requested else contractor.languages; duration_note = "fits" /
@@ -115,18 +132,33 @@ snippet = sentence (split on [.!?\n]) with the most hits, else None.
 EmbeddingScorer (bravo): OpenAI `text-embedding-3-large` (env
 EMBEDDING_MODEL), 1024 dimensions by default (env EMBEDDING_DIMENSIONS, passed
 as `dimensions` to the API). Cache: `data/embeddings.json` =
-{"model": ..., "dimensions": ..., "vectors":
+{"model": ..., "dimensions": ..., "anchors": {"low": ..., "high": ..., "pairs": ...}, "vectors":
 {sha256(model + "\n" + str(dimensions) + "\n" + text): [floats]}}.
 A model/dimensions mismatch is an empty cache; the builder rewrites it.
 Vectors are rounded to 6 decimals and stored as compact JSON. The shipped
-cache contains 392 vectors for 78 contractors and demo queries. Cosine divides
+cache contains 801 vectors for 78 contractors, all 411 catalogue query texts,
+and demo queries. Cosine divides
 by both vector norms even when API vectors are not exactly unit length.
-Texts embedded: full description per contractor AND each sentence of the description (for snippets). Query text
-embedded at request time and cached in the same file (write-through; if the
-file is read-only or missing key, keep in memory). Score = cosine mapped to
-[0,1] via (cos+1)/2, rounded to 3 decimals. Snippet = sentence with highest
-cosine, <= 200 chars. `scripts/build_embeddings.py` precomputes the cache for
-all contractors so the repo ships with it and ranking reproduces WITHOUT a key.
+Texts embedded: full description per contractor AND each sentence of the
+description (for snippets). `scripts/build_embeddings.py --anchors` also
+enumerates every distinct format/category/city combination each contractor
+can produce, with each of their languages and with no language. It includes
+`synthetic_extra.csv` when present. These queries are cached before calibration,
+so all requests with eligible catalogue candidates rank offline. Other missing
+texts retain the existing API write-through behavior (memory-only if read-only).
+
+Anchors use the Cartesian product of those distinct query texts and distinct
+catalogue descriptions, including unrelated categories/cities, never just
+eligible candidates or snippets. P05 and P95 use linear interpolation at
+`(N - 1) * percentile`: `low = P05`, `high = max(P95, low + 0.10)`.
+The shipped cache has 32,058 pairs, low 0.22155170065111932 and high
+0.506944405362618. Score = `round(clip((cos - low)/(high - low), 0, 1), 3)`.
+Clipping can intentionally tie descriptions above P95 (both demo florists).
+The frozen anchors are rebuilt only by the explicit catalogue build step;
+scoring, booking changes and vector write-through never recalibrate them.
+Missing/invalid anchors raise `SemanticUnavailable` with the `--anchors`
+rebuild command, even when vectors or an API key exist. Snippet selection is
+unchanged: sentence with highest raw cosine, <= 200 chars.
 If OPENAI_API_KEY is missing and a needed vector is not cached =>
 raise `SemanticUnavailable`; pipeline then falls back to LexicalScorer and
 reports semantic_backend="lexical".

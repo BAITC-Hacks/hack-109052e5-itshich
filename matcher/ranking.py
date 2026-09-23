@@ -6,15 +6,34 @@ from dataclasses import replace
 from matcher.model import FEATURES, MAX_CARDS, CardFacts, Contractor, MatchRequest, ScoreBreakdown, SemanticScorer
 
 
+# Catalogue categories are mapped explicitly; unknown categories use general.
+CATEGORY_GROUPS = {
+    "Банкетный зал": "venue", "Ресторан": "venue", "Отель": "venue",
+    "Загородная площадка": "venue", "Ведущий": "host", "Ведущий церемонии": "host",
+    "Флорист": "no_presence", "Декоратор": "no_presence", "Подарки и сувениры": "no_presence",
+}
+
+
 def _clamp(value: float) -> float:
     return max(0.0, min(1.0, value))
 
 
 def weights_for(request: MatchRequest) -> dict[str, float]:
-    """Feature weights used by total(). Keys == FEATURES. Owner: weights research
-    (per-category profiles land here); matcher.reasons reads contributions from it."""
-    return {"budget_fit": 0.35, "semantic": 0.35, "language_fit": 0.10,
-            "duration_fit": 0.10, "data_quality": 0.10}
+    """Category priors shared by ranking and reason contributions; keys == FEATURES."""
+    profiles = {
+        "general": (0.25, 0.55, 0.00, 0.05, 0.15),
+        "venue": (0.25, 0.60, 0.00, 0.05, 0.10),
+        "host": (0.25, 0.55, 0.00, 0.10, 0.10),
+        "no_presence": (0.25, 0.60, 0.00, 0.00, 0.15),
+    }
+    weights = dict(zip(FEATURES, profiles[CATEGORY_GROUPS.get(request.category, "general")]))
+    if request.duration_hours is None:
+        weights["duration_fit"] = 0.0
+        total = sum(weights.values())
+        weights = {feature: round(value / total, 4) for feature, value in weights.items()}
+        # Absorb rounding residue in the largest weight to retain a unit sum.
+        weights["semantic"] = round(weights["semantic"] + 1 - sum(weights.values()), 4)
+    return weights
 
 
 def rank(

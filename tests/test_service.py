@@ -1,3 +1,9 @@
+import csv
+import json
+import os
+from pathlib import Path
+import subprocess
+import sys
 from dataclasses import replace
 from datetime import date
 
@@ -7,6 +13,7 @@ from matcher.lexical import LexicalScorer
 from matcher.filtering import RequestError, filter_pool
 from matcher.model import MatchRequest, Outcome, RejectReason
 from matcher.service import run
+from tests.test_embeddings import DIMENSIONS, MODEL, QUERY, cache_key, write_cache
 
 
 def test_full_match_has_grounded_cards_and_no_shortfall(sample_contractors, match_request):
@@ -145,3 +152,93 @@ def test_unknown_category_is_a_normal_empty_outcome_with_at_most_three_alternati
 def test_calendar_error_remains_an_error_through_service(match_request):
     with pytest.raises(RequestError, match="подбор на 01.01.2027 невозможен"):
         run(replace(match_request, event_date=date(2027, 1, 1)), [], LexicalScorer())
+
+
+def test_build_script_compacts_existing_cache_without_key_or_csv(tmp_path):
+    target = tmp_path / "embeddings.json"
+    write_cache(target, {QUERY: [0.123456789, -0.987654321]}, model="cached-model")
+    command = [sys.executable, str(Path(__file__).resolve().parents[1] / "scripts/build_embeddings.py"),
+               "--compact", "--output", str(target), "--csv", str(tmp_path / "missing.csv")]
+    env = {**os.environ, "OPENAI_API_KEY": ""}
+    first = subprocess.run(command, env=env, capture_output=True, text=True)
+    assert first.returncode == 0, first.stderr
+    expected = {"model": "cached-model", "dimensions": DIMENSIONS,
+                "anchors": {"low": 0.2, "high": 0.8, "pairs": 20},
+                "vectors": {cache_key(QUERY, "cached-model"): [0.123457, -0.987654]}}
+    assert target.read_text() == json.dumps(expected, sort_keys=True, separators=(",", ":"))
+    original = target.read_bytes()
+    second = subprocess.run(command, env=env, capture_output=True, text=True)
+    assert second.returncode == 0, second.stderr
+    assert target.read_bytes() == original
+    conflict = subprocess.run([*command, "--anchors"], env=env, capture_output=True, text=True)
+    assert conflict.returncode == 2
+    assert target.read_bytes() == original
+
+
+@pytest.mark.parametrize("anchors", [False, True])
+def test_build_script_dry_run_embeds_csv_descriptions_and_sentences_once(tmp_path, anchors):
+    source, target = tmp_path / "contractors.csv", tmp_path / "embeddings.json"
+    with source.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=["id", "description", "city", "event_formats", "categories", "languages"])
+        writer.writeheader()
+        common = {"city": "Алматы", "event_formats": "корпоратив|свадьба",
+                  "categories": "Ведущий|Ведущий церемонии", "languages": "русский|английский"}
+        writer.writerows([dict(common, id="a", description="Игра. Деловой форум!"),
+                         dict(common, id="b", description="Игра.\nНаграждение?")])
+    root = Path(__file__).resolve().parents[1]
+    command = [sys.executable, str(root / "scripts/build_embeddings.py"), "--dry-run",
+               "--csv", str(source), "--output", str(target), *(["--anchors"] if anchors else [])]
+    env = {**os.environ, "OPENAI_API_KEY": "", "EMBEDDING_MODEL": MODEL, "EMBEDDING_DIMENSIONS": str(DIMENSIONS)}
+
+    first = subprocess.run(command, cwd=root, env=env, capture_output=True, text=True)
+    assert first.returncode == 0, first.stderr
+    assert "contractors=2" in first.stdout and "sentences=4" in first.stdout
+    assert f"embedded={17 if anchors else 5}" in first.stdout
+    original = target.read_bytes()
+    data = json.loads(original)
+    expected_texts = {"Игра. Деловой форум!", "Игра.\nНаграждение?", "Игра", "Деловой форум", "Награждение"}
+    if anchors:
+        expected_texts |= {f"{form} {category} Алматы{language}" for form in ("корпоратив", "свадьба")
+                           for category in ("Ведущий", "Ведущий церемонии") for language in ("", " русский", " английский")}
+        assert data.pop("anchors") == {"low": 0, "high": 0.1, "pairs": 24}
+    assert data == {"model": MODEL, "dimensions": DIMENSIONS, "vectors": {cache_key(t): [0.0] * DIMENSIONS for t in expected_texts}}
+
+    second = subprocess.run(command, cwd=root, env=env, capture_output=True, text=True)
+    assert second.returncode == 0, second.stderr
+    assert "embedded=0" in second.stdout
+    assert target.read_bytes() == original
+
+
+def test_build_anchors_from_cached_catalogue_includes_extra_profiles_without_network(tmp_path, csv_row, write_csv):
+    source = write_csv([dict(csv_row, description="Музыка.", categories="Ведущий", event_formats="корпоратив", languages="английский")])
+    write_csv([dict(csv_row, id="extra", description="Церемонии.", city="Астана", synthetic="True",
+                    categories="Ведущий", event_formats="корпоратив", languages="английский")], name="synthetic_extra.csv")
+    target = tmp_path / "cache.json"
+    vectors = {"Музыка.": [1, 0], "Музыка": [1, 0], "Церемонии.": [0, 1], "Церемонии": [0, 1]}
+    vectors |= {f"корпоратив Ведущий {city}{language}": vector for city, vector in (("Алматы", [1, 0]), ("Астана", [0, 1]))
+                for language in ("", " английский")}
+    write_cache(target, vectors, anchors=None)
+    completed = subprocess.run([sys.executable, "scripts/build_embeddings.py", "--anchors", "--csv", str(source), "--output", str(target)],
+        env={**os.environ, "OPENAI_API_KEY": "", "EMBEDDING_MODEL": MODEL, "EMBEDDING_DIMENSIONS": "2"}, capture_output=True, text=True)
+    assert completed.returncode == 0, completed.stderr
+    assert json.loads(target.read_text())["anchors"] == {"low": 0, "high": 1, "pairs": 8}
+
+
+def test_pipeline_falls_back_to_lexical_when_cached_vectors_have_no_anchors(tmp_path, monkeypatch, contractor, match_request):
+    from matcher import pipeline
+    from matcher.embeddings import EmbeddingScorer, request_text, split_sentences
+
+    target = tmp_path / "cache.json"
+    write_cache(target, {t: [1, 0] for t in (request_text(match_request), contractor.description,
+                                           *split_sentences(contractor.description))}, anchors=None)
+    monkeypatch.setenv("OPENAI_API_KEY", "")
+    monkeypatch.setattr(pipeline, "choose_scorer", lambda: EmbeddingScorer(cache_path=target, model=MODEL, dimensions=2, api_key=""))
+    monkeypatch.setattr(pipeline, "get_contractors", lambda: [contractor])
+    assert pipeline.answer(match_request)["semantic_backend"] == "lexical"
+
+
+def test_every_catalogue_query_is_cached_offline(real_contractors, offline_demo_scorer):
+    queries = {" ".join(filter(None, (form, category, c.city, language)))
+               for c in real_contractors for form in c.event_formats for category in c.categories
+               for language in (None, *c.languages)}
+    assert offline_demo_scorer.cache_texts(sorted(queries)) == 0
