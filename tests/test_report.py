@@ -113,7 +113,7 @@ def test_dashboard_mobile_filters_and_empty_state(tmp_path, monkeypatch):
         browser_page.goto('http://report.local/tests')
         expect(browser_page.locator('tbody tr')).to_have_count(6)
         assert browser_page.evaluate('document.documentElement.scrollWidth <= innerWidth')
-        browser_page.get_by_role('button', name='Ошибки', exact=True).click()
+        browser_page.get_by_role('group', name='Фильтр тестов').get_by_role('button', name='Ошибки', exact=True).click()
         expect(browser_page.locator('tbody tr')).to_have_count(2)
         browser_page.locator('details').first.locator('summary').click()
         expect(browser_page.get_by_text('first line', exact=True)).to_be_visible()
