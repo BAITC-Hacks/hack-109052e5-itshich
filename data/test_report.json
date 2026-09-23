@@ -1,46 +1,99 @@
 {
-  "generated_at": "2026-09-23T11:57:44.765293+00:00",
-  "git_sha": "db22fff",
+  "generated_at": "2026-09-23T12:07:13.660845+00:00",
+  "git_sha": "1aab763",
   "summary": {
-    "total": 378,
-    "passed": 373,
+    "total": 396,
+    "passed": 396,
     "failed": 0,
-    "skipped": 5,
+    "skipped": 0,
     "errors": 0,
-    "duration_s": 16.84
+    "duration_s": 28.406
   },
   "suites": [
     {
+      "name": "tests/e2e/test_adapter.py",
+      "kind": "e2e",
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "errors": 0,
+      "duration_s": 0.045,
+      "tests": [
+        {
+          "name": "test_adapter_preserves_dto_content_and_translates_form_request",
+          "status": "passed",
+          "duration_s": 0.045,
+          "message": ""
+        }
+      ]
+    },
+    {
       "name": "tests/e2e/test_browser.py",
       "kind": "e2e",
-      "passed": 0,
+      "passed": 10,
       "failed": 0,
-      "skipped": 4,
+      "skipped": 0,
       "errors": 0,
-      "duration_s": 0.594,
+      "duration_s": 11.014,
       "tests": [
         {
           "name": "test_422_detail_is_visible_and_form_stays_usable",
-          "status": "skipped",
-          "duration_s": 0.155,
+          "status": "passed",
+          "duration_s": 1.053,
           "message": ""
         },
         {
           "name": "test_all_three_outcomes_are_distinct_at_400px",
-          "status": "skipped",
-          "duration_s": 0.145,
+          "status": "passed",
+          "duration_s": 1.153,
           "message": ""
         },
         {
           "name": "test_form_uses_catalog_counts_dates_and_optional_fields",
-          "status": "skipped",
-          "duration_s": 0.145,
+          "status": "passed",
+          "duration_s": 1.05,
+          "message": ""
+        },
+        {
+          "name": "test_qalau_422_and_retry",
+          "status": "passed",
+          "duration_s": 1.152,
+          "message": ""
+        },
+        {
+          "name": "test_qalau_example_url_submits_backend_demo",
+          "status": "passed",
+          "duration_s": 0.946,
+          "message": ""
+        },
+        {
+          "name": "test_qalau_loading_until_backend_response",
+          "status": "passed",
+          "duration_s": 1.055,
+          "message": ""
+        },
+        {
+          "name": "test_qalau_meta_options_and_optional_fields",
+          "status": "passed",
+          "duration_s": 1.158,
+          "message": ""
+        },
+        {
+          "name": "test_qalau_preserves_backend_order_explanations_and_rejections",
+          "status": "passed",
+          "duration_s": 1.158,
+          "message": ""
+        },
+        {
+          "name": "test_qalau_three_outcomes_and_demo_payloads_at_400px",
+          "status": "passed",
+          "duration_s": 1.15,
           "message": ""
         },
         {
           "name": "test_ranked_cards_and_rejections_toggle",
-          "status": "skipped",
-          "duration_s": 0.149,
+          "status": "passed",
+          "duration_s": 1.139,
           "message": ""
         }
       ]
@@ -48,16 +101,16 @@
     {
       "name": "tests/test_api.py",
       "kind": "api",
-      "passed": 19,
+      "passed": 30,
       "failed": 0,
       "skipped": 0,
       "errors": 0,
-      "duration_s": 0.044,
+      "duration_s": 0.067,
       "tests": [
         {
           "name": "test_demo_returns_file_contents_or_an_empty_list[False]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.002,
           "message": ""
         },
         {
@@ -69,31 +122,31 @@
         {
           "name": "test_empty_outcomes_keep_their_distinct_title_and_reason[changes0-no_category_in_city-\\u0412 \\u044d\\u0442\\u043e\\u043c \\u0433\\u043e\\u0440\\u043e\\u0434\\u0435 \\u0442\\u0430\\u043a\\u043e\\u0439 \\u043a\\u0430\\u0442\\u0435\\u0433\\u043e\\u0440\\u0438\\u0438 \\u043d\\u0435\\u0442-\\u0412 \\u044d\\u0442\\u043e\\u043c \\u0433\\u043e\\u0440\\u043e\\u0434\\u0435 \\u043d\\u0435\\u0442 \\u043f\\u0440\\u043e\\u0444\\u0438\\u043b\\u0435\\u0439 \\u044d\\u0442\\u043e\\u0439 \\u043a\\u0430\\u0442\\u0435\\u0433\\u043e\\u0440\\u0438\\u0438.]",
           "status": "passed",
-          "duration_s": 0.002,
+          "duration_s": 0.003,
           "message": ""
         },
         {
           "name": "test_empty_outcomes_keep_their_distinct_title_and_reason[changes1-none_eligible-\\u041a\\u0430\\u043d\\u0434\\u0438\\u0434\\u0430\\u0442\\u044b \\u0435\\u0441\\u0442\\u044c, \\u043d\\u043e \\u043d\\u0438 \\u043e\\u0434\\u0438\\u043d \\u043d\\u0435 \\u043f\\u0440\\u043e\\u0445\\u043e\\u0434\\u0438\\u0442 \\u043f\\u043e \\u0443\\u0441\\u043b\\u043e\\u0432\\u0438\\u044f\\u043c-\\u041a\\u0430\\u043d\\u0434\\u0438\\u0434\\u0430\\u0442 \\u0435\\u0441\\u0442\\u044c, \\u043d\\u043e \\u0443\\u0441\\u043b\\u043e\\u0432\\u0438\\u044f \\u043d\\u0435 \\u0432\\u044b\\u043f\\u043e\\u043b\\u043d\\u0435\\u043d\\u044b.]",
           "status": "passed",
-          "duration_s": 0.002,
+          "duration_s": 0.003,
           "message": ""
         },
         {
-          "name": "test_home_serves_a_self_contained_russian_page",
+          "name": "test_home_serves_qalau_and_docs_keep_separate_routes",
           "status": "passed",
-          "duration_s": 0.004,
+          "duration_s": 0.003,
           "message": ""
         },
         {
           "name": "test_identical_posts_have_byte_identical_json_except_timing[changes0]",
           "status": "passed",
-          "duration_s": 0.002,
+          "duration_s": 0.004,
           "message": ""
         },
         {
           "name": "test_identical_posts_have_byte_identical_json_except_timing[changes1]",
           "status": "passed",
-          "duration_s": 0.002,
+          "duration_s": 0.003,
           "message": ""
         },
         {
@@ -103,13 +156,67 @@
           "message": ""
         },
         {
+          "name": "test_legacy_serves_a_self_contained_russian_page",
+          "status": "passed",
+          "duration_s": 0.002,
+          "message": ""
+        },
+        {
           "name": "test_match_returns_ranked_cards_and_grounded_facts",
           "status": "passed",
-          "duration_s": 0.014,
+          "duration_s": 0.004,
           "message": ""
         },
         {
           "name": "test_meta_describes_loaded_contractors_and_calendar",
+          "status": "passed",
+          "duration_s": 0.002,
+          "message": ""
+        },
+        {
+          "name": "test_qalau_assets_are_served[api.mjs]",
+          "status": "passed",
+          "duration_s": 0.002,
+          "message": ""
+        },
+        {
+          "name": "test_qalau_assets_are_served[app.mjs]",
+          "status": "passed",
+          "duration_s": 0.002,
+          "message": ""
+        },
+        {
+          "name": "test_qalau_assets_are_served[assets/generated/service-host.png]",
+          "status": "passed",
+          "duration_s": 0.002,
+          "message": ""
+        },
+        {
+          "name": "test_qalau_assets_are_served[docs.css]",
+          "status": "passed",
+          "duration_s": 0.002,
+          "message": ""
+        },
+        {
+          "name": "test_qalau_assets_are_served[docs.mjs]",
+          "status": "passed",
+          "duration_s": 0.002,
+          "message": ""
+        },
+        {
+          "name": "test_qalau_assets_are_served[fonts/OFL.txt]",
+          "status": "passed",
+          "duration_s": 0.001,
+          "message": ""
+        },
+        {
+          "name": "test_qalau_assets_are_served[services.mjs]",
+          "status": "passed",
+          "duration_s": 0.002,
+          "message": ""
+        },
+        {
+          "name": "test_qalau_assets_are_served[style.css]",
           "status": "passed",
           "duration_s": 0.002,
           "message": ""
@@ -121,39 +228,51 @@
           "message": ""
         },
         {
+          "name": "test_report_routes_read_optional_files[False]",
+          "status": "passed",
+          "duration_s": 0.002,
+          "message": ""
+        },
+        {
+          "name": "test_report_routes_read_optional_files[True]",
+          "status": "passed",
+          "duration_s": 0.002,
+          "message": ""
+        },
+        {
           "name": "test_request_error_returns_422_with_russian_detail[False]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.002,
           "message": ""
         },
         {
           "name": "test_request_error_returns_422_with_russian_detail[True]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.002,
           "message": ""
         },
         {
           "name": "test_semantic_backend_reports_the_scorer_that_actually_succeeded[available]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.002,
           "message": ""
         },
         {
           "name": "test_semantic_backend_reports_the_scorer_that_actually_succeeded[init_import]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.002,
           "message": ""
         },
         {
           "name": "test_semantic_backend_reports_the_scorer_that_actually_succeeded[init_semantic]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.002,
           "message": ""
         },
         {
           "name": "test_semantic_backend_reports_the_scorer_that_actually_succeeded[missing]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.002,
           "message": ""
         },
         {
@@ -165,7 +284,7 @@
         {
           "name": "test_semantic_backend_reports_the_scorer_that_actually_succeeded[run_semantic]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.002,
           "message": ""
         }
       ]
@@ -177,7 +296,7 @@
       "failed": 0,
       "skipped": 0,
       "errors": 0,
-      "duration_s": 0.016,
+      "duration_s": 0.014,
       "tests": [
         {
           "name": "test_at_least_fifty_of_all_seventy_eight_contractors_are_tagged",
@@ -188,13 +307,13 @@
         {
           "name": "test_committed_aspects_have_known_tags_and_verbatim_evidence",
           "status": "passed",
-          "duration_s": 0.003,
+          "duration_s": 0.002,
           "message": ""
         },
         {
           "name": "test_dry_run_drops_invalid_evidence_and_never_writes[False]",
           "status": "passed",
-          "duration_s": 0.006,
+          "duration_s": 0.004,
           "message": ""
         },
         {
@@ -212,7 +331,7 @@
         {
           "name": "test_whitespace_evidence_is_restored_and_tags_are_sorted",
           "status": "passed",
-          "duration_s": 0.0,
+          "duration_s": 0.001,
           "message": ""
         }
       ]
@@ -224,7 +343,7 @@
       "failed": 0,
       "skipped": 0,
       "errors": 0,
-      "duration_s": 0.012,
+      "duration_s": 0.009,
       "tests": [
         {
           "name": "test_anonymization_removes_full_and_short_names_and_venue_aliases",
@@ -259,7 +378,7 @@
         {
           "name": "test_jobs_are_blind_and_label_assignments_are_independent_of_presentation",
           "status": "passed",
-          "duration_s": 0.005,
+          "duration_s": 0.002,
           "message": ""
         },
         {
@@ -337,12 +456,12 @@
       "failed": 0,
       "skipped": 0,
       "errors": 0,
-      "duration_s": 0.02,
+      "duration_s": 0.014,
       "tests": [
         {
           "name": "test_global_attempt_cap_survives_restart",
           "status": "passed",
-          "duration_s": 0.007,
+          "duration_s": 0.006,
           "message": ""
         },
         {
@@ -354,31 +473,31 @@
         {
           "name": "test_invalid_rankings_are_rejected[labels1-stop-4]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.0,
           "message": ""
         },
         {
           "name": "test_invalid_rankings_are_rejected[labels2-stop-4]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.0,
           "message": ""
         },
         {
           "name": "test_invalid_rankings_are_rejected[labels3-length-4]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.0,
           "message": ""
         },
         {
           "name": "test_invalid_rankings_are_rejected[labels4-stop-True]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.0,
           "message": ""
         },
         {
           "name": "test_invalid_rankings_are_rejected[labels5-stop-6]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.0,
           "message": ""
         },
         {
@@ -420,7 +539,7 @@
       "failed": 0,
       "skipped": 0,
       "errors": 0,
-      "duration_s": 0.014,
+      "duration_s": 0.011,
       "tests": [
         {
           "name": "test_extra_catalogue_requires_synthetic_and_merges_in_id_order[False]",
@@ -443,13 +562,13 @@
         {
           "name": "test_invalid_rows_report_their_id[busy_dates-2026-09-22]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.0,
           "message": ""
         },
         {
           "name": "test_invalid_rows_report_their_id[busy_dates-20261001]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.0,
           "message": ""
         },
         {
@@ -467,7 +586,7 @@
         {
           "name": "test_invalid_rows_report_their_id[city_imputed-yes]",
           "status": "passed",
-          "duration_s": 0.0,
+          "duration_s": 0.001,
           "message": ""
         },
         {
@@ -479,7 +598,7 @@
         {
           "name": "test_invalid_rows_report_their_id[languages-\\u0440\\u0443\\u0441\\u0441\\u043a\\u0438\\u0439|\\u0444\\u0440\\u0430\\u043d\\u0446\\u0443\\u0437\\u0441\\u043a\\u0438\\u0439]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.0,
           "message": ""
         },
         {
@@ -503,19 +622,19 @@
         {
           "name": "test_invalid_rows_report_their_id[price_from_kzt-200.5]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.0,
           "message": ""
         },
         {
           "name": "test_invalid_rows_report_their_id[price_from_kzt-free]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.0,
           "message": ""
         },
         {
           "name": "test_invalid_rows_report_their_id[price_imputed-false]",
           "status": "passed",
-          "duration_s": 0.0,
+          "duration_s": 0.001,
           "message": ""
         },
         {
@@ -539,7 +658,7 @@
       "failed": 0,
       "skipped": 0,
       "errors": 0,
-      "duration_s": 0.038,
+      "duration_s": 0.013,
       "tests": [
         {
           "name": "test_anchor_percentiles_use_every_query_description_pair_and_linear_interpolation",
@@ -622,73 +741,73 @@
         {
           "name": "test_invalid_vectors_are_unavailable_instead_of_producing_a_false_score[False-None]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.0,
           "message": ""
         },
         {
           "name": "test_invalid_vectors_are_unavailable_instead_of_producing_a_false_score[False-vector0]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.0,
           "message": ""
         },
         {
           "name": "test_invalid_vectors_are_unavailable_instead_of_producing_a_false_score[False-vector1]",
           "status": "passed",
-          "duration_s": 0.002,
+          "duration_s": 0.001,
           "message": ""
         },
         {
           "name": "test_invalid_vectors_are_unavailable_instead_of_producing_a_false_score[False-vector2]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.0,
           "message": ""
         },
         {
           "name": "test_invalid_vectors_are_unavailable_instead_of_producing_a_false_score[False-vector3]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.0,
           "message": ""
         },
         {
           "name": "test_invalid_vectors_are_unavailable_instead_of_producing_a_false_score[False-vector5]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.0,
           "message": ""
         },
         {
           "name": "test_invalid_vectors_are_unavailable_instead_of_producing_a_false_score[True-None]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.0,
           "message": ""
         },
         {
           "name": "test_invalid_vectors_are_unavailable_instead_of_producing_a_false_score[True-vector0]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.0,
           "message": ""
         },
         {
           "name": "test_invalid_vectors_are_unavailable_instead_of_producing_a_false_score[True-vector1]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.0,
           "message": ""
         },
         {
           "name": "test_invalid_vectors_are_unavailable_instead_of_producing_a_false_score[True-vector2]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.0,
           "message": ""
         },
         {
           "name": "test_invalid_vectors_are_unavailable_instead_of_producing_a_false_score[True-vector3]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.0,
           "message": ""
         },
         {
           "name": "test_invalid_vectors_are_unavailable_instead_of_producing_a_false_score[True-vector5]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.0,
           "message": ""
         },
         {
@@ -754,7 +873,7 @@
         {
           "name": "test_snippet_splits_all_boundaries_and_picks_highest_cosine_with_stable_ties[False]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.0,
           "message": ""
         },
         {
@@ -766,25 +885,25 @@
         {
           "name": "test_unavailable_vectors_raise_semantic_unavailable[score-api_timeout]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.0,
           "message": ""
         },
         {
           "name": "test_unavailable_vectors_raise_semantic_unavailable[score-corrupt]",
           "status": "passed",
-          "duration_s": 0.003,
+          "duration_s": 0.0,
           "message": ""
         },
         {
           "name": "test_unavailable_vectors_raise_semantic_unavailable[score-dimensions]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.0,
           "message": ""
         },
         {
           "name": "test_unavailable_vectors_raise_semantic_unavailable[score-legacy]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.0,
           "message": ""
         },
         {
@@ -808,25 +927,25 @@
         {
           "name": "test_unavailable_vectors_raise_semantic_unavailable[score-partial]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.0,
           "message": ""
         },
         {
           "name": "test_unavailable_vectors_raise_semantic_unavailable[snippet-api_timeout]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.0,
           "message": ""
         },
         {
           "name": "test_unavailable_vectors_raise_semantic_unavailable[snippet-corrupt]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.0,
           "message": ""
         },
         {
           "name": "test_unavailable_vectors_raise_semantic_unavailable[snippet-dimensions]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.0,
           "message": ""
         },
         {
@@ -844,13 +963,13 @@
         {
           "name": "test_unavailable_vectors_raise_semantic_unavailable[snippet-other_dimensions]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.0,
           "message": ""
         },
         {
           "name": "test_unavailable_vectors_raise_semantic_unavailable[snippet-other_model]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.0,
           "message": ""
         },
         {
@@ -880,12 +999,12 @@
       "failed": 0,
       "skipped": 0,
       "errors": 0,
-      "duration_s": 0.218,
+      "duration_s": 0.203,
       "tests": [
         {
           "name": "test_file_cache_replays_across_processes_with_unordered_busy_dates",
           "status": "passed",
-          "duration_s": 0.15,
+          "duration_s": 0.142,
           "message": ""
         },
         {
@@ -921,7 +1040,7 @@
         {
           "name": "test_llm_caches_success_and_fallback_by_request_and_ordered_card_ids[{\"explanations\": [{\"id\": \"c1\", \"text\": \"\\\\u0412 \\\\u0442\\\\u0440\\\\u043e\\\\u0439\\\\u043a\\\\u0435, \\\\u043f\\\\u043e\\\\u0442\\\\u043e\\\\u043c\\\\u0443 \\\\u0447\\\\u0442\\\\u043e \\\\u0431\\\\u043e\\\\u043b\\\\u0435\\\\u0435 \\\\u043f\\\\u0440\\\\u0438\\\\u0432\\\\u043b\\\\u0435\\\\u043a\\\\u0430\\\\u0442\\\\u0435\\\\u043b\\\\u044c\\\\u043d\\\\u044b\\\\u0439 \\\\u0432\\\\u0430\\\\u0440\\\\u0438\\\\u0430\\\\u043d\\\\u0442 \\\\u043d\\\\u0430 \\\\u044d\\\\u0442\\\\u0443 \\\\u0434\\\\u0430\\\\u0442\\\\u0443 \\\\u0437\\\\u0430\\\\u043d\\\\u044f\\\\u0442 (\\\\u041a\\\\u0438\\\\u043a\\\\u0438). \\\\u0426\\\\u0435\\\\u043d\\\\u0430 \\\\u043e\\\\u0442 600\\\\u2009000 \\\\u20b8 \\\\u043e\\\\u0441\\\\u0442\\\\u0430\\\\u0432\\\\u043b\\\\u044f\\\\u0435\\\\u0442 \\\\u0437\\\\u0430\\\\u043f\\\\u0430\\\\u0441 25 % \\\\u043f\\\\u0440\\\\u0438 \\\\u0431\\\\u044e\\\\u0434\\\\u0436\\\\u0435\\\\u0442\\\\u0435 800\\\\u2009000 \\\\u20b8.\"}, {\"id\": \"c2\", \"text\": \"\\\\u041c\\\\u0438\\\\u043a\\\\u0430\\\\u0441\\\\u0430: \\\\u0446\\\\u0435\\\\u043d\\\\u0430 \\\\u043e\\\\u0442 500\\\\u2009000 \\\\u20b8 \\\\u043d\\\\u0430 17 % \\\\u043d\\\\u0438\\\\u0436\\\\u0435 \\\\u0441\\\\u043b\\\\u0435\\\\u0434\\\\u0443\\\\u044e\\\\u0449\\\\u0435\\\\u0439 \\\\u2014 600\\\\u2009000 \\\\u20b8. \\\\u0420\\\\u0430\\\\u0431\\\\u043e\\\\u0442\\\\u0430\\\\u0435\\\\u0442 \\\\u043d\\\\u0430 \\\\u0437\\\\u0430\\\\u043f\\\\u0440\\\\u043e\\\\u0448\\\\u0435\\\\u043d\\\\u043d\\\\u043e\\\\u043c \\\\u044f\\\\u0437\\\\u044b\\\\u043a\\\\u0435: \\\\u0430\\\\u043d\\\\u0433\\\\u043b\\\\u0438\\\\u0439\\\\u0441\\\\u043a\\\\u0438\\\\u0439.\"}, {\"id\": \"c3\", \"text\": \"\\\\u0420\\\\u0435\\\\u043d: \\\\u0441\\\\u0440\\\\u0435\\\\u0434\\\\u0438 \\\\u043f\\\\u043e\\\\u043a\\\\u0430\\\\u0437\\\\u0430\\\\u043d\\\\u043d\\\\u044b\\\\u0445 \\\\u0442\\\\u043e\\\\u043b\\\\u044c\\\\u043a\\\\u043e \\\\u0437\\\\u0434\\\\u0435\\\\u0441\\\\u044c \\\\u0437\\\\u0430\\\\u044f\\\\u0432\\\\u043b\\\\u0435\\\\u043d \\\\u043a\\\\u0430\\\\u0437\\\\u0430\\\\u0445\\\\u0441\\\\u043a\\\\u0438\\\\u0439 \\\\u044f\\\\u0437\\\\u044b\\\\u043a. \\\\u0414\\\\u043b\\\\u044f \\\\u043a\\\\u043e\\\\u0440\\\\u043f\\\\u043e\\\\u0440\\\\u0430\\\\u0442\\\\u0438\\\\u0432\\\\u0430 \\\\u043f\\\\u043e\\\\u043b\\\\u0435\\\\u0437\\\\u0435\\\\u043d \\\\u043e\\\\u043f\\\\u044b\\\\u0442 \\\\u0431\\\\u0438\\\\u0437\\\\u043d\\\\u0435\\\\u0441-\\\\u0444\\\\u043e\\\\u0440\\\\u0443\\\\u043c\\\\u043e\\\\u0432 \\\\u0438 \\\\u043a\\\\u043e\\\\u043d\\\\u0444\\\\u0435\\\\u0440\\\\u0435\\\\u043d\\\\u0446\\\\u0438\\\\u0439.\"}]}]",
           "status": "passed",
-          "duration_s": 0.002,
+          "duration_s": 0.001,
           "message": ""
         },
         {
@@ -1017,7 +1136,7 @@
         {
           "name": "test_llm_uses_legacy_template_when_no_reason_codes_are_available",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.0,
           "message": ""
         },
         {
@@ -1059,7 +1178,7 @@
         {
           "name": "test_repeated_primary_codes_require_diversity_limited[True]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.0,
           "message": ""
         },
         {
@@ -1089,13 +1208,13 @@
         {
           "name": "test_template_never_uses_snippets[\\u041c\\u043e\\u0434\\u0435\\u0440\\u0438\\u0440\\u0443\\u0435\\u0442 \\u0434\\u0435\\u043b\\u043e\\u0432\\u044b\\u0435 \\u0432\\u0441\\u0442\\u0440\\u0435\\u0447\\u0438 \\u0434\\u043b\\u044f \\u0431\\u043e\\u043b\\u044c\\u0448\\u0438\\u0445 \\u043a\\u043e\\u043c\\u043f\\u0430\\u043d\\u0438\\u0439 \\u0434\\u043b\\u044f \\u0431\\u043e\\u043b\\u044c\\u0448\\u0438\\u0445 \\u043a\\u043e\\u043c\\u043f\\u0430\\u043d\\u0438\\u0439 \\u0434\\u043b\\u044f \\u0431\\u043e\\u043b\\u044c\\u0448\\u0438\\u0445 \\u043a\\u043e\\u043c\\u043f\\u0430\\u043d\\u0438\\u0439 \\u0434\\u043b\\u044f \\u0431\\u043e\\u043b\\u044c\\u0448\\u0438\\u0445 \\u043a\\u043e\\u043c\\u043f\\u0430\\u043d\\u0438\\u0439 \\u0434\\u043b\\u044f \\u0431\\u043e\\u043b\\u044c\\u0448\\u0438\\u0445 \\u043a\\u043e\\u043c\\u043f\\u0430\\u043d\\u0438\\u0439 \\u0434\\u043b\\u044f \\u0431\\u043e\\u043b\\u044c\\u0448\\u0438\\u0445 \\u043a\\u043e\\u043c\\u043f\\u0430\\u043d\\u0438\\u0439 \\u0434\\u043b\\u044f \\u0431\\u043e\\u043b\\u044c\\u0448\\u0438\\u0445 \\u043a\\u043e\\u043c\\u043f\\u0430\\u043d\\u0438\\u0439 \\u0434\\u043b\\u044f \\u0431\\u043e\\u043b\\u044c\\u0448\\u0438\\u0445 \\u043a\\u043e\\u043c\\u043f\\u0430\\u043d\\u0438\\u0439 \\u0434\\u043b\\u044f \\u0431\\u043e\\u043b\\u044c\\u0448\\u0438\\u0445 \\u043a\\u043e\\u043c\\u043f\\u0430\\u043d\\u0438\\u0439 \\u0434\\u043b\\u044f \\u0431\\u043e\\u043b\\u044c\\u0448\\u0438\\u0445 \\u043a\\u043e\\u043c\\u043f\\u0430\\u043d\\u0438\\u0439 12345 \\u0433\\u043e\\u0441\\u0442\\u0435\\u0439]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.0,
           "message": ""
         },
         {
           "name": "test_template_never_uses_snippets[\\u041c\\u043e\\u0434\\u0435\\u0440\\u0438\\u0440\\u0443\\u0435\\u0442 \\u0434\\u0435\\u043b\\u043e\\u0432\\u044b\\u0435 \\u0432\\u0441\\u0442\\u0440\\u0435\\u0447\\u0438. \\u041f\\u0440\\u043e\\u0432\\u043e\\u0434\\u0438\\u0442 \\u0446\\u0435\\u0440\\u0435\\u043c\\u043e\\u043d\\u0438\\u0438! \\u0420\\u0430\\u0431\\u043e\\u0442\\u0430\\u0435\\u0442 \\u0441 \\u0433\\u043e\\u0441\\u0442\\u044f\\u043c\\u0438?]",
           "status": "passed",
-          "duration_s": 0.0,
+          "duration_s": 0.001,
           "message": ""
         },
         {
@@ -1119,7 +1238,7 @@
         {
           "name": "test_template_outputs_pass_validation_for_six_typical_triples[scarcity]",
           "status": "passed",
-          "duration_s": 0.002,
+          "duration_s": 0.001,
           "message": ""
         },
         {
@@ -1293,7 +1412,7 @@
         {
           "name": "test_validator_accepts_every_template_with_similar_profiles_and_caveats[single]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.0,
           "message": ""
         },
         {
@@ -1323,13 +1442,13 @@
         {
           "name": "test_validator_checks_long_quotes_against_full_description[\\u0412\\u0415\\u0414\\u0401\\u0422  \\u0434\\u0435\\u043b\\u043e\\u0432\\u044b\\u0435\\n\\u0432\\u0441\\u0442\\u0440\\u0435\\u0447\\u0438 \\u0441 \\u0436\\u0438\\u0432\\u043e\\u0439 \\u0438\\u043c\\u043f\\u0440\\u043e\\u0432\\u0438\\u0437\\u0430\\u0446\\u0438\\u0435\\u0439-False]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.0,
           "message": ""
         },
         {
           "name": "test_validator_checks_long_quotes_against_full_description[\\u0412\\u0435\\u0434\\u0451\\u0442 \\u0434\\u0435\\u043b\\u043e\\u0432\\u044b\\u0435 \\u0432\\u0441\\u0442\\u0440\\u0435\\u0447\\u0438 \\u0441 \\u0436\\u0438\\u0432\\u043e\\u0439 \\u0438\\u043c\\u043f\\u0440\\u043e\\u0432\\u0438\\u0437\\u0430\\u0446\\u0438\\u0435\\u0439\\u2026-False]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.0,
           "message": ""
         },
         {
@@ -1341,7 +1460,7 @@
         {
           "name": "test_validator_checks_long_quotes_against_full_description[\\u0434\\u0435\\u043b\\u043e\\u0432\\u044b\\u0435 \\u0432\\u0441\\u0442\\u0440\\u0435\\u0447\\u0438 \\u0441 \\u0436\\u0438\\u0432\\u043e\\u0439 \\u0438\\u043c\\u043f\\u0440\\u043e\\u0432\\u0438\\u0437\\u0430\\u0446\\u0438\\u0435\\u0439-False]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.0,
           "message": ""
         },
         {
@@ -1467,7 +1586,7 @@
         {
           "name": "test_validator_requires_every_primary_number_even_when_other_facts_are_grounded[720000]",
           "status": "passed",
-          "duration_s": 0.0,
+          "duration_s": 0.001,
           "message": ""
         },
         {
@@ -1485,7 +1604,7 @@
       "failed": 0,
       "skipped": 0,
       "errors": 0,
-      "duration_s": 0.004,
+      "duration_s": 0.002,
       "tests": [
         {
           "name": "test_boundaries_from_price_and_optional_hours_pass[1-None-day0]",
@@ -1502,7 +1621,7 @@
         {
           "name": "test_boundaries_from_price_and_optional_hours_pass[8-8-day0]",
           "status": "passed",
-          "duration_s": 0.0,
+          "duration_s": 0.001,
           "message": ""
         },
         {
@@ -1556,13 +1675,13 @@
         {
           "name": "test_invalid_request_raises_even_for_empty_catalogue[event_date-value0-\\u041a\\u0430\\u043b\\u0435\\u043d\\u0434\\u0430\\u0440\\u044c \\u0437\\u0430\\u043d\\u044f\\u0442\\u043e\\u0441\\u0442\\u0438 \\u0438\\u0437\\u0432\\u0435\\u0441\\u0442\\u0435\\u043d \\u0442\\u043e\\u043b\\u044c\\u043a\\u043e \\u043d\\u0430 23.09.2026 \\u2014 31.12.2026, \\u043f\\u043e\\u0434\\u0431\\u043e\\u0440 \\u043d\\u0430 22.09.2026 \\u043d\\u0435\\u0432\\u043e\\u0437\\u043c\\u043e\\u0436\\u0435\\u043d.]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.0,
           "message": ""
         },
         {
           "name": "test_invalid_request_raises_even_for_empty_catalogue[event_date-value1-\\u041a\\u0430\\u043b\\u0435\\u043d\\u0434\\u0430\\u0440\\u044c \\u0437\\u0430\\u043d\\u044f\\u0442\\u043e\\u0441\\u0442\\u0438 \\u0438\\u0437\\u0432\\u0435\\u0441\\u0442\\u0435\\u043d \\u0442\\u043e\\u043b\\u044c\\u043a\\u043e \\u043d\\u0430 23.09.2026 \\u2014 31.12.2026, \\u043f\\u043e\\u0434\\u0431\\u043e\\u0440 \\u043d\\u0430 01.01.2027 \\u043d\\u0435\\u0432\\u043e\\u0437\\u043c\\u043e\\u0436\\u0435\\u043d.]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.0,
           "message": ""
         },
         {
@@ -1598,7 +1717,7 @@
         {
           "name": "test_rejections_report_every_failure_in_contract_order[changes1-reasons1]",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.0,
           "message": ""
         },
         {
@@ -1634,72 +1753,72 @@
       "failed": 0,
       "skipped": 0,
       "errors": 0,
-      "duration_s": 11.489,
+      "duration_s": 12.308,
       "tests": [
         {
           "name": "test_assign_preserves_ranked_cards_and_emits_deterministic_grounded_reasons",
           "status": "passed",
-          "duration_s": 1.172,
+          "duration_s": 1.339,
           "message": ""
         },
         {
           "name": "test_booking_top_card_removes_it_without_reordering_survivors",
           "status": "passed",
-          "duration_s": 1.72,
+          "duration_s": 1.824,
           "message": ""
         },
         {
           "name": "test_cards_are_sorted_and_capped",
           "status": "passed",
-          "duration_s": 1.177,
+          "duration_s": 1.144,
           "message": ""
         },
         {
           "name": "test_every_card_starting_price_fits_budget",
           "status": "passed",
-          "duration_s": 0.967,
+          "duration_s": 1.354,
           "message": ""
         },
         {
           "name": "test_every_card_supports_format_and_requested_language",
           "status": "passed",
-          "duration_s": 1.14,
+          "duration_s": 1.172,
           "message": ""
         },
         {
           "name": "test_loader_round_trip",
           "status": "passed",
-          "duration_s": 0.867,
+          "duration_s": 0.778,
           "message": ""
         },
         {
           "name": "test_no_card_is_busy",
           "status": "passed",
-          "duration_s": 1.171,
+          "duration_s": 1.137,
           "message": ""
         },
         {
           "name": "test_outcome_agrees_with_counts",
           "status": "passed",
-          "duration_s": 1.003,
+          "duration_s": 1.196,
           "message": ""
         },
         {
           "name": "test_pool_is_partitioned_into_eligible_and_rejected_profiles",
           "status": "passed",
-          "duration_s": 0.891,
+          "duration_s": 1.012,
           "message": ""
         },
         {
           "name": "test_run_is_deterministic_and_independent_of_catalogue_order",
           "status": "passed",
-          "duration_s": 1.077,
+          "duration_s": 1.093,
           "message": ""
         },
         {
           "name": "test_unspecified_max_hours_never_rejects_for_duration",
           "status": "passed",
-          "duration_s": 0.304,
+          "duration_s": 0.259,
           "message": ""
         }
       ]
@@ -1711,7 +1830,7 @@
       "failed": 0,
       "skipped": 0,
       "errors": 0,
-      "duration_s": 0.033,
+      "duration_s": 0.039,
       "tests": [
         {
           "name": "test_budget_headroom_orders_otherwise_equal_candidates",
@@ -1722,7 +1841,7 @@
         {
           "name": "test_category_profiles_and_optional_duration_are_normalized[categories0-with_hours0-without_hours0]",
           "status": "passed",
-          "duration_s": 0.0,
+          "duration_s": 0.001,
           "message": ""
         },
         {
@@ -1734,13 +1853,13 @@
         {
           "name": "test_category_profiles_and_optional_duration_are_normalized[categories2-with_hours2-without_hours2]",
           "status": "passed",
-          "duration_s": 0.0,
+          "duration_s": 0.001,
           "message": ""
         },
         {
           "name": "test_category_profiles_and_optional_duration_are_normalized[categories3-with_hours3-without_hours3]",
           "status": "passed",
-          "duration_s": 0.0,
+          "duration_s": 0.001,
           "message": ""
         },
         {
@@ -1902,7 +2021,7 @@
         {
           "name": "test_lexical_snippet_ties_fallback_and_contract_limit[-0.0-None]",
           "status": "passed",
-          "duration_s": 0.0,
+          "duration_s": 0.001,
           "message": ""
         },
         {
@@ -1920,7 +2039,7 @@
         {
           "name": "test_lexical_snippet_ties_fallback_and_contract_limit[\\u041d\\u0435\\u0439\\u0442\\u0440\\u0430\\u043b\\u044c\\u043d\\u043e\\u0435 \\u043e\\u043f\\u0438\\u0441\\u0430\\u043d\\u0438\\u0435-0.0-None]",
           "status": "passed",
-          "duration_s": 0.0,
+          "duration_s": 0.001,
           "message": ""
         },
         {
@@ -1968,7 +2087,7 @@
         {
           "name": "test_unsolicited_languages_cannot_change_ranking",
           "status": "passed",
-          "duration_s": 0.0,
+          "duration_s": 0.001,
           "message": ""
         }
       ]
@@ -1980,7 +2099,7 @@
       "failed": 0,
       "skipped": 0,
       "errors": 0,
-      "duration_s": 0.959,
+      "duration_s": 0.999,
       "tests": [
         {
           "name": "test_absence_from_date_free_top_three_does_not_prove_single_competitor_replacement",
@@ -2009,13 +2128,13 @@
         {
           "name": "test_date_pair_replacement_is_proved_by_returning_the_busy_competitor_alone",
           "status": "passed",
-          "duration_s": 0.193,
+          "duration_s": 0.201,
           "message": ""
         },
         {
           "name": "test_dense_diversity_and_rare_contrasts_are_honest",
           "status": "passed",
-          "duration_s": 0.186,
+          "duration_s": 0.193,
           "message": ""
         },
         {
@@ -2117,19 +2236,19 @@
         {
           "name": "test_real_contributions_decompose_the_score_relative_to_all_eligible[date_pair_b]",
           "status": "passed",
-          "duration_s": 0.184,
+          "duration_s": 0.192,
           "message": ""
         },
         {
           "name": "test_real_contributions_decompose_the_score_relative_to_all_eligible[dense]",
           "status": "passed",
-          "duration_s": 0.186,
+          "duration_s": 0.195,
           "message": ""
         },
         {
           "name": "test_real_contributions_decompose_the_score_relative_to_all_eligible[rare]",
           "status": "passed",
-          "duration_s": 0.179,
+          "duration_s": 0.187,
           "message": ""
         },
         {
@@ -2203,11 +2322,11 @@
     {
       "name": "tests/test_report.py",
       "kind": "unit",
-      "passed": 4,
+      "passed": 5,
       "failed": 0,
-      "skipped": 1,
+      "skipped": 0,
       "errors": 0,
-      "duration_s": 0.236,
+      "duration_s": 0.43,
       "tests": [
         {
           "name": "test_committed_report_shape",
@@ -2217,14 +2336,14 @@
         },
         {
           "name": "test_dashboard_mobile_filters_and_empty_state",
-          "status": "skipped",
-          "duration_s": 0.159,
+          "status": "passed",
+          "duration_s": 0.357,
           "message": ""
         },
         {
           "name": "test_junit_cli_without_pytest_or_git[False-0]",
           "status": "passed",
-          "duration_s": 0.04,
+          "duration_s": 0.036,
           "message": ""
         },
         {
@@ -2248,7 +2367,7 @@
       "failed": 0,
       "skipped": 0,
       "errors": 0,
-      "duration_s": 2.974,
+      "duration_s": 3.052,
       "tests": [
         {
           "name": "test_absent_category_suggests_present_related_categories_and_other_city",
@@ -2277,7 +2396,7 @@
         {
           "name": "test_build_script_dry_run_embeds_csv_descriptions_and_sentences_once[True]",
           "status": "passed",
-          "duration_s": 0.08,
+          "duration_s": 0.079,
           "message": ""
         },
         {
@@ -2289,19 +2408,19 @@
         {
           "name": "test_demo_requests_have_required_real_data_characteristics",
           "status": "passed",
-          "duration_s": 0.197,
+          "duration_s": 0.203,
           "message": ""
         },
         {
           "name": "test_every_catalogue_query_is_cached_offline",
           "status": "passed",
-          "duration_s": 0.179,
+          "duration_s": 0.188,
           "message": ""
         },
         {
           "name": "test_full_match_has_grounded_cards_and_no_shortfall",
           "status": "passed",
-          "duration_s": 0.001,
+          "duration_s": 0.003,
           "message": ""
         },
         {
@@ -2343,37 +2462,37 @@
         {
           "name": "test_saved_demo_outcomes_and_ordered_cards_are_reproducible[date_pair_a]",
           "status": "passed",
-          "duration_s": 0.391,
+          "duration_s": 0.403,
           "message": ""
         },
         {
           "name": "test_saved_demo_outcomes_and_ordered_cards_are_reproducible[date_pair_b]",
           "status": "passed",
-          "duration_s": 0.384,
+          "duration_s": 0.396,
           "message": ""
         },
         {
           "name": "test_saved_demo_outcomes_and_ordered_cards_are_reproducible[dense]",
           "status": "passed",
-          "duration_s": 0.398,
+          "duration_s": 0.407,
           "message": ""
         },
         {
           "name": "test_saved_demo_outcomes_and_ordered_cards_are_reproducible[empty_no_category]",
           "status": "passed",
-          "duration_s": 0.366,
+          "duration_s": 0.374,
           "message": ""
         },
         {
           "name": "test_saved_demo_outcomes_and_ordered_cards_are_reproducible[empty_none_eligible]",
           "status": "passed",
-          "duration_s": 0.365,
+          "duration_s": 0.376,
           "message": ""
         },
         {
           "name": "test_saved_demo_outcomes_and_ordered_cards_are_reproducible[rare]",
           "status": "passed",
-          "duration_s": 0.366,
+          "duration_s": 0.376,
           "message": ""
         },
         {
@@ -2391,7 +2510,7 @@
       "failed": 0,
       "skipped": 0,
       "errors": 0,
-      "duration_s": 0.189,
+      "duration_s": 0.186,
       "tests": [
         {
           "name": "test_busy_dates_are_iso_in_window_with_seasonal_load",
@@ -2402,13 +2521,13 @@
         {
           "name": "test_embedding_builder_includes_extra_catalogue_and_reuses_vectors",
           "status": "passed",
-          "duration_s": 0.084,
+          "duration_s": 0.083,
           "message": ""
         },
         {
           "name": "test_generator_is_deterministic_and_matches_committed_csv",
           "status": "passed",
-          "duration_s": 0.062,
+          "duration_s": 0.059,
           "message": ""
         },
         {
@@ -2426,7 +2545,7 @@
         {
           "name": "test_new_descriptions_and_sentences_have_shipped_embeddings",
           "status": "passed",
-          "duration_s": 0.037,
+          "duration_s": 0.038,
           "message": ""
         },
         {
