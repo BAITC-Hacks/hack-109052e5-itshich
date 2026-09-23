@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Результаты тестов — QALAU</title>
-  <style>#live-cases{display:none}</style>
+  <title>Живые тест-кейсы — QALAU</title>
+  <style>.pytest-only{display:none}</style>
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="/tests.css">
   <style>
@@ -14,8 +14,8 @@
 </head>
 <body class="test-report">
   <main>
-    <header class="header shared-header"><div class="header-inner"><a class="brand" href="/" aria-label="QALAU — к началу подбора">QALAU<span class="brand-dot">.</span></a><nav class="header-nav" aria-label="Основная навигация"><a href="/">Подбор</a><a href="/docs-ui">Документация</a><a href="/tests" aria-current="page">Тесты</a><a href="/cases">Кейсы</a></nav></div></header>
-    <header><p class="eyebrow">Проверка качества</p><h1>Результаты тестов</h1><p id="metadata">Загружаем отчёт…</p></header>
+    <header class="header shared-header"><div class="header-inner"><a class="brand" href="/" aria-label="QALAU — к началу подбора">QALAU<span class="brand-dot">.</span></a><nav class="header-nav" aria-label="Основная навигация"><a href="/">Подбор</a><a href="/docs-ui">Документация</a><a href="/tests">Тесты</a><a href="/cases" aria-current="page">Кейсы</a></nav></div></header>
+    <header><p class="eyebrow">Реальные запросы · фактические ответы</p><h1>Живые тест-кейсы</h1><p id="metadata">Загружаем отчёт…</p></header>
     <section id="live-cases" aria-labelledby="live-title">
       <div class="live-heading"><div><p class="eyebrow">Настоящие запросы · фактические ответы</p><h2 id="live-title">Живые тест-кейсы</h2></div><button id="run-cases" type="button">Прогнать сейчас</button></div>
       <p id="cases-summary" aria-live="polite">Загружаем живые кейсы…</p>
@@ -39,7 +39,7 @@
     <div id="suites"></div>
     <section class="demo-section"><h2>Примеры запросов</h2><p>Ожидаемые результаты сценариев; не результаты их выполнения.</p><div id="demos"></div></section>
     </div>
-    <footer>QALAU · Отчёт последнего запуска <a href="/">Вернуться к подбору →</a></footer>
+    <footer>QALAU · Живые тест-кейсы <a href="/">Вернуться к подбору →</a></footer>
   </main>
 <script>
 'use strict';

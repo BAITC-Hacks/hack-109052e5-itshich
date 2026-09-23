@@ -178,3 +178,13 @@ body{
  .header{backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 }
 @media(max-width:760px){body{background-attachment:scroll}}
+
+/* Surface harmony over the generated backdrop: no opaque black bands, one translucent chrome tone. */
+:root[data-palette="openai"]{--bg:#141516;--chrome:rgba(22,23,24,.78)}
+.header.shared-header,.tonal-background .header,.selection-bar,.tonal-background .selection-bar,.tonal-background .site-footer,footer,.site-footer{background:var(--chrome);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:none}
+.header.shared-header{border-bottom:1px solid rgba(255,255,255,.08)}
+.selection-bar{border-top:1px solid rgba(255,255,255,.08);margin-top:0}
+.tonal-background :is(.intro,.screen-heading,.result-top)::before{background:rgba(24,24,24,.35);border-color:rgba(255,255,255,.06)}
+.catalog,#groups,.service-content{background:transparent}
+.vendor,.comparison{background:color-mix(in srgb,var(--surface) 82%,transparent)}
+.service[aria-pressed=true]{background:color-mix(in srgb,var(--tint) 85%,transparent)}

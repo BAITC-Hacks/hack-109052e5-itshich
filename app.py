@@ -39,6 +39,14 @@ def tests_ui():
     return FileResponse(path, media_type="text/html")
 
 
+@app.get("/cases", response_class=FileResponse)
+def cases_ui():
+    path = ROOT / "web" / "qalau" / "cases.html"
+    if not path.is_file():
+        raise HTTPException(status_code=404, detail="Страница кейсов ещё не сформирована")
+    return FileResponse(path, media_type="text/html")
+
+
 @app.get("/api/tests")
 def tests_report():
     try:
