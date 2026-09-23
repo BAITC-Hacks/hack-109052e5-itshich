@@ -1,0 +1,1012 @@
+{
+  "chosen_thetas": {
+    "budget": 0.75,
+    "duration": 1.0,
+    "quality": 1.0,
+    "text": 1.0
+  },
+  "train_loss": 0.6578300506673662,
+  "weights_by_group": {
+    "general": {
+      "budget_fit": 0.2,
+      "semantic": 0.5866666666666667,
+      "language_fit": 0.0,
+      "duration_fit": 0.05333333333333334,
+      "data_quality": 0.16
+    },
+    "venue": {
+      "budget_fit": 0.2,
+      "semantic": 0.64,
+      "language_fit": 0.0,
+      "duration_fit": 0.05333333333333334,
+      "data_quality": 0.10666666666666667
+    },
+    "host": {
+      "budget_fit": 0.2,
+      "semantic": 0.5866666666666667,
+      "language_fit": 0.0,
+      "duration_fit": 0.10666666666666667,
+      "data_quality": 0.10666666666666667
+    },
+    "decor": {
+      "budget_fit": 0.2,
+      "semantic": 0.64,
+      "language_fit": 0.0,
+      "duration_fit": 0.0,
+      "data_quality": 0.16
+    }
+  },
+  "metrics": {
+    "current_main": {
+      "train": {
+        "per_request": [
+          {
+            "id": "q01",
+            "top3": [
+              "HK-35215",
+              "HK-27222",
+              "HK-29829"
+            ],
+            "pairs": 4,
+            "boundary_pairs": 1,
+            "coverage": 0.6666666666666666,
+            "pairwise_agreement": 0.5,
+            "boundary_agreement": 0.0,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q02",
+            "top3": [
+              "HK-88430",
+              "HK-77838",
+              "HK-44923"
+            ],
+            "pairs": 4,
+            "boundary_pairs": 2,
+            "coverage": 0.4,
+            "pairwise_agreement": 0.75,
+            "boundary_agreement": 1.0,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q03",
+            "top3": [
+              "HK-68220",
+              "HK-91112",
+              "HK-30583"
+            ],
+            "pairs": 0,
+            "boundary_pairs": 0,
+            "coverage": 0.0,
+            "pairwise_agreement": null,
+            "boundary_agreement": null,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q04",
+            "top3": [
+              "HK-68220",
+              "HK-76268",
+              "HK-30583"
+            ],
+            "pairs": 4,
+            "boundary_pairs": 3,
+            "coverage": 0.4,
+            "pairwise_agreement": 0.75,
+            "boundary_agreement": 1.0,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q05",
+            "top3": [
+              "HK-90011",
+              "HK-58236",
+              "HK-69010"
+            ],
+            "pairs": 2,
+            "boundary_pairs": 0,
+            "coverage": 0.3333333333333333,
+            "pairwise_agreement": 1.0,
+            "boundary_agreement": null,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q06",
+            "top3": [
+              "HK-50695",
+              "HK-90011",
+              "HK-58236"
+            ],
+            "pairs": 2,
+            "boundary_pairs": 0,
+            "coverage": 0.3333333333333333,
+            "pairwise_agreement": 0.5,
+            "boundary_agreement": null,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q07",
+            "top3": [
+              "HK-80581",
+              "HK-37181",
+              "HK-97041"
+            ],
+            "pairs": 4,
+            "boundary_pairs": 1,
+            "coverage": 0.6666666666666666,
+            "pairwise_agreement": 0.625,
+            "boundary_agreement": 1.0,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q08",
+            "top3": [
+              "HK-80581",
+              "HK-97041",
+              "HK-37181"
+            ],
+            "pairs": 5,
+            "boundary_pairs": 2,
+            "coverage": 0.8333333333333334,
+            "pairwise_agreement": 0.7,
+            "boundary_agreement": 1.0,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q09",
+            "top3": [
+              "HK-35215",
+              "HK-88430",
+              "HK-44923"
+            ],
+            "pairs": 6,
+            "boundary_pairs": 4,
+            "coverage": 0.6,
+            "pairwise_agreement": 0.5833333333333334,
+            "boundary_agreement": 0.375,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q10",
+            "top3": [
+              "HK-77838",
+              "HK-44923",
+              "HK-88430"
+            ],
+            "pairs": 3,
+            "boundary_pairs": 1,
+            "coverage": 0.5,
+            "pairwise_agreement": 0.8333333333333334,
+            "boundary_agreement": 0.5,
+            "ndcg_at_3": 1.0
+          }
+        ],
+        "pairwise_agreement": 0.6935185185185185,
+        "boundary_agreement": 0.6964285714285714,
+        "ndcg_at_3": 1.0
+      },
+      "held_out": {
+        "per_request": [
+          {
+            "id": "q11",
+            "top3": [
+              "HK-80581",
+              "HK-37181",
+              "HK-26808"
+            ],
+            "pairs": 4,
+            "boundary_pairs": 2,
+            "coverage": 0.6666666666666666,
+            "pairwise_agreement": 0.75,
+            "boundary_agreement": 0.75,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q12",
+            "top3": [
+              "HK-80581",
+              "HK-37181",
+              "HK-97041"
+            ],
+            "pairs": 3,
+            "boundary_pairs": 0,
+            "coverage": 0.5,
+            "pairwise_agreement": 0.5,
+            "boundary_agreement": null,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q13",
+            "top3": [
+              "HK-30583",
+              "HK-20640",
+              "HK-35913"
+            ],
+            "pairs": 3,
+            "boundary_pairs": 1,
+            "coverage": 0.5,
+            "pairwise_agreement": 0.3333333333333333,
+            "boundary_agreement": 1.0,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q14",
+            "top3": [
+              "HK-30583",
+              "HK-35913",
+              "HK-20640"
+            ],
+            "pairs": 4,
+            "boundary_pairs": 2,
+            "coverage": 0.6666666666666666,
+            "pairwise_agreement": 0.5,
+            "boundary_agreement": 1.0,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q15",
+            "top3": [
+              "HK-90011",
+              "HK-58236",
+              "HK-69010"
+            ],
+            "pairs": 4,
+            "boundary_pairs": 3,
+            "coverage": 0.4,
+            "pairwise_agreement": 0.75,
+            "boundary_agreement": 0.6666666666666666,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q16",
+            "top3": [
+              "HK-90011",
+              "HK-64395",
+              "HK-58236"
+            ],
+            "pairs": 3,
+            "boundary_pairs": 2,
+            "coverage": 0.5,
+            "pairwise_agreement": 0.6666666666666666,
+            "boundary_agreement": 0.75,
+            "ndcg_at_3": 1.0
+          }
+        ],
+        "pairwise_agreement": 0.5833333333333334,
+        "boundary_agreement": 0.8333333333333334,
+        "ndcg_at_3": 1.0
+      }
+    },
+    "production_semantic_old_weights": {
+      "train": {
+        "per_request": [
+          {
+            "id": "q01",
+            "top3": [
+              "HK-35215",
+              "HK-27222",
+              "HK-29829"
+            ],
+            "pairs": 4,
+            "boundary_pairs": 1,
+            "coverage": 0.6666666666666666,
+            "pairwise_agreement": 0.5,
+            "boundary_agreement": 0.0,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q02",
+            "top3": [
+              "HK-88430",
+              "HK-77838",
+              "HK-44923"
+            ],
+            "pairs": 4,
+            "boundary_pairs": 2,
+            "coverage": 0.4,
+            "pairwise_agreement": 0.75,
+            "boundary_agreement": 1.0,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q03",
+            "top3": [
+              "HK-68220",
+              "HK-91112",
+              "HK-30583"
+            ],
+            "pairs": 0,
+            "boundary_pairs": 0,
+            "coverage": 0.0,
+            "pairwise_agreement": null,
+            "boundary_agreement": null,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q04",
+            "top3": [
+              "HK-68220",
+              "HK-76268",
+              "HK-30583"
+            ],
+            "pairs": 4,
+            "boundary_pairs": 3,
+            "coverage": 0.4,
+            "pairwise_agreement": 0.75,
+            "boundary_agreement": 1.0,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q05",
+            "top3": [
+              "HK-90011",
+              "HK-58236",
+              "HK-69010"
+            ],
+            "pairs": 2,
+            "boundary_pairs": 0,
+            "coverage": 0.3333333333333333,
+            "pairwise_agreement": 1.0,
+            "boundary_agreement": null,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q06",
+            "top3": [
+              "HK-50695",
+              "HK-90011",
+              "HK-58236"
+            ],
+            "pairs": 2,
+            "boundary_pairs": 0,
+            "coverage": 0.3333333333333333,
+            "pairwise_agreement": 0.5,
+            "boundary_agreement": null,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q07",
+            "top3": [
+              "HK-80581",
+              "HK-37181",
+              "HK-97041"
+            ],
+            "pairs": 4,
+            "boundary_pairs": 1,
+            "coverage": 0.6666666666666666,
+            "pairwise_agreement": 0.625,
+            "boundary_agreement": 1.0,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q08",
+            "top3": [
+              "HK-80581",
+              "HK-97041",
+              "HK-37181"
+            ],
+            "pairs": 5,
+            "boundary_pairs": 2,
+            "coverage": 0.8333333333333334,
+            "pairwise_agreement": 0.7,
+            "boundary_agreement": 1.0,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q09",
+            "top3": [
+              "HK-35215",
+              "HK-88430",
+              "HK-44923"
+            ],
+            "pairs": 6,
+            "boundary_pairs": 4,
+            "coverage": 0.6,
+            "pairwise_agreement": 0.5833333333333334,
+            "boundary_agreement": 0.375,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q10",
+            "top3": [
+              "HK-77838",
+              "HK-44923",
+              "HK-88430"
+            ],
+            "pairs": 3,
+            "boundary_pairs": 1,
+            "coverage": 0.5,
+            "pairwise_agreement": 0.8333333333333334,
+            "boundary_agreement": 0.5,
+            "ndcg_at_3": 1.0
+          }
+        ],
+        "pairwise_agreement": 0.6935185185185185,
+        "boundary_agreement": 0.6964285714285714,
+        "ndcg_at_3": 1.0
+      },
+      "held_out": {
+        "per_request": [
+          {
+            "id": "q11",
+            "top3": [
+              "HK-80581",
+              "HK-37181",
+              "HK-26808"
+            ],
+            "pairs": 4,
+            "boundary_pairs": 2,
+            "coverage": 0.6666666666666666,
+            "pairwise_agreement": 0.75,
+            "boundary_agreement": 0.75,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q12",
+            "top3": [
+              "HK-80581",
+              "HK-37181",
+              "HK-97041"
+            ],
+            "pairs": 3,
+            "boundary_pairs": 0,
+            "coverage": 0.5,
+            "pairwise_agreement": 0.5,
+            "boundary_agreement": null,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q13",
+            "top3": [
+              "HK-30583",
+              "HK-20640",
+              "HK-35913"
+            ],
+            "pairs": 3,
+            "boundary_pairs": 1,
+            "coverage": 0.5,
+            "pairwise_agreement": 0.3333333333333333,
+            "boundary_agreement": 1.0,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q14",
+            "top3": [
+              "HK-30583",
+              "HK-35913",
+              "HK-20640"
+            ],
+            "pairs": 4,
+            "boundary_pairs": 2,
+            "coverage": 0.6666666666666666,
+            "pairwise_agreement": 0.5,
+            "boundary_agreement": 1.0,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q15",
+            "top3": [
+              "HK-90011",
+              "HK-58236",
+              "HK-69010"
+            ],
+            "pairs": 4,
+            "boundary_pairs": 3,
+            "coverage": 0.4,
+            "pairwise_agreement": 0.75,
+            "boundary_agreement": 0.6666666666666666,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q16",
+            "top3": [
+              "HK-90011",
+              "HK-64395",
+              "HK-58236"
+            ],
+            "pairs": 3,
+            "boundary_pairs": 2,
+            "coverage": 0.5,
+            "pairwise_agreement": 0.6666666666666666,
+            "boundary_agreement": 0.75,
+            "ndcg_at_3": 1.0
+          }
+        ],
+        "pairwise_agreement": 0.5833333333333334,
+        "boundary_agreement": 0.8333333333333334,
+        "ndcg_at_3": 1.0
+      }
+    },
+    "priors": {
+      "train": {
+        "per_request": [
+          {
+            "id": "q01",
+            "top3": [
+              "HK-35215",
+              "HK-27222",
+              "HK-29829"
+            ],
+            "pairs": 4,
+            "boundary_pairs": 1,
+            "coverage": 0.6666666666666666,
+            "pairwise_agreement": 0.5,
+            "boundary_agreement": 0.0,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q02",
+            "top3": [
+              "HK-88430",
+              "HK-77838",
+              "HK-44923"
+            ],
+            "pairs": 4,
+            "boundary_pairs": 2,
+            "coverage": 0.4,
+            "pairwise_agreement": 0.75,
+            "boundary_agreement": 1.0,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q03",
+            "top3": [
+              "HK-68220",
+              "HK-30583",
+              "HK-91112"
+            ],
+            "pairs": 0,
+            "boundary_pairs": 0,
+            "coverage": 0.0,
+            "pairwise_agreement": null,
+            "boundary_agreement": null,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q04",
+            "top3": [
+              "HK-76268",
+              "HK-68220",
+              "HK-30583"
+            ],
+            "pairs": 4,
+            "boundary_pairs": 3,
+            "coverage": 0.4,
+            "pairwise_agreement": 0.75,
+            "boundary_agreement": 1.0,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q05",
+            "top3": [
+              "HK-90011",
+              "HK-58236",
+              "HK-69010"
+            ],
+            "pairs": 2,
+            "boundary_pairs": 0,
+            "coverage": 0.3333333333333333,
+            "pairwise_agreement": 1.0,
+            "boundary_agreement": null,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q06",
+            "top3": [
+              "HK-90011",
+              "HK-50695",
+              "HK-58236"
+            ],
+            "pairs": 2,
+            "boundary_pairs": 0,
+            "coverage": 0.3333333333333333,
+            "pairwise_agreement": 0.5,
+            "boundary_agreement": null,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q07",
+            "top3": [
+              "HK-80581",
+              "HK-97041",
+              "HK-58385"
+            ],
+            "pairs": 4,
+            "boundary_pairs": 2,
+            "coverage": 0.6666666666666666,
+            "pairwise_agreement": 0.625,
+            "boundary_agreement": 0.5,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q08",
+            "top3": [
+              "HK-80581",
+              "HK-97041",
+              "HK-58385"
+            ],
+            "pairs": 5,
+            "boundary_pairs": 2,
+            "coverage": 0.8333333333333334,
+            "pairwise_agreement": 0.7,
+            "boundary_agreement": 0.5,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q09",
+            "top3": [
+              "HK-35215",
+              "HK-44923",
+              "HK-88430"
+            ],
+            "pairs": 6,
+            "boundary_pairs": 4,
+            "coverage": 0.6,
+            "pairwise_agreement": 0.4166666666666667,
+            "boundary_agreement": 0.375,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q10",
+            "top3": [
+              "HK-77838",
+              "HK-44923",
+              "HK-88430"
+            ],
+            "pairs": 3,
+            "boundary_pairs": 1,
+            "coverage": 0.5,
+            "pairwise_agreement": 0.8333333333333334,
+            "boundary_agreement": 0.5,
+            "ndcg_at_3": 1.0
+          }
+        ],
+        "pairwise_agreement": 0.675,
+        "boundary_agreement": 0.5535714285714286,
+        "ndcg_at_3": 1.0
+      },
+      "held_out": {
+        "per_request": [
+          {
+            "id": "q11",
+            "top3": [
+              "HK-80581",
+              "HK-97041",
+              "HK-37181"
+            ],
+            "pairs": 4,
+            "boundary_pairs": 1,
+            "coverage": 0.6666666666666666,
+            "pairwise_agreement": 0.5,
+            "boundary_agreement": 1.0,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q12",
+            "top3": [
+              "HK-80581",
+              "HK-97041",
+              "HK-37181"
+            ],
+            "pairs": 3,
+            "boundary_pairs": 0,
+            "coverage": 0.5,
+            "pairwise_agreement": 0.5,
+            "boundary_agreement": null,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q13",
+            "top3": [
+              "HK-30583",
+              "HK-20640",
+              "HK-16628"
+            ],
+            "pairs": 3,
+            "boundary_pairs": 1,
+            "coverage": 0.5,
+            "pairwise_agreement": 0.3333333333333333,
+            "boundary_agreement": 0.0,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q14",
+            "top3": [
+              "HK-30583",
+              "HK-20640",
+              "HK-16628"
+            ],
+            "pairs": 4,
+            "boundary_pairs": 2,
+            "coverage": 0.6666666666666666,
+            "pairwise_agreement": 0.25,
+            "boundary_agreement": 0.0,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q15",
+            "top3": [
+              "HK-90011",
+              "HK-69010",
+              "HK-58236"
+            ],
+            "pairs": 4,
+            "boundary_pairs": 3,
+            "coverage": 0.4,
+            "pairwise_agreement": 0.75,
+            "boundary_agreement": 0.6666666666666666,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q16",
+            "top3": [
+              "HK-90011",
+              "HK-64395",
+              "HK-69010"
+            ],
+            "pairs": 3,
+            "boundary_pairs": 1,
+            "coverage": 0.5,
+            "pairwise_agreement": 0.6666666666666666,
+            "boundary_agreement": 0.5,
+            "ndcg_at_3": 1.0
+          }
+        ],
+        "pairwise_agreement": 0.5,
+        "boundary_agreement": 0.4333333333333333,
+        "ndcg_at_3": 1.0
+      }
+    },
+    "calibrated": {
+      "train": {
+        "per_request": [
+          {
+            "id": "q01",
+            "top3": [
+              "HK-35215",
+              "HK-27222",
+              "HK-29829"
+            ],
+            "pairs": 4,
+            "boundary_pairs": 1,
+            "coverage": 0.6666666666666666,
+            "pairwise_agreement": 0.5,
+            "boundary_agreement": 0.0,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q02",
+            "top3": [
+              "HK-77838",
+              "HK-88430",
+              "HK-44923"
+            ],
+            "pairs": 4,
+            "boundary_pairs": 2,
+            "coverage": 0.4,
+            "pairwise_agreement": 0.75,
+            "boundary_agreement": 1.0,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q03",
+            "top3": [
+              "HK-68220",
+              "HK-30583",
+              "HK-91112"
+            ],
+            "pairs": 0,
+            "boundary_pairs": 0,
+            "coverage": 0.0,
+            "pairwise_agreement": null,
+            "boundary_agreement": null,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q04",
+            "top3": [
+              "HK-76268",
+              "HK-68220",
+              "HK-30583"
+            ],
+            "pairs": 4,
+            "boundary_pairs": 3,
+            "coverage": 0.4,
+            "pairwise_agreement": 0.75,
+            "boundary_agreement": 1.0,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q05",
+            "top3": [
+              "HK-90011",
+              "HK-58236",
+              "HK-69010"
+            ],
+            "pairs": 2,
+            "boundary_pairs": 0,
+            "coverage": 0.3333333333333333,
+            "pairwise_agreement": 1.0,
+            "boundary_agreement": null,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q06",
+            "top3": [
+              "HK-90011",
+              "HK-50695",
+              "HK-69010"
+            ],
+            "pairs": 2,
+            "boundary_pairs": 2,
+            "coverage": 0.3333333333333333,
+            "pairwise_agreement": 0.5,
+            "boundary_agreement": 0.5,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q07",
+            "top3": [
+              "HK-80581",
+              "HK-97041",
+              "HK-58385"
+            ],
+            "pairs": 4,
+            "boundary_pairs": 2,
+            "coverage": 0.6666666666666666,
+            "pairwise_agreement": 0.625,
+            "boundary_agreement": 0.5,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q08",
+            "top3": [
+              "HK-80581",
+              "HK-97041",
+              "HK-58385"
+            ],
+            "pairs": 5,
+            "boundary_pairs": 2,
+            "coverage": 0.8333333333333334,
+            "pairwise_agreement": 0.7,
+            "boundary_agreement": 0.5,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q09",
+            "top3": [
+              "HK-35215",
+              "HK-44923",
+              "HK-88430"
+            ],
+            "pairs": 6,
+            "boundary_pairs": 4,
+            "coverage": 0.6,
+            "pairwise_agreement": 0.4166666666666667,
+            "boundary_agreement": 0.375,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q10",
+            "top3": [
+              "HK-77838",
+              "HK-44923",
+              "HK-88430"
+            ],
+            "pairs": 3,
+            "boundary_pairs": 1,
+            "coverage": 0.5,
+            "pairwise_agreement": 0.8333333333333334,
+            "boundary_agreement": 0.5,
+            "ndcg_at_3": 1.0
+          }
+        ],
+        "pairwise_agreement": 0.675,
+        "boundary_agreement": 0.546875,
+        "ndcg_at_3": 1.0
+      },
+      "held_out": {
+        "per_request": [
+          {
+            "id": "q11",
+            "top3": [
+              "HK-80581",
+              "HK-97041",
+              "HK-37181"
+            ],
+            "pairs": 4,
+            "boundary_pairs": 1,
+            "coverage": 0.6666666666666666,
+            "pairwise_agreement": 0.5,
+            "boundary_agreement": 1.0,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q12",
+            "top3": [
+              "HK-80581",
+              "HK-97041",
+              "HK-37181"
+            ],
+            "pairs": 3,
+            "boundary_pairs": 0,
+            "coverage": 0.5,
+            "pairwise_agreement": 0.5,
+            "boundary_agreement": null,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q13",
+            "top3": [
+              "HK-30583",
+              "HK-20640",
+              "HK-16628"
+            ],
+            "pairs": 3,
+            "boundary_pairs": 1,
+            "coverage": 0.5,
+            "pairwise_agreement": 0.3333333333333333,
+            "boundary_agreement": 0.0,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q14",
+            "top3": [
+              "HK-30583",
+              "HK-16628",
+              "HK-20640"
+            ],
+            "pairs": 4,
+            "boundary_pairs": 2,
+            "coverage": 0.6666666666666666,
+            "pairwise_agreement": 0.0,
+            "boundary_agreement": 0.0,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q15",
+            "top3": [
+              "HK-90011",
+              "HK-99701",
+              "HK-69010"
+            ],
+            "pairs": 4,
+            "boundary_pairs": 1,
+            "coverage": 0.4,
+            "pairwise_agreement": 0.75,
+            "boundary_agreement": 1.0,
+            "ndcg_at_3": 1.0
+          },
+          {
+            "id": "q16",
+            "top3": [
+              "HK-90011",
+              "HK-64395",
+              "HK-69010"
+            ],
+            "pairs": 3,
+            "boundary_pairs": 1,
+            "coverage": 0.5,
+            "pairwise_agreement": 0.6666666666666666,
+            "boundary_agreement": 0.5,
+            "ndcg_at_3": 1.0
+          }
+        ],
+        "pairwise_agreement": 0.4583333333333333,
+        "boundary_agreement": 0.5,
+        "ndcg_at_3": 1.0
+      }
+    },
+    "coverage": {
+      "eligible_pairs": 112,
+      "retained_pairs": 55,
+      "ties": 15
+    },
+    "stability": {
+      "repeated_pairs": 20,
+      "changed_winner_calls": 5
+    }
+  },
+  "requests_sha256": "ae9cfd33b63e14e48569d1428d051c54fbf3e4b22ec7e1f6878c75218648acca",
+  "judgments_sha256": "068ef20073253ca394e65b9a584ae57b544b857e3d2096b2dd181dccd87c4505"
+}
