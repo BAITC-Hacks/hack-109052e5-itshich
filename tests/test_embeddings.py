@@ -14,7 +14,8 @@ import pytest
 from matcher.model import Contractor, MatchRequest
 
 
-MODEL = "text-embedding-3-small"
+MODEL = "text-embedding-3-large"
+DIMENSIONS = 2
 REQUEST = MatchRequest("Алматы", date(2026, 11, 14), "корпоратив", "Ведущий", 800_000, 5, "английский")
 QUERY = "корпоратив Ведущий Алматы английский"
 CONTRACTOR = Contractor(
@@ -25,12 +26,13 @@ CONTRACTOR = Contractor(
 )
 
 
-def cache_key(text, model=MODEL):
-    return sha256((model + "\n" + text).encode()).hexdigest()
+def cache_key(text, model=MODEL, dimensions=DIMENSIONS):
+    return sha256(f"{model}\n{dimensions}\n{text}".encode()).hexdigest()
 
 
-def write_cache(path, vectors, model=MODEL):
-    path.write_text(json.dumps({"model": model, "vectors": {cache_key(t, model): v for t, v in vectors.items()}}))
+def write_cache(path, vectors, model=MODEL, dimensions=DIMENSIONS):
+    path.write_text(json.dumps({"model": model, "dimensions": dimensions,
+                                "vectors": {cache_key(t, model, dimensions): v for t, v in vectors.items()}}))
 
 
 class FakeEmbeddingsClient:
@@ -38,11 +40,11 @@ class FakeEmbeddingsClient:
         self.vectors, self.error, self.calls = vectors or {}, error, []
         self.embeddings = self
 
-    def create(self, **kwargs):
-        self.calls.append(kwargs)
+    def create(self, *, model, dimensions, input):
+        self.calls.append({"model": model, "dimensions": dimensions, "input": input})
         if self.error:
             raise self.error
-        texts = kwargs["input"]
+        texts = input
         texts = [texts] if isinstance(texts, str) else texts
         return SimpleNamespace(data=[SimpleNamespace(index=i, embedding=self.vectors[t]) for i, t in enumerate(texts)])
 
@@ -57,7 +59,7 @@ def test_cached_scores_map_cosine_and_round_without_client_calls(tmp_path, vecto
     path = tmp_path / "embeddings.json"
     write_cache(path, {QUERY: [1.0, 0.0], CONTRACTOR.description: vector})
     client = FakeEmbeddingsClient(error=AssertionError("cache hit must be offline"))
-    scorer = EmbeddingScorer(cache_path=path, client=client, model=MODEL)
+    scorer = EmbeddingScorer(cache_path=path, client=client, model=MODEL, dimensions=DIMENSIONS)
 
     assert scorer.name == "embeddings"
     assert scorer.score(REQUEST, [CONTRACTOR]) == {"c1": expected}
@@ -70,14 +72,14 @@ def test_missing_embeddings_are_written_through_and_reused_offline(tmp_path):
     path = tmp_path / "embeddings.json"
     write_cache(path, {CONTRACTOR.description: [1.0, 1.0]})
     client = FakeEmbeddingsClient({QUERY: [1.0, 0.0]})
-    scorer = EmbeddingScorer(cache_path=path, client=client, model=MODEL)
+    scorer = EmbeddingScorer(cache_path=path, client=client, model=MODEL, dimensions=DIMENSIONS)
 
     assert scorer.score(REQUEST, [CONTRACTOR]) == {"c1": 0.854}
     assert scorer.score(REQUEST, [CONTRACTOR]) == {"c1": 0.854}
     assert [text for call in client.calls for text in call["input"]] == [QUERY]
-    assert json.loads(path.read_text()) == {"model": MODEL, "vectors": {
+    assert json.loads(path.read_text()) == {"model": MODEL, "dimensions": DIMENSIONS, "vectors": {
         cache_key(QUERY): [1.0, 0.0], cache_key(CONTRACTOR.description): [1.0, 1.0]}}
-    offline = EmbeddingScorer(cache_path=path, model=MODEL, api_key="")
+    offline = EmbeddingScorer(cache_path=path, model=MODEL, dimensions=DIMENSIONS, api_key="")
     assert offline.score(REQUEST, [CONTRACTOR]) == {"c1": 0.854}
 
 
@@ -87,14 +89,14 @@ def test_persist_rounds_existing_and_new_vectors_to_six_decimals(tmp_path):
     path = tmp_path / "embeddings.json"
     vector = [0.123456789, -0.987654321]
     write_cache(path, {CONTRACTOR.description: vector})
-    scorer = EmbeddingScorer(cache_path=path, model=MODEL,
+    scorer = EmbeddingScorer(cache_path=path, model=MODEL, dimensions=DIMENSIONS,
                              client=FakeEmbeddingsClient({QUERY: vector}))
     scores = scorer.score(REQUEST, [CONTRACTOR])
     data = json.loads(path.read_text())
     assert data["vectors"] == {cache_key(text): [0.123457, -0.987654]
                                for text in (QUERY, CONTRACTOR.description)}
     assert path.read_text() == json.dumps(data, sort_keys=True, separators=(",", ":"))
-    assert scores == EmbeddingScorer(cache_path=path, model=MODEL, api_key="").score(REQUEST, [CONTRACTOR])
+    assert scores == EmbeddingScorer(cache_path=path, model=MODEL, dimensions=DIMENSIONS, api_key="").score(REQUEST, [CONTRACTOR])
     assert all(score == round(score, 3) for score in scores.values())
 
 
@@ -106,7 +108,7 @@ def test_build_script_compacts_existing_cache_without_key_or_csv(tmp_path):
     env = {**os.environ, "OPENAI_API_KEY": ""}
     first = subprocess.run(command, env=env, capture_output=True, text=True)
     assert first.returncode == 0, first.stderr
-    expected = {"model": "cached-model", "vectors": {cache_key(QUERY, "cached-model"): [0.123457, -0.987654]}}
+    expected = {"model": "cached-model", "dimensions": DIMENSIONS, "vectors": {cache_key(QUERY, "cached-model"): [0.123457, -0.987654]}}
     assert target.read_text() == json.dumps(expected, sort_keys=True, separators=(",", ":"))
     original = target.read_bytes()
     second = subprocess.run(command, env=env, capture_output=True, text=True)
@@ -124,7 +126,7 @@ def test_snippet_splits_all_boundaries_and_picks_highest_cosine_with_stable_ties
     write_cache(path, {QUERY: [1, 0], "Игры": [-1, 0], selected: [1, 0],
                        "Церемонии": [1, 0], "Музыка": [0, 1], "Танцы": [0, 1]})
     client = FakeEmbeddingsClient(error=AssertionError("cache hit must be offline"))
-    scorer = EmbeddingScorer(cache_path=path, client=client, model=MODEL)
+    scorer = EmbeddingScorer(cache_path=path, client=client, model=MODEL, dimensions=DIMENSIONS)
 
     assert scorer.snippet(REQUEST, contractor) == selected[:200]
     assert client.calls == []
@@ -145,7 +147,7 @@ def test_vectors_stay_in_memory_when_cache_cannot_be_written(tmp_path, storage):
         path = blocker / "embeddings.json"
     client = FakeEmbeddingsClient({QUERY: [1, 0], CONTRACTOR.description: [1, 1]})
     try:
-        scorer = EmbeddingScorer(cache_path=path, client=client, model=MODEL)
+        scorer = EmbeddingScorer(cache_path=path, client=client, model=MODEL, dimensions=DIMENSIONS)
         assert scorer.score(REQUEST, [CONTRACTOR]) == {"c1": 0.854}
         client.error = AssertionError("already cached in memory")
         assert scorer.score(REQUEST, [CONTRACTOR]) == {"c1": 0.854}
@@ -156,7 +158,7 @@ def test_vectors_stay_in_memory_when_cache_cannot_be_written(tmp_path, storage):
             path.chmod(0o644)
 
 
-@pytest.mark.parametrize("source", ["missing", "partial", "other_model", "corrupt", "dimensions", "api_timeout"])
+@pytest.mark.parametrize("source", ["missing", "partial", "other_model", "other_dimensions", "legacy", "corrupt", "dimensions", "api_timeout"])
 @pytest.mark.parametrize("operation", ["score", "snippet"])
 def test_unavailable_vectors_raise_semantic_unavailable(tmp_path, source, operation):
     from matcher.embeddings import EmbeddingScorer, SemanticUnavailable
@@ -167,12 +169,19 @@ def test_unavailable_vectors_raise_semantic_unavailable(tmp_path, source, operat
         write_cache(path, {QUERY: [1, 0]})
     if source == "other_model":
         write_cache(path, vectors, model="another-model")
+    if source == "other_dimensions":
+        write_cache(path, vectors, dimensions=3)
+    if source == "legacy":
+        write_cache(path, vectors)
+        data = json.loads(path.read_text())
+        del data["dimensions"]
+        path.write_text(json.dumps(data))
     if source == "corrupt":
         path.write_text("{broken json")
     if source == "dimensions":
         write_cache(path, {**vectors, QUERY: [1, 0, 0]})
     client = FakeEmbeddingsClient(error=TimeoutError("offline")) if source == "api_timeout" else None
-    scorer = EmbeddingScorer(cache_path=path, model=MODEL, client=client, api_key="")
+    scorer = EmbeddingScorer(cache_path=path, model=MODEL, dimensions=DIMENSIONS, client=client, api_key="")
 
     with pytest.raises(SemanticUnavailable):
         if operation == "score":
@@ -191,7 +200,7 @@ def test_build_script_dry_run_embeds_csv_descriptions_and_sentences_once(tmp_pat
     root = Path(__file__).resolve().parents[1]
     command = [sys.executable, str(root / "scripts/build_embeddings.py"), "--dry-run",
                "--csv", str(source), "--output", str(target)]
-    env = {**os.environ, "OPENAI_API_KEY": "", "EMBEDDING_MODEL": MODEL}
+    env = {**os.environ, "OPENAI_API_KEY": "", "EMBEDDING_MODEL": MODEL, "EMBEDDING_DIMENSIONS": str(DIMENSIONS)}
 
     first = subprocess.run(command, cwd=root, env=env, capture_output=True, text=True)
     assert first.returncode == 0, first.stderr
@@ -200,7 +209,7 @@ def test_build_script_dry_run_embeds_csv_descriptions_and_sentences_once(tmp_pat
     original = target.read_bytes()
     data = json.loads(original)
     expected_texts = {"Игра. Деловой форум!", "Игра.\nНаграждение?", "Игра", "Деловой форум", "Награждение"}
-    assert data == {"model": MODEL, "vectors": {cache_key(t): [0.0] * 8 for t in expected_texts}}
+    assert data == {"model": MODEL, "dimensions": DIMENSIONS, "vectors": {cache_key(t): [0.0] * DIMENSIONS for t in expected_texts}}
 
     second = subprocess.run(command, cwd=root, env=env, capture_output=True, text=True)
     assert second.returncode == 0, second.stderr
@@ -217,7 +226,7 @@ def test_invalid_vectors_are_unavailable_instead_of_producing_a_false_score(tmp_
     vectors = {QUERY: [1, 0], CONTRACTOR.description: vector}
     if cached:
         write_cache(path, vectors)
-    scorer = EmbeddingScorer(cache_path=path, model=MODEL, api_key="",
+    scorer = EmbeddingScorer(cache_path=path, model=MODEL, dimensions=DIMENSIONS, api_key="",
                              client=None if cached else FakeEmbeddingsClient(vectors))
     with pytest.raises(SemanticUnavailable):
         scorer.score(REQUEST, [CONTRACTOR])
@@ -231,3 +240,64 @@ def test_empty_candidates_and_descriptions_do_not_need_embeddings(tmp_path):
     assert scorer.score(REQUEST, []) == {}
     assert scorer.snippet(REQUEST, replace(CONTRACTOR, description=". !\n?")) is None
     assert client.calls == []
+
+
+@pytest.mark.parametrize("dimensions", [None, 3])
+def test_default_model_and_configured_dimensions_reach_api_and_cache(tmp_path, monkeypatch, dimensions):
+    from matcher.embeddings import EmbeddingScorer
+
+    monkeypatch.delenv("EMBEDDING_MODEL", raising=False)
+    monkeypatch.delenv("EMBEDDING_DIMENSIONS", raising=False)
+    if dimensions is not None:
+        monkeypatch.setenv("EMBEDDING_DIMENSIONS", str(dimensions))
+    expected_dimensions = dimensions or 1024
+    vector = [1.0] + [0.0] * (expected_dimensions - 1)
+    client = FakeEmbeddingsClient({QUERY: vector, CONTRACTOR.description: vector})
+    path = tmp_path / "cache.json"
+    scorer = EmbeddingScorer(cache_path=path, client=client)
+
+    assert scorer.score(REQUEST, [CONTRACTOR]) == {"c1": 1.0}
+    assert client.calls == [{"model": MODEL, "dimensions": expected_dimensions,
+                             "input": [QUERY, CONTRACTOR.description]}]
+    data = json.loads(path.read_text())
+    assert data == {"model": MODEL, "dimensions": expected_dimensions, "vectors": {
+        cache_key(text, dimensions=expected_dimensions): vector
+        for text in (QUERY, CONTRACTOR.description)}}
+    assert EmbeddingScorer(cache_path=path, api_key="").score(REQUEST, [CONTRACTOR]) == {"c1": 1.0}
+
+
+@pytest.mark.parametrize("old_model,old_dimensions", [("text-embedding-3-small", 2), (MODEL, 3)])
+def test_incompatible_cache_is_replaced_without_mixing_vectors(tmp_path, old_model, old_dimensions):
+    from matcher.embeddings import EmbeddingScorer
+
+    path = tmp_path / "cache.json"
+    write_cache(path, {QUERY: [1, 0], CONTRACTOR.description: [1, 0], "obsolete": [1, 0]},
+                model=old_model, dimensions=old_dimensions)
+    client = FakeEmbeddingsClient({QUERY: [1, 0], CONTRACTOR.description: [0, 1]})
+    scorer = EmbeddingScorer(cache_path=path, client=client, model=MODEL, dimensions=2)
+    assert scorer.score(REQUEST, [CONTRACTOR]) == {"c1": 0.5}
+    assert json.loads(path.read_text()) == {"model": MODEL, "dimensions": 2, "vectors": {
+        cache_key(QUERY): [1, 0], cache_key(CONTRACTOR.description): [0, 1]}}
+
+
+def test_content_hash_isolated_by_model_and_dimensions():
+    from matcher.embeddings import content_key
+
+    assert content_key(MODEL, QUERY, 2) == cache_key(QUERY)
+    assert len({content_key(model, QUERY, dimensions)
+                for model in (MODEL, "text-embedding-3-small")
+                for dimensions in (2, 3)}) == 4
+
+
+@pytest.mark.parametrize("cached", [False, True])
+def test_consistently_wrong_vector_length_is_unavailable(tmp_path, cached):
+    from matcher.embeddings import EmbeddingScorer, SemanticUnavailable
+
+    path = tmp_path / "cache.json"
+    vectors = {QUERY: [1, 0, 0], CONTRACTOR.description: [1, 0, 0]}
+    if cached:
+        write_cache(path, vectors)
+    scorer = EmbeddingScorer(cache_path=path, model=MODEL, dimensions=2, api_key="",
+                             client=None if cached else FakeEmbeddingsClient(vectors))
+    with pytest.raises(SemanticUnavailable):
+        scorer.score(REQUEST, [CONTRACTOR])

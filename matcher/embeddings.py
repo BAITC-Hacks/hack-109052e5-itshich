@@ -10,6 +10,9 @@ from tempfile import NamedTemporaryFile
 from matcher import config  # Loads the worktree's .env without creating a client.
 from matcher.model import Contractor, MatchRequest
 
+EMBEDDING_MODEL = "text-embedding-3-large"
+EMBEDDING_DIMENSIONS = 1024
+
 
 class SemanticUnavailable(RuntimeError):
     """A required vector could not be obtained; use the lexical scorer."""
@@ -19,8 +22,8 @@ def request_text(request: MatchRequest) -> str:
     return " ".join(filter(None, (request.event_format, request.category, request.city, request.language)))
 
 
-def content_key(model: str, text: str) -> str:
-    return sha256((model + "\n" + text).encode()).hexdigest()
+def content_key(model: str, text: str, dimensions: int = EMBEDDING_DIMENSIONS) -> str:
+    return sha256(f"{model}\n{dimensions}\n{text}".encode()).hexdigest()
 
 
 def split_sentences(text: str) -> list[str]:
@@ -36,6 +39,7 @@ def _valid_vector(vector) -> bool:
 def _cosine(left: list[float], right: list[float]) -> float:
     if len(left) != len(right):
         raise SemanticUnavailable("Embedding dimensions do not match")
+    # Normalize even API vectors: six-decimal storage can change their unit norm.
     length = math.hypot(*left) * math.hypot(*right)
     if not length:
         return 0.0
@@ -46,16 +50,20 @@ class EmbeddingScorer:
     name = "embeddings"
 
     def __init__(self, cache_path: str | Path | None = None, *, client=None,
-                 model: str | None = None, api_key: str | None = None):
-        self.model = model or os.getenv("EMBEDDING_MODEL", "text-embedding-3-small")
+                 model: str | None = None, dimensions: int | None = None,
+                 api_key: str | None = None):
+        self.model = model or os.getenv("EMBEDDING_MODEL", EMBEDDING_MODEL)
+        self.dimensions = int(os.getenv("EMBEDDING_DIMENSIONS", EMBEDDING_DIMENSIONS)) if dimensions is None else dimensions
         self.cache_path = Path(cache_path) if cache_path is not None else Path(__file__).resolve().parents[1] / "data/embeddings.json"
         self.client, self.api_key = client, api_key
         self._vectors = {}
         try:
             data = json.loads(self.cache_path.read_text(encoding="utf-8"))
-            if data["model"] == self.model and isinstance(data["vectors"], dict):
+            if (data["model"] == self.model and data["dimensions"] == self.dimensions
+                    and isinstance(data["vectors"], dict)):
                 self._vectors = {key: [round(value, 6) for value in vector]
-                                 for key, vector in data["vectors"].items() if _valid_vector(vector)}
+                                 for key, vector in data["vectors"].items()
+                                 if _valid_vector(vector) and len(vector) == self.dimensions}
         except (OSError, ValueError, KeyError, TypeError):
             pass  # A missing or damaged cache is a cache miss, not a ranking error.
 
@@ -63,8 +71,8 @@ class EmbeddingScorer:
         if not contractors:
             return {}
         self.cache_texts([request_text(request), *(c.description for c in contractors)])
-        query = self._vectors[content_key(self.model, request_text(request))]
-        return {c.id: round((_cosine(query, self._vectors[content_key(self.model, c.description)]) + 1) / 2, 3)
+        query = self._vectors[content_key(self.model, request_text(request), self.dimensions)]
+        return {c.id: round((_cosine(query, self._vectors[content_key(self.model, c.description, self.dimensions)]) + 1) / 2, 3)
                 for c in contractors}
 
     def snippet(self, request: MatchRequest, contractor: Contractor) -> str | None:
@@ -72,13 +80,13 @@ class EmbeddingScorer:
         if not sentences:
             return None
         self.cache_texts([request_text(request), *sentences])
-        query = self._vectors[content_key(self.model, request_text(request))]
-        return max(sentences, key=lambda text: _cosine(query, self._vectors[content_key(self.model, text)]))[:200]
+        query = self._vectors[content_key(self.model, request_text(request), self.dimensions)]
+        return max(sentences, key=lambda text: _cosine(query, self._vectors[content_key(self.model, text, self.dimensions)]))[:200]
 
     def cache_texts(self, texts: list[str]) -> int:
         """Embed missing texts only; return the number of new content hashes."""
-        missing = {content_key(self.model, text): text for text in texts
-                   if content_key(self.model, text) not in self._vectors}
+        missing = {content_key(self.model, text, self.dimensions): text for text in texts
+                   if content_key(self.model, text, self.dimensions) not in self._vectors}
         if not missing:
             return 0
         if self.client is None:
@@ -88,9 +96,11 @@ class EmbeddingScorer:
                 f"OPENAI_API_KEY is missing and {len(missing)} required vector(s) are not cached "
                 f"in {self.cache_path}: {', '.join(missing)}")
         try:
-            response = self.client.embeddings.create(model=self.model, input=list(missing.values()))
+            response = self.client.embeddings.create(model=self.model, dimensions=self.dimensions,
+                                                     input=list(missing.values()))
             entries = sorted(response.data, key=lambda item: item.index)
-            if [item.index for item in entries] != list(range(len(missing))) or not all(_valid_vector(item.embedding) for item in entries):
+            if [item.index for item in entries] != list(range(len(missing))) or not all(
+                    _valid_vector(item.embedding) and len(item.embedding) == self.dimensions for item in entries):
                 raise ValueError("Malformed embedding response")
             # Score the same precision used on disk so first-use and offline results agree.
             self._vectors.update({key: [round(value, 6) for value in item.embedding]
@@ -109,7 +119,7 @@ class EmbeddingScorer:
             with NamedTemporaryFile(mode="w", encoding="utf-8", dir=self.cache_path.parent,
                                     prefix=".embeddings-", delete=False) as handle:
                 temporary = Path(handle.name)
-                json.dump({"model": self.model, "vectors": self._vectors}, handle,
+                json.dump({"model": self.model, "dimensions": self.dimensions, "vectors": self._vectors}, handle,
                           sort_keys=True, separators=(",", ":"))
             temporary.replace(self.cache_path)
         except OSError:

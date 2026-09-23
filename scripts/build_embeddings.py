@@ -20,8 +20,8 @@ class ZeroEmbeddingsClient:
     def __init__(self):
         self.embeddings = self
 
-    def create(self, *, model, input):
-        return SimpleNamespace(data=[SimpleNamespace(index=i, embedding=[0.0] * 8)
+    def create(self, *, model, dimensions, input):
+        return SimpleNamespace(data=[SimpleNamespace(index=i, embedding=[0.0] * dimensions)
                                      for i, _ in enumerate(input)])
 
 
@@ -30,7 +30,7 @@ def main(argv=None) -> int:
     parser.add_argument("--csv", "--input", type=Path, default=ROOT / "data/contractors.csv")
     parser.add_argument("--output", type=Path, default=ROOT / "data/embeddings.json")
     mode = parser.add_mutually_exclusive_group()
-    mode.add_argument("--dry-run", action="store_true", help="Use a fake client that returns 8-dimensional zero vectors")
+    mode.add_argument("--dry-run", action="store_true", help="Use a fake client that returns zero vectors of the configured dimensions")
     mode.add_argument("--compact", action="store_true", help="Round the existing --output cache to 6 decimals without network")
     args = parser.parse_args(argv)
     if args.compact:
@@ -58,11 +58,12 @@ def main(argv=None) -> int:
     scorer = EmbeddingScorer(cache_path=args.output, client=ZeroEmbeddingsClient() if args.dry_run else None)
     embedded = scorer.cache_texts(texts)
     data = json.loads(args.output.read_text(encoding="utf-8"))
-    if data["model"] != scorer.model or not all(content_key(scorer.model, text) in data["vectors"] for text in texts):
+    if (data["model"] != scorer.model or data["dimensions"] != scorer.dimensions
+            or not all(content_key(scorer.model, text, scorer.dimensions) in data["vectors"] for text in texts)):
         raise OSError(f"Could not persist all vectors to {args.output}")
     print(f"contractors={len(descriptions)} descriptions={len(descriptions)} sentences={len(sentences)} "
           f"unique_texts={len(texts)} embedded={embedded} reused={len(texts) - embedded} "
-          f"vectors={len(data['vectors'])} model={scorer.model} dry_run={args.dry_run}")
+          f"vectors={len(data['vectors'])} model={scorer.model} dimensions={scorer.dimensions} dry_run={args.dry_run}")
     return 0
 
 

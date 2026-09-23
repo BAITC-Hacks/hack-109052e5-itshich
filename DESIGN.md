@@ -112,10 +112,16 @@ LexicalScorer (alpha): keyword dictionary per format/category (e.g. свадьб
 "қазақ"]). score = min(1, hits/4) over stemmed substrings, case-insensitive;
 snippet = sentence (split on [.!?\n]) with the most hits, else None.
 
-EmbeddingScorer (bravo): OpenAI `text-embedding-3-small` (env
-EMBEDDING_MODEL). Cache: `data/embeddings.json` = {"model": ..., "vectors":
-{sha256(model + "\n" + text): [floats]}}. Texts embedded: full description per
-contractor AND each sentence of the description (for snippets). Query text
+EmbeddingScorer (bravo): OpenAI `text-embedding-3-large` (env
+EMBEDDING_MODEL), 1024 dimensions by default (env EMBEDDING_DIMENSIONS, passed
+as `dimensions` to the API). Cache: `data/embeddings.json` =
+{"model": ..., "dimensions": ..., "vectors":
+{sha256(model + "\n" + str(dimensions) + "\n" + text): [floats]}}.
+A model/dimensions mismatch is an empty cache; the builder rewrites it.
+Vectors are rounded to 6 decimals and stored as compact JSON. The shipped
+cache contains 392 vectors for 78 contractors and demo queries. Cosine divides
+by both vector norms even when API vectors are not exactly unit length.
+Texts embedded: full description per contractor AND each sentence of the description (for snippets). Query text
 embedded at request time and cached in the same file (write-through; if the
 file is read-only or missing key, keep in memory). Score = cosine mapped to
 [0,1] via (cos+1)/2, rounded to 3 decimals. Snippet = sentence with highest
