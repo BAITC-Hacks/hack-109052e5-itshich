@@ -54,7 +54,8 @@ class EmbeddingScorer:
         try:
             data = json.loads(self.cache_path.read_text(encoding="utf-8"))
             if data["model"] == self.model and isinstance(data["vectors"], dict):
-                self._vectors = {key: vector for key, vector in data["vectors"].items() if _valid_vector(vector)}
+                self._vectors = {key: [round(value, 6) for value in vector]
+                                 for key, vector in data["vectors"].items() if _valid_vector(vector)}
         except (OSError, ValueError, KeyError, TypeError):
             pass  # A missing or damaged cache is a cache miss, not a ranking error.
 
@@ -83,13 +84,17 @@ class EmbeddingScorer:
         if self.client is None:
             self.client = config.create_client(self.api_key)
         if self.client is None:
-            raise SemanticUnavailable("OPENAI_API_KEY is missing and a required vector is not cached")
+            raise SemanticUnavailable(
+                f"OPENAI_API_KEY is missing and {len(missing)} required vector(s) are not cached "
+                f"in {self.cache_path}: {', '.join(missing)}")
         try:
             response = self.client.embeddings.create(model=self.model, input=list(missing.values()))
             entries = sorted(response.data, key=lambda item: item.index)
             if [item.index for item in entries] != list(range(len(missing))) or not all(_valid_vector(item.embedding) for item in entries):
                 raise ValueError("Malformed embedding response")
-            self._vectors.update({key: list(item.embedding) for key, item in zip(missing, entries, strict=True)})
+            # Score the same precision used on disk so first-use and offline results agree.
+            self._vectors.update({key: [round(value, 6) for value in item.embedding]
+                                  for key, item in zip(missing, entries, strict=True)})
         except Exception as error:
             raise SemanticUnavailable("Embedding API did not return the required vectors") from error
         self._persist()
@@ -104,7 +109,8 @@ class EmbeddingScorer:
             with NamedTemporaryFile(mode="w", encoding="utf-8", dir=self.cache_path.parent,
                                     prefix=".embeddings-", delete=False) as handle:
                 temporary = Path(handle.name)
-                json.dump({"model": self.model, "vectors": self._vectors}, handle, sort_keys=True)
+                json.dump({"model": self.model, "vectors": self._vectors}, handle,
+                          sort_keys=True, separators=(",", ":"))
             temporary.replace(self.cache_path)
         except OSError:
             pass  # Read-only deployments can still reuse vectors in memory.

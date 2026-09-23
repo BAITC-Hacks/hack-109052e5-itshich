@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Precompute description/sentence embeddings; --dry-run uses eight zeroes."""
+"""Build embeddings, or round and compact an existing cache offline with --compact."""
 import argparse
 import csv
 import json
@@ -29,8 +29,20 @@ def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--csv", "--input", type=Path, default=ROOT / "data/contractors.csv")
     parser.add_argument("--output", type=Path, default=ROOT / "data/embeddings.json")
-    parser.add_argument("--dry-run", action="store_true", help="Use a fake client that returns 8-dimensional zero vectors")
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument("--dry-run", action="store_true", help="Use a fake client that returns 8-dimensional zero vectors")
+    mode.add_argument("--compact", action="store_true", help="Round the existing --output cache to 6 decimals without network")
     args = parser.parse_args(argv)
+    if args.compact:
+        before = args.output.stat().st_size
+        data = json.loads(args.output.read_text(encoding="utf-8"))
+        data["vectors"] = {key: [round(value, 6) for value in vector]
+                           for key, vector in data["vectors"].items()}
+        content = json.dumps(data, sort_keys=True, separators=(",", ":"), allow_nan=False)
+        args.output.write_text(content, encoding="utf-8")
+        print(f"compacted={args.output} vectors={len(data['vectors'])} "
+              f"bytes_before={before} bytes_after={args.output.stat().st_size}")
+        return 0
     if not args.dry_run and not os.getenv("OPENAI_API_KEY"):
         parser.error("OPENAI_API_KEY is required; use --dry-run for offline verification")
 
