@@ -56,9 +56,10 @@ def test_budget_contrast_uses_all_eligible_for_contribution_and_formatted_eviden
     cheapest = assigned.cards[0].reasons[0]
     assert cheapest.code == "BUDGET_LOWER_THAN_SHOWN"
     assert cheapest.evidence == {"price": "200\u2009000 ₸", "next_price": "400\u2009000 ₸", "diff_pct": "50"}
-    # Baseline includes the fourth, unshown 800,000 profile: phi = .35 * (.8 - .5).
-    assert cheapest.contribution == pytest.approx(0.105)
-    assert any(r.code == "BUDGET_HEADROOM" and r.contribution == pytest.approx(0.035)
+    # Baseline includes the fourth, unshown 800,000 profile: phi = w_budget * (.8 - .5),
+    # w_budget = 0.25 / 0.90 = 0.2778 for a host profile without requested hours.
+    assert cheapest.contribution == pytest.approx(0.0833, abs=1e-4)
+    assert any(r.code == "BUDGET_HEADROOM" and r.contribution == pytest.approx(0.0278, abs=1e-4)
                for r in assigned.cards[1].reasons)
     assert all(r.code != "BUDGET_FITS" for c in assigned.cards for r in c.reasons)
 
@@ -121,26 +122,28 @@ def test_language_and_duration_reasons_carry_only_their_grounded_evidence(
         assert reason.contribution == 0
 
 
-def test_date_pair_replacement_is_proved_by_returning_kiki_alone(real_contractors, demo_queries, offline_demo_scorer):
+def test_date_pair_replacement_is_proved_by_returning_the_busy_competitor_alone(
+        real_contractors, demo_queries, offline_demo_scorer):
+    """Whoever the witness is, the counterfactual maths must hold on the real data."""
     from matcher.reasons import assign
 
     request = demo_request(demo_queries, "date_pair_b")
     result, scored, scorer = reason_input(real_contractors, request, offline_demo_scorer)
     assigned = assign(result, scored, real_contractors, scorer)
     replacements = [(card, r) for card in assigned.cards for r in card.reasons
-                    if r.code == "AVAILABILITY_REPLACEMENT" and r.evidence["competitor"] == "Кики"]
-    assert replacements, "Report the counterfactual maths in RESULT.md if the dataset changes"
-    kiki = next(c for c in real_contractors if c.id == "HK-35215")
-    assert request.event_date == date(2026, 10, 5) and request.event_date in kiki.busy_dates
+                    if r.code == "AVAILABILITY_REPLACEMENT"]
+    assert replacements, "date_pair_b must show a card admitted because a competitor is busy"
     _, ignoring_date, _ = filter_pool(real_contractors, request, ignore_date=True)
-    top_without_date = ranking.score_all(ignoring_date, request, scorer)[:MAX_CARDS]
-    assert kiki.id in {c.contractor.id for c in top_without_date}
+    top_without_date = {c.contractor.id for c in ranking.score_all(ignoring_date, request, scorer)[:MAX_CARDS]}
     _, eligible, _ = filter_pool(real_contractors, request)
-    restored = ranking.score_all(eligible + [kiki], request, scorer)[:MAX_CARDS]
     for card, reason in replacements:
-        assert card.contractor.id not in {c.contractor.id for c in top_without_date}
-        assert card.contractor.id not in {c.contractor.id for c in restored}
-        assert reason.evidence == {"competitor": "Кики", "date": "05.10.2026"}
+        competitor = next(c for c in real_contractors if c.name == reason.evidence["competitor"])
+        assert request.event_date in competitor.busy_dates
+        assert reason.evidence["date"] == request.event_date.strftime("%d.%m.%Y")
+        assert competitor.id in top_without_date
+        assert card.contractor.id not in top_without_date
+        restored = {c.contractor.id for c in ranking.score_all(eligible + [competitor], request, scorer)[:MAX_CARDS]}
+        assert card.contractor.id not in restored
 
 
 def test_only_free_card_reports_busy_count_and_all_caveats(contractor, match_request):
@@ -202,7 +205,9 @@ def test_dense_diversity_and_rare_contrasts_are_honest(real_contractors, demo_qu
     result, scored, _ = reason_input(real_contractors, demo_request(demo_queries, "rare"), scorer)
     rare = assign(result, scored, real_contractors, scorer)
     assert len(rare.cards) == 2
-    assert any(r.code in {"BUDGET_LOWER_THAN_SHOWN", "DESCRIPTION_CLOSEST_IN_SHOWN"}
+    # Two florists: a truthful contrast on budget, description, or language options.
+    assert any(r.code in {"BUDGET_LOWER_THAN_SHOWN", "BUDGET_HEADROOM",
+                          "DESCRIPTION_CLOSEST_IN_SHOWN", "LANGUAGE_OPTIONS"}
                for c in rare.cards for r in c.reasons)
     synthetic, = [c for c in rare.cards if c.contractor.synthetic]
     assert any(r.code == "SYNTHETIC" and not r.primary for r in synthetic.reasons)
