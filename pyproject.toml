@@ -1,0 +1,31 @@
+[project]
+name = "contractor-matcher"
+version = "0.1.0"
+description = "Smart contractor matching (#79-lite): deterministic filter+rank, LLM explanations grounded in facts"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn>=0.30",
+    "openai>=1.50",
+    "python-dotenv>=1.0",
+    "pydantic>=2.7",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8",
+    "hypothesis>=6.100",
+    "httpx>=0.27",
+    "playwright>=1.45",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.hatch.build.targets.wheel]
+packages = ["matcher"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
