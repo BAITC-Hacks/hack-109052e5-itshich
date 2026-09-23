@@ -115,9 +115,21 @@ def _phrase(reason: Reason, facts: CardFacts, variant: int | None = None) -> str
         text += ": " + evidence["aspect"]
     if reason.family == ReasonFamily.BUDGET and facts.contractor.price_from_kzt * 100 > facts.budget_kzt * 85:
         text = "Бюджет впритык: " + text[:1].lower() + text[1:]
-    if "scarcity" in evidence and reason.code != "AVAILABILITY_SCARCE":
+    if "scarcity" in evidence and reason.code != "AVAILABILITY_SCARCE" and (
+            _says_scarcity(facts) or reason.code == "AVAILABILITY_ONLY_FREE"):
         text += "; " + evidence["scarcity"]
     return text
+
+
+def _says_scarcity(facts: CardFacts) -> bool:
+    """The date-scarcity note is a property of the whole result, so it is said
+    once, on the first card, instead of being repeated on every card."""
+    return facts.rank == 1
+
+
+def _supporting(facts: CardFacts, primary: Reason | None) -> list[Reason]:
+    return [r for r in facts.reasons if r is not primary and r.family != ReasonFamily.DATA_QUALITY
+            and not (r.code == "AVAILABILITY_SCARCE" and not _says_scarcity(facts))]
 
 
 def _reason_text(facts: CardFacts) -> str:
@@ -127,8 +139,7 @@ def _reason_text(facts: CardFacts) -> str:
     if primary.code != "AVAILABILITY_REPLACEMENT":
         text = facts.contractor.name + ": " + text[:1].lower() + text[1:]
     caveats = [_phrase(r, facts) for r in facts.reasons if r.family == ReasonFamily.DATA_QUALITY]
-    supports = [r for r in facts.reasons if r is not primary
-                and r.family not in {primary.family, ReasonFamily.DATA_QUALITY}]
+    supports = [r for r in _supporting(facts, primary) if r.family != primary.family]
     # Fit complete phrases, never crop a fact or a name to the character limit.
     for support in [*supports[:1], None]:
         details = ([_phrase(support, facts)] if support else []) + caveats
@@ -239,7 +250,8 @@ def validate_explanations(result: MatchResult, texts: list[str] | tuple[str, ...
         if primary:
             required = set().union(*(
                 _numbers(value) for key, value in primary.evidence.items()
-                if key in NUMBER_KEYS and not (primary.code == "AVAILABILITY_REPLACEMENT" and key == "date")))
+                if key in NUMBER_KEYS and not (primary.code == "AVAILABILITY_REPLACEMENT" and key == "date")
+                and not (key == "scarcity" and not _says_scarcity(facts))))
             missing = required - _numbers(text)
             if missing:
                 problems.append(f"{prefix}: missing primary numbers {sorted(missing)}")
@@ -322,6 +334,8 @@ def build_prompt_payload(result: MatchResult) -> dict:
     """Expose only selected codes and display evidence, never scores or raw flags."""
     def encoded(reason: Reason, card: CardFacts) -> dict:
         evidence = {k: v for k, v in reason.evidence.items() if k in EVIDENCE_KEYS}
+        if not _says_scarcity(card):
+            evidence.pop("scarcity", None)
         return {"код": reason.code, "смысл": _phrase(reason, card, 0), "факты": evidence}
 
     req = result.request
@@ -331,8 +345,7 @@ def build_prompt_payload(result: MatchResult) -> dict:
         cards.append({
             "id": facts.contractor.id, "имя": facts.contractor.name, "позиция": facts.rank,
             "главная_причина": encoded(primary, facts) if primary else None,
-            "поддерживающие": [encoded(r, facts) for r in facts.reasons
-                               if r is not primary and r.family != ReasonFamily.DATA_QUALITY],
+            "поддерживающие": [encoded(r, facts) for r in _supporting(facts, primary)],
             "оговорки": [{"код": r.code, "формулировка": PHRASES[r.code][0]}
                          for r in facts.reasons if r.family == ReasonFamily.DATA_QUALITY],
         })
