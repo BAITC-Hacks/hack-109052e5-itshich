@@ -96,18 +96,6 @@ def run(request: MatchRequest, contractors: list[Contractor], scorer: SemanticSc
         if rejections:
             note += ", " + _rejection_summary(request, rejections)
         note += "."
-    elif rejections or len(eligible) > MAX_CARDS:
-        # Full result, but the user must still see why the others are absent
-        # (e.g. the previous top card is busy on this date).
-        fit = f"{len(eligible)} из {len(pool)}"
-        note = f"Условиям соответствуют {fit}; показаны {MAX_CARDS} с лучшим баллом"
-        shown = {c.contractor.id for c in cards}
-        left_out = [c.name for c in eligible if c.id not in shown]
-        if left_out:
-            note += f" (не вошли: {', '.join(left_out)})"
-        note += "."
-        if rejections:
-            note += " Не прошли условия: " + _rejection_summary(request, rejections) + "."
     if note is not None and any(len(r.reasons) > 1 for r in rejections):
         note += " Причины могут пересекаться."
     result = MatchResult(
