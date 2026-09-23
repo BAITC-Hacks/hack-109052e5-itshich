@@ -5,7 +5,7 @@ from dataclasses import replace
 from itertools import combinations, product
 from math import fsum
 
-from matcher import filtering, ranking
+from matcher import aspects, filtering, ranking
 from matcher.model import (
     FEATURES, MAX_CARDS, CardFacts, Contractor, MatchResult, Reason, ReasonFamily, RejectReason, SemanticScorer,
 )
@@ -39,7 +39,7 @@ def _availability(result, all_scored, contractors, scorer):
     if result.pool_size > 1 and result.eligible_count == 1 and busy_count:
         replacements[result.cards[0].contractor.id] = Reason(
             "AVAILABILITY_ONLY_FREE", ReasonFamily.AVAILABILITY,
-            {"date": format_date(result.request.event_date), "busy_count": str(busy_count)})
+            {"date": format_date(result.request.event_date)})
     if not any(r.reasons == (RejectReason.BUSY_ON_DATE,) for r in result.rejections):
         return replacements
     _, ignoring_date, _ = filtering.filter_pool(contractors, result.request, ignore_date=True)
@@ -60,10 +60,15 @@ def _availability(result, all_scored, contractors, scorer):
     return replacements
 
 
-def _candidates(card, shown, phi, availability):
+def _candidates(card, shown, phi, availability, tagged, scarcity):
     contractor = card.contractor
     peers = [c for c in shown if c.contractor.id != contractor.id]
     reasons = [availability[contractor.id]] if contractor.id in availability else []
+    if scarcity:
+        if reasons:
+            reasons[0] = replace(reasons[0], evidence={**reasons[0].evidence, "scarcity": scarcity})
+        else:
+            reasons.append(Reason("AVAILABILITY_SCARCE", ReasonFamily.AVAILABILITY, {"scarcity": scarcity}))
 
     def add(code, family, **evidence):
         reasons.append(Reason(code, family, evidence, phi.get(_FEATURE.get(family), 0.0)))
@@ -94,23 +99,41 @@ def _candidates(card, shown, phi, availability):
         if peers and all(c.contractor.max_hours is None or contractor.max_hours > c.contractor.max_hours
                          for c in peers):
             add("DURATION_MAX_IN_SHOWN", ReasonFamily.DURATION, max_hours=str(contractor.max_hours))
-    quote = (card.semantic_snippet or "").strip()
-    if len(quote) > 120:
-        boundary = max((i for i, char in enumerate(quote[:121]) if char.isspace()), default=0)
-        quote = quote[:boundary].rstrip()
-    if quote and quote in contractor.description:
-        add("DESCRIPTION_ASPECT", ReasonFamily.DESCRIPTION, quote=quote, semantic_score=str(card.semantic_score))
-        if peers and card.semantic_score > max(c.semantic_score for c in peers):
-            add("DESCRIPTION_CLOSEST_IN_SHOWN", ReasonFamily.DESCRIPTION, quote=quote)
-    if not any(r.code != "DURATION_NOT_APPLICABLE" for r in reasons):
+    relevant = sorted((a for a in tagged.get(contractor.id, ())
+                       if a.polarity == "positive" and a.relevant_to(card.format_matched)), key=lambda a: a.tag)
+    evidence = {"aspect": relevant[0].label, "tag": relevant[0].tag} if relevant else {}
+    if relevant:
+        add("DESCRIPTION_ASPECT", ReasonFamily.DESCRIPTION, **evidence)
+    if peers and card.semantic_score > max(c.semantic_score for c in peers):
+        add("DESCRIPTION_CLOSEST_IN_SHOWN", ReasonFamily.DESCRIPTION, **evidence)
+    if not any(_can_headline(r) for r in reasons) or (
+            contractor.price_from_kzt * 100 > card.budget_kzt * 85
+            and not any(r.family == ReasonFamily.BUDGET for r in reasons)):
         add("BUDGET_FITS", ReasonFamily.BUDGET, price=price, budget=budget)
     return reasons
+
+
+def _can_headline(reason):
+    return reason.code not in {"DURATION_NOT_APPLICABLE", "AVAILABILITY_SCARCE"} and not (
+        reason.code == "DESCRIPTION_CLOSEST_IN_SHOWN" and not reason.evidence)
 
 
 def _strong(reason):
     return reason.code.endswith("_IN_SHOWN") or reason.code in {
         "BUDGET_LOWER_THAN_SHOWN", "LANGUAGE_REQUEST_MATCH", "AVAILABILITY_REPLACEMENT",
     }
+
+
+def _priority(reason, card):
+    if reason.family == ReasonFamily.BUDGET and card.contractor.price_from_kzt * 100 > card.budget_kzt * 85:
+        return 0.3
+    if reason.family == ReasonFamily.AVAILABILITY and "scarcity" in reason.evidence:
+        return 0.3
+    if reason.code == "DURATION_HEADROOM" and card.requested_hours is not None:
+        return 0.2
+    if reason.code == "LANGUAGE_REQUEST_MATCH" and card.requested_language is not None:
+        return 0.2
+    return 0.0
 
 
 def _plan_key(plan, cards):
@@ -128,7 +151,12 @@ def assign(result: MatchResult, all_scored: tuple[CardFacts, ...],
     weights = ranking.weights_for(result.request)
     contexts = [_attribution(c, all_scored, result.cards, weights) for c in result.cards]
     availability = _availability(result, all_scored, contractors, scorer)
-    candidates = [_candidates(c, result.cards, phi, availability) for c, (phi, _) in zip(result.cards, contexts)]
+    tagged = aspects.load_aspects()
+    busy_count = sum(RejectReason.BUSY_ON_DATE in r.reasons for r in result.rejections)
+    scarce = result.request.event_date.month == 12 or busy_count * 2 >= result.pool_size
+    scarcity = f"в эту дату свободны {result.pool_size - busy_count} из {result.pool_size}" if scarce else None
+    candidates = [_candidates(c, result.cards, phi, availability, tagged, scarcity)
+                  for c, (phi, _) in zip(result.cards, contexts)]
     options, rated = [], []
     for index, (reasons, (phi, distinct)) in enumerate(zip(candidates, contexts)):
         maximum = max(0.0, *phi.values())
@@ -138,11 +166,12 @@ def assign(result: MatchResult, all_scored: tuple[CardFacts, ...],
             unique = len(result.cards) > 1 and not any(
                 reason.code == other.code and reason.evidence == other.evidence
                 for j, group in enumerate(candidates) if j != index for other in group)
-            utility = 0.65 * a + 0.25 * distinct.get(_FEATURE.get(reason.family), 0) + 0.10 * unique
+            utility = (0.65 * a + 0.25 * distinct.get(_FEATURE.get(reason.family), 0) + 0.10 * unique
+                       + _priority(reason, result.cards[index]))
             choices.append((reason, utility))
         choices.sort(key=lambda item: (-item[1], item[0].code, result.cards[index].contractor.id))
-        substantive = [item for item in choices if item[0].code != "DURATION_NOT_APPLICABLE"]
-        primary = [item for item in substantive if _strong(item[0]) or
+        substantive = [item for item in choices if _can_headline(item[0])]
+        primary = [item for item in substantive if _strong(item[0]) or _priority(item[0], result.cards[index]) or
                    item[0].contribution >= 0.2 * maximum]
         options.append((primary or substantive)[:6])
         rated.append(choices)
@@ -150,7 +179,7 @@ def assign(result: MatchResult, all_scored: tuple[CardFacts, ...],
     cards = []
     for card, (primary, _), choices in zip(result.cards, plan, rated):
         reasons, families = [replace(primary, primary=True)], {primary.family}
-        for reason, _ in choices:
+        for reason, _ in sorted(choices, key=lambda item: "scarcity" not in item[0].evidence):
             if reason.family not in families:
                 reasons.append(reason)
                 families.add(reason.family)
