@@ -19,5 +19,3 @@ const entries=[
  ['Загородная площадка',3,'Мероприятие за городом','природа загород']
 ];
 export const services=entries.map(([name,group,description,aliases])=>({name,group,description,aliases}));
-export function findServices(value){const needle=value.trim().toLocaleLowerCase('ru');return services.filter(s=>`${s.name} ${s.aliases}`.toLocaleLowerCase('ru').includes(needle));}
-export function serviceStats(data,city,category){const rows=data.filter(p=>p.city===city&&p.categories.includes(category));return {count:rows.length,min:rows.length?Math.min(...rows.map(p=>p.price)):null};}
