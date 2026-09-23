@@ -6,6 +6,7 @@ import re
 from collections import Counter
 from dataclasses import asdict
 from hashlib import sha256
+from pathlib import Path
 from itertools import combinations
 
 from matcher.config import create_client
@@ -249,19 +250,54 @@ def _json(value) -> str:
 
 
 _log = logging.getLogger(__name__)
+CACHE_PATH = Path(__file__).resolve().parents[1] / "data" / "explanations_cache.json"
+PROMPT_VERSION = sha256(SYSTEM_PROMPT.encode()).hexdigest()[:12]
 
 
 class LLMExplainer:
     last_fallback_reason: str | None = None
-    def __init__(self, client=None, *, model: str | None = None, api_key: str | None = None):
+    def __init__(self, client=None, *, model: str | None = None, api_key: str | None = None,
+                 cache_path: "Path | None" = None):
         self.client, self.api_key = client, api_key
         self.model = model or os.getenv("LLM_MODEL", "gpt-5.4-mini")
         self._cache: dict[str, tuple[Explanation, ...]] = {}
+        # Durable cache: demo requests replay word-for-word across restarts and
+        # even without a key. Keyed by request + card ids + model + prompt hash,
+        # so a prompt or model change invalidates old texts.
+        self.cache_path = CACHE_PATH if cache_path is None else cache_path
+        self._load_cache()
+
+    def _key(self, result: MatchResult) -> str:
+        return sha256(_json([asdict(result.request), [c.contractor.id for c in result.cards],
+                             self.model, PROMPT_VERSION]).encode()).hexdigest()
+
+    def _load_cache(self) -> None:
+        try:
+            raw = json.loads(Path(self.cache_path).read_text(encoding="utf-8")) if self.cache_path else {}
+        except (OSError, ValueError):
+            raw = {}
+        for key, items in raw.items():
+            if isinstance(items, list):
+                self._cache[key] = tuple(Explanation(i["contractor_id"], i["text"], "llm") for i in items)
+
+    def _persist(self, key: str, explanations: tuple[Explanation, ...]) -> None:
+        if not self.cache_path:
+            return
+        try:
+            path = Path(self.cache_path)
+            raw = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
+            raw[key] = [{"contractor_id": e.contractor_id, "text": e.text} for e in explanations]
+            path.write_text(json.dumps(raw, ensure_ascii=False, indent=1, sort_keys=True), encoding="utf-8")
+        except (OSError, ValueError) as exc:
+            _log.warning("Could not persist explanation cache: %s", exc)
 
     def explain(self, result: MatchResult) -> tuple[Explanation, ...]:
-        key = sha256(_json([asdict(result.request), [c.contractor.id for c in result.cards]]).encode()).hexdigest()
+        key = self._key(result)
         if key not in self._cache:
-            self._cache[key] = self._explain(result) if result.cards else ()
+            explanations = self._explain(result) if result.cards else ()
+            self._cache[key] = explanations  # in-process: same request => same text
+            if explanations and all(e.source == "llm" for e in explanations):
+                self._persist(key, explanations)  # only real LLM texts survive restarts
         return self._cache[key]
 
     def _explain(self, result: MatchResult) -> tuple[Explanation, ...]:
@@ -269,6 +305,8 @@ class LLMExplainer:
         try:
             if self.client is None:
                 self.client = create_client(self.api_key)
+            if self.client is None:
+                raise RuntimeError("no OPENAI_API_KEY and no cached explanation")
             response = self.client.chat.completions.create(
                 model=self.model, temperature=0, seed=42, timeout=8,
                 response_format={"type": "json_object"},
@@ -289,4 +327,7 @@ class LLMExplainer:
 
 
 def get_explainer() -> LLMExplainer | TemplateExplainer:
-    return LLMExplainer() if os.getenv("OPENAI_API_KEY") else TemplateExplainer()
+    """LLM when a key exists or cached LLM texts can be replayed; else template."""
+    if os.getenv("OPENAI_API_KEY") or CACHE_PATH.exists():
+        return LLMExplainer()
+    return TemplateExplainer()

@@ -259,3 +259,17 @@ def test_distinctions_are_code_derived_and_verifiable():
         assert any("самая низкая цена" in n for n in distinct[cheapest_id])
     single = result(card())
     assert any("единственный" in n for n in _distinctions(single)[single.cards[0].contractor.id])
+
+
+def test_llm_file_cache_replays_without_a_client(tmp_path):
+    from matcher.explain import LLMExplainer
+
+    match = result(card(), card(2), card(3))
+    path = tmp_path / "cache.json"
+    first = LLMExplainer(client=FakeChatClient(llm_json()), cache_path=path).explain(match)
+    assert all(e.source == "llm" for e in first) and path.exists()
+    replay = LLMExplainer(client=None, api_key="", cache_path=path).explain(match)
+    assert replay == first
+    # A different model or prompt version must not reuse the cached text.
+    other = LLMExplainer(client=None, api_key="", model="other-model", cache_path=path).explain(match)
+    assert all(e.source == "template" for e in other)

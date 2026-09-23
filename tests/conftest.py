@@ -75,3 +75,11 @@ def write_csv(tmp_path):
         return path
 
     return write
+
+
+@pytest.fixture(autouse=True)
+def _isolate_explanation_cache(tmp_path, monkeypatch):
+    """Tests must never read or write the repository's LLM explanation cache."""
+    import matcher.explain as explain_module
+
+    monkeypatch.setattr(explain_module, "CACHE_PATH", tmp_path / "explanations_cache.json")
