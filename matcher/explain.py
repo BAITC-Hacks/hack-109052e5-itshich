@@ -258,6 +258,9 @@ def validate_explanations(result: MatchResult, texts: list[str] | tuple[str, ...
             if (primary.family == ReasonFamily.BUDGET and facts.contractor.price_from_kzt * 100 > facts.budget_kzt * 85
                     and "впритык" not in text.casefold()):
                 problems.append(f"{prefix}: tight budget must say впритык")
+            if (facts.contractor.price_from_kzt * 100 <= facts.budget_kzt * 85
+                    and "впритык" in text.casefold()):
+                problems.append(f"{prefix}: впритык is only for headroom below 15 %")
             if primary.code == "AVAILABILITY_REPLACEMENT" and not _contains(text, primary.evidence["competitor"]):
                 problems.append(f"{prefix}: missing primary competitor")
         for quote in re.findall(r"«([^»]+)»", text):
@@ -310,7 +313,8 @@ SYSTEM_PROMPT = (
     "Русский язык, 1–2 предложения и 60–260 символов на карточку.\n"
     "1. Первое предложение раскрывает главную_причину: поле «смысл» задаёт точное значение, "
     "поле «факты» содержит разрешённые числа, имена и аспекты. Приведи её числа и имена. "
-    "Бюджет впритык — обязательно скажи «впритык».\n"
+    "Слово «впритык» пиши ТОЛЬКО если в «смысле» сказано «Бюджет впритык» (запас меньше 15 %); "
+    "при запасе 15 % и больше это слово запрещено.\n"
     "2. AVAILABILITY_REPLACEMENT объясни коротко и обязательно назови занятого конкурента. "
     "Дата брони не нужна. Пример: «В тройке, потому что более привлекательный вариант на эту дату занят (Кики).»\n"
     "3. Во втором предложении добавь одну поддерживающую причину или оговорку готовой формулировкой. "
