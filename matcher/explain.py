@@ -1,5 +1,6 @@
 """Deterministic explanations of already-selected contractor facts."""
 import json
+import logging
 import os
 import re
 from collections import Counter
@@ -145,10 +146,14 @@ def _json(value) -> str:
     return json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(",", ":"), default=str)
 
 
+_log = logging.getLogger(__name__)
+
+
 class LLMExplainer:
+    last_fallback_reason: str | None = None
     def __init__(self, client=None, *, model: str | None = None, api_key: str | None = None):
         self.client, self.api_key = client, api_key
-        self.model = model or os.getenv("LLM_MODEL", "gpt-5-mini")
+        self.model = model or os.getenv("LLM_MODEL", "gpt-5.4-mini")
         self._cache: dict[str, tuple[Explanation, ...]] = {}
 
     def explain(self, result: MatchResult) -> tuple[Explanation, ...]:
@@ -181,8 +186,10 @@ class LLMExplainer:
             if validate_explanations(result, [entry["text"] for entry in entries]):
                 raise ValueError("Explanations failed grounding validation")
             return tuple(Explanation(entry["id"], entry["text"], "llm") for entry in entries)
-        except Exception:
+        except Exception as exc:
             # Failure of any card rejects the whole response, preserving one source.
+            self.last_fallback_reason = f"{type(exc).__name__}: {exc}"[:300]
+            _log.warning("LLM explanation fell back to template: %s", self.last_fallback_reason)
             return TemplateExplainer().explain(result)
 
 
