@@ -46,6 +46,24 @@ uv run python scripts/browser_check.py      # живая проверка стр
 
 Все тесты идут без сети и без ключа. Полный прогон около 15 секунд.
 
+### Второй backend эмбеддингов: NVIDIA NIM
+
+Для `nvidia/nemotron-3-embed-1b` задайте `NVIDIA_API_KEY` в `.env` и соберите
+отдельный кэш запросов, описаний и предложений:
+
+```bash
+uv run python scripts/build_embeddings.py --provider nvidia --anchors
+```
+
+Кэш `data/embeddings_nvidia.json` хранит векторы и фиксированные якоря P05/P95
+по всему каталогу. Без ключа сборщик выводит сообщение и завершает работу
+с кодом 2. `EMBEDDING_PROVIDER=nvidia` выбирает этот backend; по умолчанию
+используется `openai`. Готовый кэш работает без ключа; при отсутствии
+нужного вектора или якорей подбор переходит на `lexical`.
+Для выдачи `semantic_backend=nvidia` через HTTP требуется добавить `nvidia`
+в общие типы ответа; состояние интеграции описано в
+[`docs/worker-reports/a-nvidia.md`](docs/worker-reports/a-nvidia.md).
+
 ## Что происходит внутри
 
 Пайплайн из четырёх шагов, каждый в своём модуле (`DESIGN.md` описывает

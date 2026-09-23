@@ -1,5 +1,6 @@
 """Small composition boundary; collaborators are imported only when needed."""
 from functools import lru_cache
+import os
 from pathlib import Path
 from time import perf_counter
 
@@ -35,6 +36,9 @@ def get_contractors() -> list[Contractor]:
 
 def choose_scorer() -> SemanticScorer:
     try:
+        if os.getenv("EMBEDDING_PROVIDER", "openai") == "nvidia":
+            from matcher.embeddings_nvidia import NvidiaEmbeddingScorer
+            return NvidiaEmbeddingScorer()
         from matcher.embeddings import EmbeddingScorer
         return EmbeddingScorer()
     except semantic_error_types():
@@ -72,7 +76,7 @@ def answer(request: MatchRequest) -> dict:
         try:
             result = run(request, contractors, scorer)
         except semantic_error_types():
-            if scorer.name != "embeddings":
+            if scorer.name not in ("embeddings", "nvidia"):
                 raise
             scorer = lexical_scorer()
             result = run(request, contractors, scorer)

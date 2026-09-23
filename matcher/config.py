@@ -14,3 +14,13 @@ def create_client(api_key: str | None = None):
     from openai import OpenAI
 
     return OpenAI(api_key=key, timeout=8, max_retries=0)
+
+
+def create_nvidia_client(api_key: str | None = None):
+    key = os.getenv("NVIDIA_API_KEY") if api_key is None else api_key
+    if not key:
+        return None
+    from openai import OpenAI
+
+    return OpenAI(base_url="https://integrate.api.nvidia.com/v1", api_key=key,
+                  timeout=8, max_retries=0)

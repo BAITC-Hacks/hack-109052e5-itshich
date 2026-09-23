@@ -28,11 +28,19 @@ class ZeroEmbeddingsClient:
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--csv", "--input", type=Path, default=ROOT / "data/contractors.csv")
-    parser.add_argument("--output", type=Path, default=ROOT / "data/embeddings.json")
+    parser.add_argument("--output", type=Path)
+    parser.add_argument("--provider", choices=("openai", "nvidia"), default="openai", help="Провайдер эмбеддингов")
+    parser.add_argument("--anchors", action="store_true", help="Рассчитать якоря NVIDIA по всему каталогу")
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument("--dry-run", action="store_true", help="Use a fake client that returns zero vectors of the configured dimensions")
     mode.add_argument("--compact", action="store_true", help="Round the existing --output cache to 6 decimals without network")
     args = parser.parse_args(argv)
+    if args.provider == "nvidia":
+        from matcher.embeddings_nvidia import build_cache
+        if args.compact or args.dry_run:
+            parser.error("Параметры --dry-run и --compact поддерживаются только для OpenAI")
+        return build_cache(args.csv, args.output or ROOT / "data/embeddings_nvidia.json", anchors=args.anchors)
+    args.output = args.output or ROOT / "data/embeddings.json"
     if args.compact:
         before = args.output.stat().st_size
         data = json.loads(args.output.read_text(encoding="utf-8"))
