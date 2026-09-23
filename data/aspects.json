@@ -1,0 +1,802 @@
+{
+  "aspects": {
+    "HK-10990": [
+      {
+        "polarity": "positive",
+        "quote": "TODOROKI SHOTO WEDDING VIDEOGRAPHER -colorist of the year 2025 🏆",
+        "tag": "wedding_ceremony"
+      }
+    ],
+    "HK-11484": [
+      {
+        "polarity": "positive",
+        "quote": "опыт крупных проектов и масштабных площадок",
+        "tag": "large_scale_events"
+      },
+      {
+        "polarity": "positive",
+        "quote": "создаём концепции свадеб, юбилеев и корпоративных событий премиум-уровня.",
+        "tag": "premium_clients"
+      },
+      {
+        "polarity": "positive",
+        "quote": "Работаем под ключ: от идеи и эскиза до монтажа и финальной реализации.",
+        "tag": "turnkey_decor"
+      }
+    ],
+    "HK-16628": [
+      {
+        "polarity": "positive",
+        "quote": "умеет ловить живые эмоции и передавать атмосферу события через искренние, естественные кадры.",
+        "tag": "documentary_photo"
+      },
+      {
+        "polarity": "positive",
+        "quote": "Является свадебным и репортажным фотографом",
+        "tag": "wedding_ceremony"
+      }
+    ],
+    "HK-20640": [
+      {
+        "polarity": "positive",
+        "quote": "специализирующийся на съёмке событий и частных мероприятий. Его работы — это внимание к деталям, живые эмоции",
+        "tag": "documentary_photo"
+      }
+    ],
+    "HK-23752": [
+      {
+        "polarity": "positive",
+        "quote": "В репертуаре группы большой выбор казахских песен, ретро-шлягеров, хитов 80-х, 90-х, 2000-х, а так же, современные хиты.",
+        "tag": "kazakh_repertoire"
+      },
+      {
+        "polarity": "positive",
+        "quote": "🎤 два вокалиста 🎤 вокалистка 🥁 барабанщик 🎸 бас-гитарист 🎸 соло-гитарист 🎺 труба 🎷 саксофон 🎵 тромбон",
+        "tag": "live_instruments"
+      },
+      {
+        "polarity": "neutral",
+        "quote": "от модных ивэнтов до масштабных свадеб, «Thunder Breath Band» идеально впишется в любой формат мероприятия!",
+        "tag": "wedding_ceremony"
+      }
+    ],
+    "HK-27222": [
+      {
+        "polarity": "positive",
+        "quote": "постоянным ведущим масштабных событий",
+        "tag": "large_scale_events"
+      },
+      {
+        "polarity": "positive",
+        "quote": "один из самых востребованных двуязычных ведущих Алматы",
+        "tag": "multilingual_hosting"
+      }
+    ],
+    "HK-30583": [
+      {
+        "polarity": "positive",
+        "quote": "Являюсь свадебным фотографом.",
+        "tag": "wedding_ceremony"
+      }
+    ],
+    "HK-31819": [
+      {
+        "polarity": "positive",
+        "quote": "Репертуар: от ретро-хитов до современных треков: любимые песни 80-х, 90-х, 2000-х, современные композиции",
+        "tag": "international_repertoire"
+      },
+      {
+        "polarity": "positive",
+        "quote": "и, конечно, казахская музыка.",
+        "tag": "kazakh_repertoire"
+      },
+      {
+        "polarity": "positive",
+        "quote": "🎤 вокалист 🎤 вокалистка 🥁 барабанщик 🎸 бас-гитарист 🎸 соло-гитарист 🎺 труба 🎷 саксофон 🎵 тромбон",
+        "tag": "live_instruments"
+      }
+    ],
+    "HK-35215": [
+      {
+        "polarity": "positive",
+        "quote": "Работает на казахском, русском и английском языках.",
+        "tag": "multilingual_hosting"
+      }
+    ],
+    "HK-35913": [
+      {
+        "polarity": "positive",
+        "quote": "Он работает с частными и бизнес-ивентами любого масштаба — от камерных торжеств до крупных форумов и презентаций.",
+        "tag": "business_forum"
+      },
+      {
+        "polarity": "positive",
+        "quote": "Он работает с частными и бизнес-ивентами любого масштаба — от камерных торжеств до крупных форумов и презентаций.",
+        "tag": "large_scale_events"
+      },
+      {
+        "polarity": "positive",
+        "quote": "а также сотрудничество с ведущими агентствами и брендами, включая EventDream.kz.",
+        "tag": "premium_clients"
+      }
+    ],
+    "HK-36965": [
+      {
+        "polarity": "positive",
+        "quote": "Прославляем казахскую песню на весь мир",
+        "tag": "kazakh_repertoire"
+      }
+    ],
+    "HK-37181": [
+      {
+        "polarity": "positive",
+        "quote": "СТАРАЮСЬ К КАЖДОМУ МЕРОПРИЯТИЮ ПОДХОДИТЬ С АВТОРСКИМ СЦЕНАРИЕМ И АДРЕСНЫМИ КОНКУРСАМИ.",
+        "tag": "custom_script"
+      },
+      {
+        "polarity": "positive",
+        "quote": "ОСНОВНЫЕ СТИЛИ ВЕДЕНИЯ МЕРОПРИЯТИЙ – ДИНАМИКА, ИМПРОВИЗАЦИЯ, ИНТЕРАКТИВЫ.",
+        "tag": "improvisation"
+      }
+    ],
+    "HK-39301": [
+      {
+        "polarity": "positive",
+        "quote": "впервые выступивший перед главой государства",
+        "tag": "premium_clients"
+      }
+    ],
+    "HK-39372": [
+      {
+        "polarity": "positive",
+        "quote": "Среди наших клиентов и партнёров: SkyLumen, CoffeeNoir, Trickster Café, Suisei Water, Curly Sensei, Hoshizora, Банк «Sakura Credit».",
+        "tag": "premium_clients"
+      }
+    ],
+    "HK-42352": [
+      {
+        "polarity": "positive",
+        "quote": "Опыт ведения свадеб 13 лет",
+        "tag": "wedding_ceremony"
+      }
+    ],
+    "HK-44733": [
+      {
+        "polarity": "positive",
+        "quote": "Веду как ламповые вечера от 8 человек, так и крупные бизнес форумы на 3000 человек.",
+        "tag": "business_forum"
+      },
+      {
+        "polarity": "positive",
+        "quote": "Веду как ламповые вечера от 8 человек, так и крупные бизнес форумы на 3000 человек.",
+        "tag": "large_scale_events"
+      },
+      {
+        "polarity": "positive",
+        "quote": "Языки ведения: Русский, Английский",
+        "tag": "multilingual_hosting"
+      }
+    ],
+    "HK-44923": [
+      {
+        "polarity": "positive",
+        "quote": "Вместе с вами мы разработаем ОРИГИНАЛЬНЫЙ сценарий, согласуем все нюансы и сделаем для вас настоящий праздник!",
+        "tag": "custom_script"
+      },
+      {
+        "polarity": "positive",
+        "quote": "Импровизация, живой интеллигентный юмор",
+        "tag": "improvisation"
+      },
+      {
+        "polarity": "positive",
+        "quote": "DJ и современная танцевальная музыка и мультимедийное оборудование",
+        "tag": "presentation_equipment"
+      }
+    ],
+    "HK-45928": [
+      {
+        "polarity": "positive",
+        "quote": "работает с живыми эмоциями и настоящими моментами",
+        "tag": "documentary_photo"
+      },
+      {
+        "polarity": "positive",
+        "quote": "Он специализируется на свадебной, семейной и рекламной съёмке",
+        "tag": "wedding_ceremony"
+      }
+    ],
+    "HK-46450": [
+      {
+        "polarity": "positive",
+        "quote": "от казахских народных мелодий до современных мировых хитов.",
+        "tag": "international_repertoire"
+      },
+      {
+        "polarity": "positive",
+        "quote": "Quintet — сценический формат с живыми барабанами (контрабас-вокал + гитара + саксофон + домбра + барабаны).",
+        "tag": "live_instruments"
+      },
+      {
+        "polarity": "positive",
+        "quote": "Bebop Jazz Collective выступает в премиум-сегменте: частных мероприятий до открытий бутиков и бизнес-ивентов.",
+        "tag": "premium_clients"
+      }
+    ],
+    "HK-50695": [
+      {
+        "polarity": "positive",
+        "quote": "живую музыку",
+        "tag": "live_instruments"
+      },
+      {
+        "polarity": "positive",
+        "quote": "уютные террасы",
+        "tag": "outdoor_area"
+      },
+      {
+        "polarity": "positive",
+        "quote": "красивые виды на горы",
+        "tag": "panoramic_view"
+      }
+    ],
+    "HK-53108": [
+      {
+        "polarity": "positive",
+        "quote": "Я фотограф и уже около семи лет я ловлю моменты, которые обычно проходят незаметно.",
+        "tag": "documentary_photo"
+      }
+    ],
+    "HK-57480": [
+      {
+        "polarity": "positive",
+        "quote": "активным взаимодействием с публикой. Репертуар KOBAYASHI охватывает всё: от культовых хитов 90-х и 2000-х до современных компози",
+        "tag": "improvisation"
+      },
+      {
+        "polarity": "positive",
+        "quote": "Репертуар KOBAYASHI охватывает всё: от культовых хитов 90-х и 2000-х до современных композиций.",
+        "tag": "international_repertoire"
+      }
+    ],
+    "HK-58236": [
+      {
+        "polarity": "positive",
+        "quote": "атмосферный ресторан национальной казахской кухни",
+        "tag": "own_kitchen"
+      },
+      {
+        "polarity": "positive",
+        "quote": "на вершине городской горы с панорамным видом на Алматы и горы.",
+        "tag": "panoramic_view"
+      }
+    ],
+    "HK-58385": [
+      {
+        "polarity": "positive",
+        "quote": "мощная импровизация. Без шаблонов и банальных конкурсов — креативный подход , живой диалог с гостями, настоящие эмоции",
+        "tag": "improvisation"
+      }
+    ],
+    "HK-60927": [
+      {
+        "polarity": "positive",
+        "quote": "леденцы с именами, датами, фотографиями, логотипами и персональными надписями.",
+        "tag": "branded_merch"
+      },
+      {
+        "polarity": "neutral",
+        "quote": "Konpeito Craft подойдут для: — свадеб и love story — детских праздников — корпоративных мероприятий",
+        "tag": "wedding_ceremony"
+      }
+    ],
+    "HK-61323": [
+      {
+        "polarity": "positive",
+        "quote": "Последние годы больше внимание уделяю таким жанрам, как свадебный фотожурнализм, документально — свадебный фотожурнализм.",
+        "tag": "documentary_photo"
+      },
+      {
+        "polarity": "positive",
+        "quote": "я научу, как свободно чувствовать себя перед камерой и получить удовольствие от съемки.",
+        "tag": "posing_guidance"
+      },
+      {
+        "polarity": "positive",
+        "quote": "Я свадебный фотограф.",
+        "tag": "wedding_ceremony"
+      }
+    ],
+    "HK-62242": [
+      {
+        "polarity": "positive",
+        "quote": "победителем в номинации «Лучший репортажный видеограф» фестиваля Sakura Frame Fest",
+        "tag": "documentary_photo"
+      },
+      {
+        "polarity": "positive",
+        "quote": "Юдзи — свадебный видеограф с авторским взглядом и международной практикой.",
+        "tag": "wedding_ceremony"
+      }
+    ],
+    "HK-64395": [
+      {
+        "polarity": "positive",
+        "quote": "уютные террасы и эффектные закаты, идеально подходя для мероприятий, романтических вечеров и отдыха",
+        "tag": "outdoor_area"
+      },
+      {
+        "polarity": "positive",
+        "quote": "стильная панорамная локация в Алматы с захватывающим видом на город и горы.",
+        "tag": "panoramic_view"
+      }
+    ],
+    "HK-68220": [
+      {
+        "polarity": "positive",
+        "quote": "Концерт «Тенгри Саунд» с 30 тыс зрителей.",
+        "tag": "large_scale_events"
+      },
+      {
+        "polarity": "positive",
+        "quote": "Рок Ли — один из лучших свадебных и репортажных фотографов в городе Алматы.",
+        "tag": "wedding_ceremony"
+      }
+    ],
+    "HK-69010": [
+      {
+        "polarity": "positive",
+        "quote": "панорамные виды на горы",
+        "tag": "panoramic_view"
+      },
+      {
+        "polarity": "neutral",
+        "quote": "спокойную премиальную атмосферу",
+        "tag": "premium_clients"
+      }
+    ],
+    "HK-72785": [
+      {
+        "polarity": "positive",
+        "quote": "изысканные рестораны",
+        "tag": "own_kitchen"
+      },
+      {
+        "polarity": "positive",
+        "quote": "с панорамными видами на горы и город",
+        "tag": "panoramic_view"
+      },
+      {
+        "polarity": "positive",
+        "quote": "один из самых роскошных отелей Алматы",
+        "tag": "premium_clients"
+      }
+    ],
+    "HK-72938": [
+      {
+        "polarity": "positive",
+        "quote": "Большая база игр и конкурсов, свежий юмор на актуальные темы.",
+        "tag": "improvisation"
+      },
+      {
+        "polarity": "positive",
+        "quote": "Язык ведения: казахский, русский.",
+        "tag": "multilingual_hosting"
+      }
+    ],
+    "HK-74147": [
+      {
+        "polarity": "positive",
+        "quote": "инструменталисты с тонким чувством стиля и атмосферы",
+        "tag": "live_instruments"
+      },
+      {
+        "polarity": "positive",
+        "quote": "музыкальный дуэт премиум-класса",
+        "tag": "premium_clients"
+      },
+      {
+        "polarity": "neutral",
+        "quote": "создавая изысканное музыкальное сопровождение для свадеб",
+        "tag": "wedding_ceremony"
+      }
+    ],
+    "HK-74914": [
+      {
+        "polarity": "neutral",
+        "quote": "Я свадебный видеограф из Астаны.",
+        "tag": "wedding_ceremony"
+      }
+    ],
+    "HK-75012": [
+      {
+        "polarity": "positive",
+        "quote": "ведёт мероприятия Fortune Sekai, технологические форумы, концерты и премиальные частные события.",
+        "tag": "business_forum"
+      },
+      {
+        "polarity": "positive",
+        "quote": "Он работает с крупнейшими брендами и международными площадками, ведёт мероприятия Fortune Sekai, технологические форумы, концерты и премиальные частные события.",
+        "tag": "premium_clients"
+      }
+    ],
+    "HK-76268": [
+      {
+        "polarity": "positive",
+        "quote": "Люблю живые кадры, настоящие улыбки и моменты, которые невозможно повторить.",
+        "tag": "documentary_photo"
+      },
+      {
+        "polarity": "positive",
+        "quote": "Я Сацуки Кусакабэ — свадебный фотограф.",
+        "tag": "wedding_ceremony"
+      }
+    ],
+    "HK-76335": [
+      {
+        "polarity": "positive",
+        "quote": "В её кадрах — живые эмоции, естественность и аккуратная эстетика, позволяющая сохранить атмосферу события и его ключевые моменты.",
+        "tag": "documentary_photo"
+      }
+    ],
+    "HK-77793": [
+      {
+        "polarity": "positive",
+        "quote": "Ведение на казахском и русском языках",
+        "tag": "multilingual_hosting"
+      }
+    ],
+    "HK-77838": [
+      {
+        "polarity": "positive",
+        "quote": "Его стиль — культурная импровизация, тонкий юмор и естественная энергия, которые делают атмосферу праздника живой",
+        "tag": "improvisation"
+      }
+    ],
+    "HK-80581": [
+      {
+        "polarity": "positive",
+        "quote": "Резидент клуба импровизаторов Improv Konoha",
+        "tag": "improvisation"
+      },
+      {
+        "polarity": "positive",
+        "quote": "от блогеров миллионников до политических деятелей первой величины, от фрилансеров-ремесленников до бизнесменов ультра-класса.",
+        "tag": "premium_clients"
+      }
+    ],
+    "HK-83709": [
+      {
+        "polarity": "positive",
+        "quote": "В репертуаре группы большой выбор казахских песен, ретро-шлягеров, хитов 80-х, 90-х, 2000-х, а так же, современные хиты.",
+        "tag": "kazakh_repertoire"
+      },
+      {
+        "polarity": "positive",
+        "quote": "Большой музыкальный состав: 4 вокалиста, струнный квартет, духовой брасс, перкуссионист, клавишник, барабанщик, гитарист и бас-гитарист.",
+        "tag": "live_instruments"
+      },
+      {
+        "polarity": "neutral",
+        "quote": "Начиная от модных ивэнтов до масштабных свадеб, «Eva Sound» идеально впишется в любой формат мероприятия!",
+        "tag": "wedding_ceremony"
+      }
+    ],
+    "HK-90001": [
+      {
+        "polarity": "positive",
+        "quote": "авторская флористика для свадеб и юбилеев. Работаем с сезонными и привозными цветами, собираем композиции под цветовую палитру мероприятия — от букета невесты",
+        "tag": "wedding_ceremony"
+      }
+    ],
+    "HK-90003": [
+      {
+        "polarity": "positive",
+        "quote": "Работаем под ключ: проект, монтаж, демонтаж.",
+        "tag": "turnkey_decor"
+      },
+      {
+        "polarity": "neutral",
+        "quote": "для свадеб и корпоративных мероприятий",
+        "tag": "wedding_ceremony"
+      }
+    ],
+    "HK-90004": [
+      {
+        "polarity": "positive",
+        "quote": "Берём проекты премиум-уровня",
+        "tag": "premium_clients"
+      }
+    ],
+    "HK-90005": [
+      {
+        "polarity": "positive",
+        "quote": "именные открытки и подарочные наборы для гостей мероприятия: карточки рассадки, welcome-боксы, сладости с индивидуальным дизайном под тематику события",
+        "tag": "branded_merch"
+      }
+    ],
+    "HK-90006": [
+      {
+        "polarity": "positive",
+        "quote": "брендированный мерч и сувениры для корпоративных мероприятий: фотомагниты, значки, блокноты с логотипом компании.",
+        "tag": "branded_merch"
+      }
+    ],
+    "HK-90007": [
+      {
+        "polarity": "positive",
+        "quote": "Работаю по сценарию пары, без шаблонных фраз — каждая церемония собирается индивидуально под историю молодожёнов.",
+        "tag": "custom_script"
+      },
+      {
+        "polarity": "positive",
+        "quote": "на казахском и русском языках.",
+        "tag": "multilingual_hosting"
+      },
+      {
+        "polarity": "positive",
+        "quote": "Провожу выездную регистрацию и церемонию бракосочетания",
+        "tag": "wedding_ceremony"
+      }
+    ],
+    "HK-90008": [
+      {
+        "polarity": "positive",
+        "quote": "Церемониймейстер выездных регистраций брака.",
+        "tag": "wedding_ceremony"
+      }
+    ],
+    "HK-90009": [
+      {
+        "polarity": "positive",
+        "quote": "и брендированной рамкой.",
+        "tag": "branded_merch"
+      },
+      {
+        "polarity": "positive",
+        "quote": "интерактивная фотобудка с мгновенной печатью снимков",
+        "tag": "instant_print"
+      },
+      {
+        "polarity": "neutral",
+        "quote": "Подходит для свадеб и корпоративных мероприятий",
+        "tag": "wedding_ceremony"
+      }
+    ],
+    "HK-90010": [
+      {
+        "polarity": "positive",
+        "quote": "зеркальная фотобудка с сенсорным экраном, анимацией и печатью фото.",
+        "tag": "instant_print"
+      }
+    ],
+    "HK-90011": [
+      {
+        "polarity": "positive",
+        "quote": "Панорамные окна, вместимость зала до 200 гостей, свой кейтеринг и парковка для гостей мероприятия.",
+        "tag": "own_kitchen"
+      },
+      {
+        "polarity": "positive",
+        "quote": "Панорамные окна, вместимость зала до 200 гостей, свой кейтеринг и парковка для гостей мероприятия.",
+        "tag": "panoramic_view"
+      }
+    ],
+    "HK-90012": [
+      {
+        "polarity": "positive",
+        "quote": "Подходит для корпоративных конференций, свадеб и юбилеев, есть техническое оснащение для презентаций.",
+        "tag": "presentation_equipment"
+      },
+      {
+        "polarity": "positive",
+        "quote": "Подходит для корпоративных конференций, свадеб и юбилеев, есть техническое оснащение для презентаций.",
+        "tag": "wedding_ceremony"
+      }
+    ],
+    "HK-90013": [
+      {
+        "polarity": "positive",
+        "quote": "Сольные выступления на скрипке и саксофоне",
+        "tag": "live_instruments"
+      },
+      {
+        "polarity": "positive",
+        "quote": "для свадебных церемоний, романтических ужинов и welcome-зон корпоративных мероприятий.",
+        "tag": "wedding_ceremony"
+      }
+    ],
+    "HK-91112": [
+      {
+        "polarity": "positive",
+        "quote": "Я — свадебный фотограф с тонким чувством эстетики и эмоций.",
+        "tag": "wedding_ceremony"
+      }
+    ],
+    "HK-97041": [
+      {
+        "polarity": "positive",
+        "quote": "Тэнъя ведёт 12 лет на каз/рус языках",
+        "tag": "multilingual_hosting"
+      }
+    ],
+    "HK-97737": [
+      {
+        "polarity": "positive",
+        "quote": "Я — свадебный профессиональный фотограф из Астаны.",
+        "tag": "wedding_ceremony"
+      }
+    ],
+    "HK-98562": [
+      {
+        "polarity": "positive",
+        "quote": "Я помогаю невестам выглядеть естественно и уверенно даже без модельного опыта — направляю, подсказываю позирование",
+        "tag": "posing_guidance"
+      },
+      {
+        "polarity": "positive",
+        "quote": "Сняла более 80 мероприятий — от камерных мероприятий до масштабных свадеб.",
+        "tag": "wedding_ceremony"
+      }
+    ],
+    "HK-99701": [
+      {
+        "polarity": "positive",
+        "quote": "ужинов на террасе",
+        "tag": "outdoor_area"
+      },
+      {
+        "polarity": "positive",
+        "quote": "с живописными панорамами гор",
+        "tag": "panoramic_view"
+      }
+    ],
+    "SYN-00001": [
+      {
+        "polarity": "positive",
+        "quote": "Банкетный координатор согласует рассадку и подачу блюд на казахском или русском языке.",
+        "tag": "multilingual_hosting"
+      },
+      {
+        "polarity": "positive",
+        "quote": "используются как фон для свадеб и семейных тоев.",
+        "tag": "wedding_ceremony"
+      }
+    ],
+    "SYN-00003": [
+      {
+        "polarity": "positive",
+        "quote": "играет казахскую эстраду",
+        "tag": "kazakh_repertoire"
+      },
+      {
+        "polarity": "positive",
+        "quote": "В составе вокалистка, гитарист, басист, барабанщик и домбрист;",
+        "tag": "live_instruments"
+      },
+      {
+        "polarity": "positive",
+        "quote": "играет казахскую эстраду и русскоязычный фанк на свадьбах и корпоративах.",
+        "tag": "wedding_ceremony"
+      }
+    ],
+    "SYN-00004": [
+      {
+        "polarity": "positive",
+        "quote": "На конференциях музыканты играют инструментальные сеты во время регистрации, оставляя место для разговора гостей.",
+        "tag": "business_forum"
+      },
+      {
+        "polarity": "positive",
+        "quote": "Вокал сопровождают электропиано, контрабас и ударные со щётками.",
+        "tag": "live_instruments"
+      }
+    ],
+    "SYN-00006": [
+      {
+        "polarity": "positive",
+        "quote": "В репертуаре кюи и переложения казахских лирических песен,",
+        "tag": "kazakh_repertoire"
+      },
+      {
+        "polarity": "positive",
+        "quote": "музыкант рассказывает об инструменте на казахском или русском языке.",
+        "tag": "multilingual_hosting"
+      },
+      {
+        "polarity": "positive",
+        "quote": "играет на кобызе на свадебных церемониях и семейных тоях в Астане.",
+        "tag": "wedding_ceremony"
+      }
+    ],
+    "SYN-00007": [
+      {
+        "polarity": "neutral",
+        "quote": "размещение в номерах рассчитывается отдельно.",
+        "tag": "accommodation"
+      },
+      {
+        "polarity": "positive",
+        "quote": "Команда сопровождает мероприятия на русском, английском и казахском,",
+        "tag": "multilingual_hosting"
+      }
+    ],
+    "SYN-00008": [
+      {
+        "polarity": "neutral",
+        "quote": "снимает конференции и корпоративные интервью в Астане",
+        "tag": "business_forum"
+      },
+      {
+        "polarity": "neutral",
+        "quote": "Интервью проводит на русском и английском",
+        "tag": "multilingual_hosting"
+      }
+    ],
+    "SYN-00009": [
+      {
+        "polarity": "positive",
+        "quote": "Для тоев и свадеб собирает бонбоньерки с именами гостей на казахском или русском, для корпоративов наносит логотип.",
+        "tag": "branded_merch"
+      },
+      {
+        "polarity": "neutral",
+        "quote": "Для тоев и свадеб собирает бонбоньерки с именами гостей на казахском или русском, для корпоративов наносит логотип.",
+        "tag": "wedding_ceremony"
+      }
+    ],
+    "SYN-00010": [
+      {
+        "polarity": "positive",
+        "quote": "Рика Нагахара снимает свадьбы и международные конференции в Алматы в репортажной манере.",
+        "tag": "documentary_photo"
+      },
+      {
+        "polarity": "neutral",
+        "quote": "Общается с гостями на казахском и английском,",
+        "tag": "multilingual_hosting"
+      },
+      {
+        "polarity": "positive",
+        "quote": "Рика Нагахара снимает свадьбы и международные конференции в Алматы в репортажной манере.",
+        "tag": "wedding_ceremony"
+      }
+    ],
+    "SYN-00011": [
+      {
+        "polarity": "positive",
+        "quote": "В монтаже чередует наблюдение ручной камерой со статичными портретами, сохраняя живой звук поздравлений.",
+        "tag": "documentary_photo"
+      },
+      {
+        "polarity": "neutral",
+        "quote": "Для русско-казахских семей записывает короткие интервью со старшими родственниками на обоих языках.",
+        "tag": "multilingual_hosting"
+      },
+      {
+        "polarity": "positive",
+        "quote": "подготовку к свадьбе, церемонию и разговоры за праздничным столом.",
+        "tag": "wedding_ceremony"
+      }
+    ],
+    "SYN-00012": [
+      {
+        "polarity": "positive",
+        "quote": "Площадка «Яманэ» под Алматы принимает до 100 гостей в отапливаемом павильоне у яблоневого сада.",
+        "tag": "large_scale_events"
+      },
+      {
+        "polarity": "positive",
+        "quote": "координатор общается на русском и английском",
+        "tag": "multilingual_hosting"
+      },
+      {
+        "polarity": "positive",
+        "quote": "Осенью здесь проводят выездные свадьбы",
+        "tag": "wedding_ceremony"
+      }
+    ]
+  },
+  "model": "gpt-5.4-mini",
+  "version": 1
+}
