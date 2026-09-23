@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Результаты тестов — QALAU</title>
+  <style>
+:root{color-scheme:dark;--bg:#191b19;--surface:#222521;--text:#eeeee7;--muted:#b2b9ae;--line:#42493f;--accent:#c6d4b1;--tint:#30392b;--error:#ffb5ac;font-family:Plex,'Segoe UI',sans-serif;color:var(--text);background:var(--bg)}*{box-sizing:border-box}body{margin:0}main{margin:auto}button{font:inherit;color:inherit;cursor:pointer}a{color:inherit;text-underline-offset:4px}a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:4px}h1,h2,h3,p{margin:0}h1{font-family:Serif,Georgia,serif;font-size:clamp(34px,4vw,52px);font-weight:450;line-height:1.12;letter-spacing:-.035em}h2{font-size:20px;font-weight:500}h3{font-size:17px;font-weight:500}p{line-height:1.6}.brand{font-size:25px;font-weight:600;text-decoration:none}.brand-dot{color:var(--accent)}
+.test-report main{max-width:1200px;padding:0 32px}.test-report nav{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:28px 0;border-bottom:1px solid var(--line)}.test-report nav>a:last-child{font-size:14px}.test-report header{padding:48px 0 28px}.eyebrow{color:var(--accent);font-size:13px;margin-bottom:14px}.test-report #metadata{color:var(--muted);margin-top:20px;font-size:14px}.test-report #notice{overflow-wrap:anywhere;color:var(--muted);line-height:1.7}.test-report #notice:not(:empty){padding:20px;border:1px solid var(--line);margin:20px 0}.test-report #metrics{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:12px 0 28px}.metric{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:20px}.metric>span{display:block;color:var(--muted);font-size:13px}.metric strong{display:block;font-weight:500;font-size:27px;margin-top:10px}.metric.passed strong{color:var(--accent)}.metric.failed strong{color:var(--error)}.filters{display:flex;gap:8px;margin-bottom:32px}.filters button{min-height:44px;padding:8px 20px;border:1px solid var(--line);border-radius:24px;background:transparent}.filters button[aria-pressed=true]{background:var(--accent);color:var(--bg);border-color:var(--accent)}.suite-section{margin-bottom:36px}.suite-section h2{margin-bottom:16px}.test-report table{width:100%;table-layout:fixed;border-collapse:collapse;font-size:14px}.test-report th{text-align:left;color:var(--muted);font-weight:400;font-size:12px}.test-report td,.test-report th{padding:16px 10px;border-bottom:1px solid var(--line);vertical-align:top}.test-report th:first-child{width:66%;padding-left:0}.test-report td:first-child{padding-left:0}.test-report th:last-child{width:14%}.suite-path{display:block;font-size:12px;color:var(--muted);margin-bottom:7px;overflow-wrap:anywhere}.test-name{overflow-wrap:anywhere}.badge{display:inline-block;padding:4px 8px;border-radius:5px;font-size:12px;background:#333832;color:var(--muted)}.badge.passed{background:var(--tint);color:var(--accent)}.badge.failed,.badge.error{background:#482a28;color:var(--error)}.duration{color:var(--muted);font-variant-numeric:tabular-nums}.test-report details{margin-top:10px}.test-report summary{cursor:pointer;color:var(--error);padding:10px 0;font-size:12px}.test-report pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px;line-height:1.6}.demo-section{border-top:1px solid var(--line);padding-top:32px}.demo-section>p{color:var(--muted);margin:12px 0 24px;font-size:14px}#demos{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}#demos article{padding:24px;border:1px solid var(--line);border-radius:8px;background:var(--surface);min-width:0}#demos article p{font-size:13px;overflow-wrap:anywhere}.ordered-ids{margin-top:8px;color:var(--accent)}.test-report footer{display:flex;justify-content:space-between;gap:20px;padding:24px 0 32px;color:var(--muted);font-size:13px}@media(max-width:600px){.test-report main{padding:0 20px}.test-report #metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.metric:last-child{grid-column:1/-1}.metric{padding:16px}.test-report th:first-child{width:52%}.test-report th:last-child{width:20%}.test-report td,.test-report th{padding:12px 4px}.badge{font-size:11px;padding:4px}.test-report table{font-size:12px}.test-report #demos{grid-template-columns:1fr}.test-report footer{display:block}.test-report footer a{display:block;margin-top:16px}.test-report header{padding-top:32px}}
+  </style>
+</head>
+<body class="test-report">
+  <main>
+    <nav aria-label="Навигация"><a href="/" class="brand">QALAU<span class="brand-dot">.</span></a><a href="/docs-ui">Документация ↗</a></nav>
+    <header><p class="eyebrow">Проверка качества</p><h1>Результаты тестов</h1><p id="metadata">Загружаем отчёт…</p></header>
+    <div id="notice" role="status" aria-live="polite"></div>
+    <section id="metrics" aria-label="Итоги запуска"></section>
+    <div class="filters" role="group" aria-label="Фильтр тестов">
+      <button type="button" data-filter="all" aria-pressed="true">Все</button>
+      <button type="button" data-filter="failed" aria-pressed="false">Ошибки</button>
+      <button type="button" data-filter="e2e" aria-pressed="false">E2E</button>
+    </div>
+    <div id="suites"></div>
+    <section class="demo-section"><h2>Демо-запросы</h2><p>Ожидаемые результаты сценариев; не результаты их выполнения.</p><div id="demos"></div></section>
+    <footer>QALAU · Отчёт последнего запуска <a href="/">Вернуться к подбору →</a></footer>
+  </main>
+<script>
+'use strict';
+const $ = selector => document.querySelector(selector);
+const kinds = {e2e: 'E2E · Сквозные проверки', api: 'API · Проверки интерфейса', property: 'Свойства · Property-based', unit: 'Модульные тесты', other: 'Другие проверки'};
+const statuses = {passed: 'Пройден', failed: 'Сбой', error: 'Ошибка', skipped: 'Пропущен'};
+let report, filter = 'all';
+function el(tag, text, className) {
+  const node = document.createElement(tag);
+  if (text !== undefined) node.textContent = text;
+  if (className) node.className = className;
+  return node;
+}
+function seconds(value) { return `${Number(value || 0).toLocaleString('ru-RU', {maximumFractionDigits: 3})} с`; }
+function renderSuites() {
+  $('#suites').replaceChildren();
+  $('#notice').textContent = '';
+  if (!report.suites.length) {
+    $('#notice').textContent = 'отчёт ещё не сформирован: uv run python scripts/test_report.py';
+    return;
+  }
+  let count = 0;
+  for (const [kind, title] of Object.entries(kinds)) {
+    if (filter === 'e2e' && kind !== 'e2e') continue;
+    const rows = report.suites.filter(s => s.kind === kind).sort((a,b) => a.name.localeCompare(b.name))
+      .flatMap(s => s.tests.map(t => ({...t, suite: s.name})))
+      .filter(t => filter !== 'failed' || ['failed', 'error'].includes(t.status));
+    if (!rows.length) continue;
+    count += rows.length;
+    const section = el('section', undefined, 'suite-section');
+    section.append(el('h2', `${title} · ${rows.length}`));
+    const table = el('table');
+    const head = el('thead'), header = el('tr');
+    for (const name of ['Тест', 'Статус', 'Время']) { const th = el('th', name); th.scope = 'col'; header.append(th); }
+    head.append(header); table.append(head);
+    const body = el('tbody');
+    for (const test of rows) {
+      const row = el('tr'), name = el('td');
+      name.append(el('span', test.suite, 'suite-path'), el('span', test.name, 'test-name'));
+      if (test.message) {
+        const details = el('details');
+        details.append(el('summary', 'Сообщение об ошибке'), el('pre', test.message));
+        name.append(details);
+      }
+      const status = el('td'); status.append(el('span', statuses[test.status] || test.status, `badge ${test.status}`));
+      row.append(name, status, el('td', seconds(test.duration_s), 'duration')); body.append(row);
+    }
+    table.append(body); section.append(table); $('#suites').append(section);
+  }
+  if (!count) $('#notice').textContent = 'По этому фильтру тестов нет.';
+}
+function render() {
+  $('#metadata').textContent = `Коммит ${report.git_sha} · ${new Date(report.generated_at).toLocaleString('ru-RU')} · время вашего устройства`;
+  const s = report.summary;
+  for (const [label, value, cls] of [['Пройдено',s.passed,'passed'],['Ошибки',s.failed+s.errors,'failed'],['Пропущено',s.skipped,'skipped'],['Всего',s.total,''],['Время тестов',seconds(s.duration_s),'']]) {
+    const tile = el('div', undefined, `metric ${cls}`); tile.append(el('span',label), el('strong',value)); $('#metrics').append(tile);
+  }
+  for (const demo of report.demo || []) {
+    const card = el('article'); card.append(el('h3',demo.name), el('pre',JSON.stringify(demo.request,null,2)));
+    const outcome = {matched:'Подобраны подрядчики', no_category_in_city:'В городе нет этой категории', none_eligible:'Нет подходящих кандидатов'};
+    card.append(el('p', `Ожидаемый результат: ${outcome[demo.expected_outcome] || demo.expected_outcome}`));
+    card.append(el('p', `ID по порядку: ${demo.expected_card_ids.length ? demo.expected_card_ids.join(' → ') : 'нет'}`, 'ordered-ids'));
+    $('#demos').append(card);
+  }
+  if (!report.demo?.length) $('#demos').append(el('p','Демо-запросы не добавлены в отчёт.'));
+  renderSuites();
+}
+for (const button of document.querySelectorAll('[data-filter]')) button.addEventListener('click', () => {
+  filter = button.dataset.filter;
+  for (const other of document.querySelectorAll('[data-filter]')) other.setAttribute('aria-pressed', String(other === button));
+  if (report) renderSuites();
+});
+fetch('/api/tests', {cache:'no-store'}).then(response => {
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  return response.json();
+}).then(data => { report = data; render(); }).catch(error => {
+  $('#metadata').textContent = 'Отчёт недоступен';
+  $('#notice').textContent = `Не удалось загрузить отчёт (${error.message}). Обновите страницу или выполните: uv run python scripts/test_report.py`;
+});
+</script>
+</body>
+</html>
