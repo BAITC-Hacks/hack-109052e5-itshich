@@ -2,10 +2,11 @@
 from dataclasses import replace
 from datetime import date
 from fractions import Fraction
+import json
 
 import pytest
 
-from matcher import ranking
+from matcher import aspects, ranking
 from matcher.filtering import filter_pool
 from matcher.lexical import LexicalScorer
 from matcher.model import FEATURES, MAX_CARDS, MatchRequest, MatchResult, Outcome, ReasonFamily
@@ -63,32 +64,53 @@ def test_budget_contrast_uses_all_eligible_for_contribution_and_formatted_eviden
     assert all(r.code != "BUDGET_FITS" for c in assigned.cards for r in c.reasons)
 
 
-@pytest.mark.parametrize("snippet, expected", [
-    ("Корпоративы для команды", "Корпоративы для команды"),
-    ("Корпоративы " + "для команды " * 15, "Корпоративы " + "для команды " * 9),
-    ("Несуществующая цитата", None),
-    ("я" * 121, None),
-    (None, None),
-], ids=["short", "long", "invented", "unbroken-word", "missing"])
-def test_description_quotes_are_verbatim_and_end_at_a_word_boundary(
-        contractor, match_request, snippet, expected):
+@pytest.fixture(autouse=True)
+def aspect_catalogue(tmp_path, monkeypatch):
+    load = aspects.load_aspects
+
+    def install(entries):
+        path = tmp_path / f"aspects-{len(list(tmp_path.glob('aspects-*.json')))}.json"
+        path.write_text(json.dumps({"model": "test", "version": 1, "aspects": entries}), encoding="utf-8")
+        loaded = load(path)
+        monkeypatch.setattr(aspects, "load_aspects", lambda: loaded)
+
+    install({})
+    return install
+
+
+@pytest.mark.parametrize("event_format, expected", [
+    ("корпоратив", "business_forum"), ("свадьба", "wedding_ceremony"),
+])
+def test_description_aspect_uses_positive_format_tags_with_stable_ties(
+        contractor, match_request, aspect_catalogue, event_format, expected):
     from matcher.reasons import assign
 
-    description = "Корпоративы " + "для команды " * 15 + "\n" + "я" * 121
-    catalogue = [replace(contractor, description=description, price_from_kzt=match_request.budget_kzt)]
-    result, scored, scorer = reason_input(catalogue, match_request)
-    scored = (replace(scored[0], semantic_snippet=snippet),)
-    result = replace(result, cards=scored)
-    assigned = assign(result, scored, catalogue, scorer)
-    quoted = [r for r in assigned.cards[0].reasons if "quote" in r.evidence]
-    if expected is None:
-        assert quoted == []
-    else:
-        reason, = quoted
-        assert reason.code == "DESCRIPTION_ASPECT" and reason.primary
-        assert reason.evidence["quote"] == expected.rstrip()
-        assert reason.evidence["quote"] in description and len(reason.evidence["quote"]) <= 120
-        assert reason.evidence["semantic_score"] == str(scored[0].semantic_score)
+    entries = [{"tag": tag, "polarity": polarity, "quote": contractor.description}
+               for tag, polarity in [("team_building", "positive"), ("wedding_ceremony", "positive"),
+                                     ("business_forum", "positive"), ("accommodation", "negative")]]
+    request = replace(match_request, event_format=event_format, budget_kzt=contractor.price_from_kzt)
+    result, scored, scorer = reason_input([contractor], request)
+    for ordered in (entries, list(reversed(entries))):
+        aspect_catalogue({contractor.id: ordered})
+        assigned = assign(result, scored, [contractor], scorer)
+        selected, = [r for r in assigned.cards[0].reasons if r.code == "DESCRIPTION_ASPECT"]
+        assert selected.evidence == {"aspect": aspects.TAGS[expected][0], "tag": expected}
+        assert all("quote" not in r.evidence for r in assigned.cards[0].reasons)
+
+
+@pytest.mark.parametrize("entries", [[],
+    [{"tag": "business_forum", "polarity": "neutral", "quote": "Корпоратив"}],
+    [{"tag": "business_forum", "polarity": "negative", "quote": "Корпоратив"}],
+    [{"tag": "wedding_ceremony", "polarity": "positive", "quote": "Свадьба"}],
+])
+def test_description_aspect_is_absent_without_relevant_positive_tags(
+        contractor, match_request, aspect_catalogue, entries):
+    from matcher.reasons import assign
+
+    aspect_catalogue({contractor.id: entries})
+    result, scored, scorer = reason_input([contractor], match_request)
+    assigned = assign(result, scored, [contractor], scorer)
+    assert all(r.code != "DESCRIPTION_ASPECT" for r in assigned.cards[0].reasons)
 
 
 @pytest.mark.parametrize("code, fields, peer_fields, request_fields, evidence", [
@@ -140,10 +162,10 @@ def test_date_pair_replacement_is_proved_by_returning_kiki_alone(real_contractor
     for card, reason in replacements:
         assert card.contractor.id not in {c.contractor.id for c in top_without_date}
         assert card.contractor.id not in {c.contractor.id for c in restored}
-        assert reason.evidence == {"competitor": "Кики", "date": "05.10.2026"}
+        assert reason.evidence == {"competitor": "Кики", "date": "05.10.2026", "scarcity": "в эту дату свободны 5 из 10"}
 
 
-def test_only_free_card_reports_busy_count_and_all_caveats(contractor, match_request):
+def test_only_free_card_reports_scarcity_and_all_caveats(contractor, match_request):
     from matcher.reasons import assign
 
     free = replace(contractor, price_from_kzt=match_request.budget_kzt, description="",
@@ -155,7 +177,7 @@ def test_only_free_card_reports_busy_count_and_all_caveats(contractor, match_req
     assigned = assign(result, scored, catalogue, scorer)
     card, = assigned.cards
     assert card.reasons[0].code == "AVAILABILITY_ONLY_FREE" and card.reasons[0].primary
-    assert card.reasons[0].evidence == {"date": "14.11.2026", "busy_count": "2"}
+    assert card.reasons[0].evidence == {"date": "14.11.2026", "scarcity": "в эту дату свободны 1 из 3"}
     assert [r.code for r in card.reasons[-3:]] == ["CITY_IMPUTED", "PRICE_IMPUTED", "SYNTHETIC"]
     assert not any(r.primary for r in card.reasons[1:])
     assert assigned.diversity_limited is False
@@ -234,12 +256,13 @@ def test_absence_from_date_free_top_three_does_not_prove_single_competitor_repla
     assert any(r.code == "AVAILABILITY_REPLACEMENT" for r in assigned.cards[2].reasons)
 
 
-def test_zero_contribution_fact_qualifies_before_a_negative_ranking_factor(contractor, match_request):
+def test_zero_contribution_fact_qualifies_before_a_negative_ranking_factor(contractor, match_request, aspect_catalogue):
     from matcher.reasons import assign
 
     catalogue = [replace(contractor, id="0", price_from_kzt=300_000,
                          languages=("русский", "казахский", "английский")),
                  replace(contractor, id="1", price_from_kzt=500_000, languages=("русский",))]
+    aspect_catalogue({"1": [{"tag": "business_forum", "polarity": "positive", "quote": "proof"}]})
     result, scored, scorer = reason_input(catalogue, replace(match_request, budget_kzt=1_000_000))
     assigned = assign(result, scored, catalogue, scorer)
     # The second card has no positive phi. Semantic phi == 0 reaches its zero
@@ -248,17 +271,104 @@ def test_zero_contribution_fact_qualifies_before_a_negative_ranking_factor(contr
     assert assigned.cards[1].reasons[0].contribution == 0
 
 
-def test_triple_search_trades_individual_utility_for_diversity_and_breaks_ties_by_code(contractor, match_request):
+def test_triple_search_trades_individual_utility_for_diversity_and_breaks_ties_by_code(contractor, match_request, aspect_catalogue):
     from matcher.reasons import assign
 
     catalogue = [replace(contractor, id=str(i), description=f"Корпоративы ведущий {word}",
                          languages=("русский", "казахский", "английский"))
                  for i, word in enumerate(("один", "два", "три"))]
+    aspect_catalogue({str(i): [{"tag": tag, "polarity": "positive", "quote": "proof"}]
+                      for i, tag in enumerate(("business_forum", "team_building", "improvisation"))})
     result, scored, scorer = reason_input(catalogue, match_request)
     assigned = assign(result, scored, catalogue, scorer)
-    # All phi and delta are zero. Each distinct quote has U=.10; common budget
-    # and language facts have U=0. Three quotes score .30 - 3*.50 - 3*.10 = -1.50;
+    # All phi and delta are zero. Each distinct aspect has U=.10; common budget
+    # and language facts have U=0. Three aspects score .30 - 3*.50 - 3*.10 = -1.50;
     # three different families score .10, with code strings deciding their order.
     assert [c.reasons[0].code for c in assigned.cards] == [
         "BUDGET_HEADROOM", "DESCRIPTION_ASPECT", "LANGUAGE_OPTIONS"]
     assert assigned.diversity_limited is False
+
+
+@pytest.mark.parametrize("tagged", [False, True])
+def test_unique_closest_description_without_tags_is_support_only(
+        contractor, match_request, aspect_catalogue, tagged):
+    from matcher.reasons import assign
+
+    if tagged:
+        aspect_catalogue({contractor.id: [{"tag": "business_forum", "polarity": "positive", "quote": "proof"}]})
+    catalogue = [contractor, replace(contractor, id="peer", description="", price_from_kzt=700_000)]
+    result, scored, scorer = reason_input(catalogue, match_request)
+    assigned = assign(result, scored, catalogue, scorer)
+    closest = next(r for c in assigned.cards for r in c.reasons if r.code == "DESCRIPTION_CLOSEST_IN_SHOWN")
+    assert closest.evidence == ({"aspect": aspects.TAGS["business_forum"][0], "tag": "business_forum"} if tagged else {})
+    if not tagged:
+        assert not closest.primary
+    tied = [contractor, replace(contractor, id="peer")]
+    result, scored, scorer = reason_input(tied, match_request)
+    assert not any(r.code == "DESCRIPTION_CLOSEST_IN_SHOWN"
+                   for c in assign(result, scored, tied, scorer).cards for r in c.reasons)
+
+
+@pytest.mark.parametrize("price, expected", [
+    (850_000, "DESCRIPTION_ASPECT"), (850_001, "BUDGET_FITS"), (860_000, "BUDGET_FITS"),
+])
+def test_tight_budget_promotes_budget_before_diversity_search(
+        contractor, match_request, aspect_catalogue, price, expected):
+    from matcher.reasons import assign
+
+    aspect_catalogue({contractor.id: [{"tag": "business_forum", "polarity": "positive", "quote": "proof"}]})
+    catalogue = [replace(contractor, price_from_kzt=price)]
+    result, scored, scorer = reason_input(catalogue, replace(match_request, budget_kzt=1_000_000))
+    assigned = assign(result, scored, catalogue, scorer)
+    assert assigned.cards[0].reasons[0].code == expected
+    assert assigned.cards[0].score == result.cards[0].score
+
+
+@pytest.mark.parametrize("month,busy,scarcity", [(11, 2, False), (11, 3, True), (12, 0, True)])
+def test_scarcity_counts_category_date_availability_even_when_other_filters_reject(
+        contractor, match_request, month, busy, scarcity):
+    from matcher.reasons import assign
+
+    request = replace(match_request, event_date=date(2026, month, 14))
+    catalogue = [replace(contractor, id=str(i), description="", price_from_kzt=900_000 if i == 5 else 200_000,
+                         busy_dates=frozenset({request.event_date}) if i < busy else frozenset()) for i in range(6)]
+    catalogue.append(replace(contractor, id="other-city", city="Астана", busy_dates=frozenset({request.event_date})))
+    result, scored, scorer = reason_input(catalogue, request)
+    assigned = assign(result, scored, catalogue, scorer)
+    for card in assigned.cards:
+        evidence = [r.evidence["scarcity"] for r in card.reasons if "scarcity" in r.evidence]
+        assert evidence == ([f"в эту дату свободны {6 - busy} из 6"] if scarcity else [])
+        assert all(not r.primary for r in card.reasons if r.code == "AVAILABILITY_SCARCE")
+
+
+def test_requested_hours_promote_headroom_over_an_unrequested_maximum(contractor, match_request):
+    from matcher.reasons import assign
+
+    catalogue = [replace(contractor, description="", max_hours=8, price_from_kzt=200_000),
+                 replace(contractor, id="peer", description="", max_hours=4, price_from_kzt=400_000)]
+    result, scored, scorer = reason_input(catalogue, replace(match_request, budget_kzt=1_000_000, duration_hours=4))
+    assigned = assign(result, scored, catalogue, scorer)
+    assert assigned.cards[0].reasons[0].code == "DURATION_HEADROOM"
+
+
+@pytest.mark.parametrize("month, expected", [(11, "LANGUAGE_REQUEST_MATCH"), (12, "AVAILABILITY_REPLACEMENT")])
+def test_language_and_december_priorities_change_the_primary_in_a_competitive_triple(
+        contractor, match_request, aspect_catalogue, month, expected):
+    from matcher.reasons import assign
+
+    class Scorer:
+        name = "lexical"
+        def score(self, request, contractors):
+            return {c.id: {"busy": 1.0, "a": 0.9, "b": 0.8, "c": 0.7}[c.id] for c in contractors}
+        def snippet(self, request, contractor):
+            return None
+
+    match_request = replace(match_request, event_date=date(2026, month, 14))
+    catalogue = [replace(contractor, id=cid, name=cid, max_hours=12 if cid == "b" else 8,
+                         busy_dates=frozenset({match_request.event_date}) if cid == "busy" else frozenset())
+                 for cid in ("busy", "a", "b", "c")]
+    aspect_catalogue({"a": [{"tag": "business_forum", "polarity": "positive", "quote": "proof"}]})
+    result, scored, scorer = reason_input(catalogue, replace(match_request, language="русский"), Scorer())
+    assigned = assign(result, scored, catalogue, scorer)
+    assert assigned.cards[2].reasons[0].code == expected
+    assert any(r.code == "AVAILABILITY_REPLACEMENT" for r in assigned.cards[2].reasons)

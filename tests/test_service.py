@@ -92,6 +92,11 @@ def test_saved_demo_outcomes_and_ordered_cards_are_reproducible(real_contractors
         assert sum(reason.primary for reason in card.reasons) == 1
         assert card.reasons[0].code not in {"FORMAT_SUPPORTED", "PRICE_IMPUTED", "CITY_IMPUTED", "SYNTHETIC"}
     assert result == run(request, list(reversed(real_contractors)), offline_demo_scorer)
+    from matcher.explain import TemplateExplainer, validate_explanations
+
+    rendered = TemplateExplainer().explain(result)
+    assert validate_explanations(result, [e.text for e in rendered]) == []
+    assert rendered == TemplateExplainer().explain(run(request, real_contractors, offline_demo_scorer))
     from matcher.pipeline import answer
 
     response = answer(request)
