@@ -627,7 +627,9 @@ def test_template_outputs_pass_validation_for_six_typical_triples(profile, tmp_p
     assert TemplateExplainer().explain(match) == TemplateExplainer().explain(run(request, list(reversed(catalogue)), LexicalScorer()))
     assert all(c.contractor.description not in text for c, text in zip(match.cards, texts))
     if profile in {"scarcity", "december"}:
-        assert all("в эту дату свободны" in text for text in texts)
+        # Said once, on the first card; the note describes the whole result.
+        assert "в эту дату свободны" in texts[0]
+        assert all("в эту дату свободны" not in text for text in texts[1:])
 
 
 @pytest.mark.parametrize("change", ["card", "prompt"])
