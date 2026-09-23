@@ -136,7 +136,7 @@ card, same order). Two implementations:
   quote, caveats ("цена проставлена при подготовке датасета", "профиль
   синтетический"), and free-on-date ("свободен 14.11.2026"). Vary sentence
   structure by rank so cards are not clones. 1-2 sentences, <= 350 chars.
-- LLMExplainer: OpenAI chat (env LLM_MODEL, default "gpt-5-mini"),
+- LLMExplainer: OpenAI chat (env LLM_MODEL, default "gpt-5.4-mini"),
   temperature 0, seed 42, JSON output {"explanations":[{"id","text"}]}. The
   prompt contains ONLY: the request, the CardFacts of the shown cards (as
   compact JSON incl. description snippet, NOT the full catalogue), and the
