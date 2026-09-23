@@ -1,0 +1,59 @@
+.theme-console{color-scheme:dark;--bg:#171816;--paper:#20221f;--ink:#edece6;--muted:#b4b8ae;--line:#454b42;--accent:#c6d4b1;--accent-text:#d1dfbc;--on-accent:#202719;--tint:#303729;--control:#707a66;--error:#ffaba3}
+.theme-console .topbar{background:var(--bg);border-bottom:1px solid var(--line)}
+.theme-console .brand{font-family:'IBM Plex Sans',sans-serif;font-weight:650;font-size:18px}
+.theme-console .intro h1{font-family:'Source Serif',serif;font-weight:450;max-width:700px;font-size:40px}
+.theme-console main{max-width:1392px}
+.theme-console .intro{padding-bottom:12px}
+.theme-console .workspace{display:grid;grid-template-columns:268px minmax(0,1fr);gap:30px;align-items:start}
+.theme-console .filter-panel{margin:0;padding:20px;border-radius:8px}
+.theme-console .panel-heading>div{display:block}
+.theme-console .small{display:block;margin-top:4px}
+.theme-console #search{display:block}
+.theme-console .field{margin-bottom:16px}
+.theme-console #extra{display:block;margin-top:4px}
+.theme-console .primary{width:100%;font-size:13px;margin-top:12px}
+.theme-console .form-note{display:none}
+.theme-console .card-grid{grid-template-columns:1fr;max-width:none;gap:12px}
+.theme-console .vendor{border-radius:8px;padding:20px;display:grid;grid-template-columns:1fr 230px;column-gap:28px}
+.theme-console .vendor-top{grid-column:1;min-height:45px}
+.theme-console .vendor h3{font-size:22px}
+.theme-console .avatar{display:none}
+.theme-console .price{grid-column:2;grid-row:1;text-align:right;margin:0;font-size:25px;min-height:0}
+.theme-console .available{grid-column:2;grid-row:2;margin:8px 0 0;justify-content:flex-end;min-height:0;font-size:11px}
+.theme-console .available small{display:none}
+.theme-console .explanation{grid-column:1;grid-row:2/4;padding:12px 0 0;border:0;min-height:0}
+.theme-console .explanation p{font-size:13px}
+.theme-console .facts{grid-column:2;grid-row:3;font-size:12px;align-self:end;margin-top:12px}
+.theme-console .facts>div{padding:7px 0}
+.theme-console .profile-details{grid-column:1/-1;margin-top:14px}
+.theme-console .price-origin{grid-column:1/-1;margin:0}
+.theme-console .results-heading{gap:12px;align-items:flex-start}
+.theme-console .results-heading h2{font-size:23px}
+.theme-console .results-actions .count{display:none}
+.theme-console #edit-results{display:none}
+.theme-console .comparison .vendor{border-bottom:1px solid var(--line);border-right:0}
+.theme-console .comparison .price{min-height:0}
+.theme-console .comparison .row-label{display:none}
+.theme-console .skeleton i{background:#353b30}
+.theme-console .edit-conditions{padding:5px 8px;font-size:11px}
+.theme-console .demo-tools{margin-top:30px}
+.theme-console .notice{color:var(--ink)}
+@media(max-width:1100px){.theme-console .workspace{grid-template-columns:250px minmax(0,1fr);gap:22px}
+.theme-console .vendor{display:flex}
+.theme-console .price{text-align:left;margin:14px 0}
+.theme-console .available{justify-content:flex-start;margin:0 0 12px}
+.theme-console .explanation{padding-top:14px}}
+@media(max-width:920px){.theme-console .workspace{display:block}
+.theme-console .filter-panel{margin-bottom:28px}
+.theme-console #edit-results{display:block}
+.theme-console .intro h1{font-size:35px}
+.theme-console .vendor{display:flex}
+.theme-console .explanation{min-height:0}}
+@media(max-width:580px){.theme-paper .intro h1,.theme-console .intro h1,.theme-editorial .intro h1,.theme-sage .intro h1{font-size:33px}
+.theme-console .vendor{padding:20px}
+.theme-console .comparison .vendor{display:flex}
+.theme-console .price-origin{margin-top:10px}}
+.skip{background:var(--paper);color:var(--ink)}
+.theme-console .form-collapsed #search{display:none}
+.theme-console ::selection{background:#c6d4b1;color:#202719}
+@media(max-width:1100px){.theme-console .facts{align-self:stretch}}

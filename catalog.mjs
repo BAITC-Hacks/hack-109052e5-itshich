@@ -25,7 +25,7 @@ export function descriptionExcerpt(p){
  const score=s=>(/стиль|сценар|специал|репертуар|подача|предлага|снима|оформ|цвет|оборуд|вместим|монтаж/i.test(s)?3:0)-(/меня зовут|привет|востребован|лучший|статистика/i.test(s)?4:0);
  const candidates=sentences.filter(s=>s.trim().length>=35&&s.trim().length<=300).sort((a,b)=>score(b)-score(a));
  const useful=candidates[0]||text.split('Статистика:')[0]||text;
- const clean=useful.trim();
+ const clean=useful.split('Статистика:')[0].trim();
  if(clean.length<=240)return clean;
  return clean.slice(0,237).replace(/\s+\S*$/,'')+'…';
 }
