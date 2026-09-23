@@ -215,3 +215,72 @@ Each: {name, request, expected_outcome, note}. Must be found on REAL data by
 Python 3.12+, `uv run` for everything, stdlib + fastapi + openai + hypothesis.
 Frozen dataclasses. No global mutable state except explicit caches. Russian
 user-facing strings; English code and comments. Every module <= ~250 lines.
+
+## Reasons: "why this card" is computed by code (matcher/reasons.py)
+
+Source: docs/research/02-reasons-codex.md + team decisions. The LLM never
+decides reasons; it receives reason codes with evidence and only phrases them.
+
+Hooks already in place: `ranking.score_all(eligible, request, scorer)` returns
+CardFacts for EVERY eligible contractor (rank 1..n, same order rule);
+`ranking.weights_for(request)` returns the weights dict (keys == model.FEATURES);
+`filtering.filter_pool(..., ignore_date=True)` drops the busy check.
+Types: `model.Reason`, `model.ReasonFamily`, `CardFacts.reasons`,
+`MatchResult.diversity_limited`.
+
+### Contributions (exact, linear score)
+For card i and feature f: `phi_if = w_f * (x_if - mean_f(eligible))` where the
+mean is over ALL eligible (score_all), not just the top-3. Pairwise contrast
+against every other shown card j and against the best non-shown eligible k:
+`delta_ij_f = w_f * (x_if - x_jf)`. Round to 4 decimals.
+
+### Taxonomy (codes -> evidence keys)
+| family | code | when | evidence |
+| --- | --- | --- | --- |
+| budget | BUDGET_HEADROOM | phi_budget > 0 or headroom_pct >= 30 | price, budget, headroom_pct |
+| budget | BUDGET_LOWER_THAN_SHOWN | cheapest among shown (unique) | price, next_price, diff_pct |
+| budget | BUDGET_FITS | always true for eligible; used only when nothing stronger | price, budget |
+| format | FORMAT_SUPPORTED | always (eligibility); never primary | format |
+| language | LANGUAGE_REQUEST_MATCH | language requested | language |
+| language | LANGUAGE_UNIQUE_IN_SHOWN | only shown card with lang L (L not requested) | language |
+| language | LANGUAGE_OPTIONS | 3 languages, no request | languages |
+| duration | DURATION_HEADROOM | hours requested, max_hours not None, phi_duration > 0 | requested_hours, max_hours |
+| duration | DURATION_MAX_IN_SHOWN | largest max_hours among shown (unique) | max_hours |
+| duration | DURATION_NOT_APPLICABLE | max_hours None (never primary unless nothing else) | — |
+| description_semantic | DESCRIPTION_ASPECT | phi_semantic > 0 or snippet exists; must carry a verbatim quote | quote (<= 120 chars, substring of description), semantic_score |
+| description_semantic | DESCRIPTION_CLOSEST_IN_SHOWN | highest semantic among shown (unique) | quote |
+| availability_contrast | AVAILABILITY_REPLACEMENT | i in top3(on date) and i not in top3(ignore date); competitor j in top3(ignore date), j busy on date, and i not in top3(eligible_on_date + [j]) | competitor, date |
+| availability_contrast | AVAILABILITY_ONLY_FREE | pool > 1 and eligible == 1 and >= 1 rejection is BUSY_ON_DATE | date, busy_count |
+| data_quality_caveat | PRICE_IMPUTED / CITY_IMPUTED / SYNTHETIC | flags | — (caveat, never primary) |
+
+### Selecting the primary reason per card, diverse across the triple
+1. Candidates for card i: reasons with contribution >= 0.2 * max positive
+   contribution of that card, plus AVAILABILITY_REPLACEMENT / *_IN_SHOWN /
+   LANGUAGE_REQUEST_MATCH when they apply (contrast reasons count as strong:
+   utility A = 1.0). Utility `U = 0.65*A + 0.25*D + 0.10*Q` with A = normalized
+   contribution (phi / max phi of card), D = normalized min delta vs other shown
+   cards for that feature, Q = 1 if the fact is unique in the shown set else 0.
+2. Triple: enumerate combinations (<= 6 candidates per card => <= 216),
+   maximize sum of U minus 0.5 per repeated code and 0.1 per repeated family;
+   ties -> lexicographic by codes. Card order is NEVER changed. If the best
+   combination still repeats a code, set MatchResult.diversity_limited=True.
+3. Output per card: primary first (primary=True), then up to 2 supporting
+   reasons (highest U, different family), then caveats. FORMAT_SUPPORTED is
+   included as supporting only when no other supporting reason exists.
+4. Evidence strings are pre-formatted with textfmt (money, dates) so the LLM
+   copies them verbatim.
+
+`reasons.assign(result: MatchResult, all_scored: tuple[CardFacts, ...], contractors, scorer) -> MatchResult`
+returns a new MatchResult whose cards carry reasons. service.run calls
+score_all once, slices top-3, then assign().
+
+### Explanations from codes (matcher/explain.py)
+- Prompt payload per card: {id, имя, позиция, главная причина: {code, evidence},
+  поддерживающие: [...], оговорки: [...]} + запрос. No full description, no
+  raw flags. Rule to the model: the first sentence states the primary reason
+  with its numbers; the second may add one supporting reason or caveat.
+- TemplateExplainer renders from codes with one Russian phrase pattern per
+  code (3 variants keyed by rank), then joins: primary + 1 supporting + caveats.
+- Validator additions: the text must contain every number in the primary
+  reason's evidence (price/headroom/hours/date) and the competitor name for
+  AVAILABILITY_REPLACEMENT; quotes must be substrings of the description.

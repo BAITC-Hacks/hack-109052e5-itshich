@@ -3,16 +3,32 @@ from __future__ import annotations
 
 from dataclasses import replace
 
-from matcher.model import MAX_CARDS, CardFacts, Contractor, MatchRequest, ScoreBreakdown, SemanticScorer
+from matcher.model import FEATURES, MAX_CARDS, CardFacts, Contractor, MatchRequest, ScoreBreakdown, SemanticScorer
 
 
 def _clamp(value: float) -> float:
     return max(0.0, min(1.0, value))
 
 
+def weights_for(request: MatchRequest) -> dict[str, float]:
+    """Feature weights used by total(). Keys == FEATURES. Owner: weights research
+    (per-category profiles land here); matcher.reasons reads contributions from it."""
+    return {"budget_fit": 0.35, "semantic": 0.35, "language_fit": 0.10,
+            "duration_fit": 0.10, "data_quality": 0.10}
+
+
 def rank(
     eligible: list[Contractor], request: MatchRequest, scorer: SemanticScorer,
 ) -> tuple[CardFacts, ...]:
+    """Top MAX_CARDS of score_all()."""
+    return score_all(eligible, request, scorer)[:MAX_CARDS]
+
+
+def score_all(
+    eligible: list[Contractor], request: MatchRequest, scorer: SemanticScorer,
+) -> tuple[CardFacts, ...]:
+    """Every eligible contractor as CardFacts, sorted by (-total, id), rank 1..n."""
+    weights = weights_for(request)
     semantics = scorer.score(request, eligible)
     cards = []
     for contractor in eligible:
@@ -28,10 +44,10 @@ def rank(
             duration_note = "fits"
         quality = (1 - 0.5 * contractor.price_imputed - 0.25 * contractor.city_imputed
                    - 0.25 * contractor.synthetic)
+        values = dict(zip(FEATURES, (budget, semantic, language, duration, quality)))
         score = ScoreBreakdown(
             budget, semantic, language, duration, quality,
-            round(0.35 * budget + 0.35 * semantic + 0.10 * language
-                  + 0.10 * duration + 0.10 * quality, 4),
+            round(sum(weights[f] * values[f] for f in FEATURES), 4),
         )
         cards.append(CardFacts(
             contractor=contractor, rank=len(cards) + 1, score=score,
@@ -47,4 +63,4 @@ def rank(
                           if getattr(contractor, flag)),
         ))
     cards.sort(key=lambda card: (-card.score.total, card.contractor.id))
-    return tuple(replace(card, rank=index) for index, card in enumerate(cards[:MAX_CARDS], 1))
+    return tuple(replace(card, rank=index) for index, card in enumerate(cards, 1))

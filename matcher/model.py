@@ -89,6 +89,38 @@ class ScoreBreakdown:
 
 DurationNote = Literal["fits", "not_applicable", "not_requested"]
 
+# Score feature keys, in weight order. ranking.weights_for(request) returns a
+# dict with exactly these keys; ScoreBreakdown holds the feature values x_f.
+FEATURES: tuple[str, ...] = ("budget_fit", "semantic", "language_fit", "duration_fit", "data_quality")
+
+
+class ReasonFamily(str, Enum):
+    BUDGET = "budget"
+    FORMAT = "format"
+    LANGUAGE = "language"
+    DURATION = "duration"
+    DESCRIPTION = "description_semantic"
+    AVAILABILITY = "availability_contrast"
+    DATA_QUALITY = "data_quality_caveat"
+
+
+@dataclass(frozen=True)
+class Reason:
+    """One code-derived, verifiable reason why a card is shown (or a caveat).
+    code examples: BUDGET_HEADROOM, BUDGET_LOWER_THAN_SHOWN, LANGUAGE_REQUEST_MATCH,
+    LANGUAGE_UNIQUE_IN_SHOWN, DURATION_HEADROOM, DURATION_NOT_APPLICABLE,
+    DESCRIPTION_ASPECT, AVAILABILITY_REPLACEMENT, PRICE_IMPUTED, SYNTHETIC ...
+    evidence: every number/name/quote the text may use for this reason,
+    e.g. {"price": "900 000 ₸", "budget": "2 000 000 ₸", "headroom_pct": "55",
+    "competitor": "Кики", "date": "05.10.2026", "quote": "..."}.
+    contribution: w_f·(x_if − mean_f(eligible)) for score-based reasons, else 0.
+    primary: True for the single reason chosen as the card's headline."""
+    code: str
+    family: ReasonFamily
+    evidence: dict[str, str]
+    contribution: float = 0.0
+    primary: bool = False
+
 
 @dataclass(frozen=True)
 class CardFacts:
@@ -108,6 +140,7 @@ class CardFacts:
     semantic_score: float  # rounded to 3 decimals
     free_on_date: date  # the requested date (guaranteed not in busy_dates)
     caveats: tuple[str, ...]  # subset of: "price_imputed", "city_imputed", "synthetic"
+    reasons: tuple[Reason, ...] = ()  # filled by matcher.reasons; primary first
 
 
 @dataclass(frozen=True)
@@ -120,6 +153,7 @@ class MatchResult:
     eligible_count: int  # pool_size - len(rejections)
     shortfall_note: str | None  # Russian, code-generated: why fewer than 3 (or none)
     semantic_backend: Literal["embeddings", "lexical"]
+    diversity_limited: bool = False  # cards' primary reasons could not all be made distinct
 
 
 @dataclass(frozen=True)

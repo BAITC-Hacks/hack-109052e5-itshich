@@ -31,8 +31,10 @@ def _validate(request: MatchRequest) -> None:
 
 
 def filter_pool(
-    contractors: list[Contractor], request: MatchRequest,
+    contractors: list[Contractor], request: MatchRequest, *, ignore_date: bool = False,
 ) -> tuple[list[Contractor], list[Contractor], tuple[Rejection, ...]]:
+    """ignore_date=True drops the busy-date check: used by matcher.reasons to
+    prove that a card is shown *because* a competitor is busy on the date."""
     _validate(request)
     pool = sorted(
         (c for c in contractors if c.city == request.city and request.category in c.categories),
@@ -41,7 +43,7 @@ def filter_pool(
     eligible, rejections = [], []
     for contractor in pool:
         failures = (
-            (RejectReason.BUSY_ON_DATE, request.event_date in contractor.busy_dates),
+            (RejectReason.BUSY_ON_DATE, not ignore_date and request.event_date in contractor.busy_dates),
             (RejectReason.OVER_BUDGET, contractor.price_from_kzt > request.budget_kzt),
             (RejectReason.FORMAT_NOT_SUPPORTED, request.event_format not in contractor.event_formats),
             (RejectReason.LANGUAGE_NOT_SUPPORTED,
