@@ -151,7 +151,8 @@ def test_outcome_agrees_with_counts(case):
     else:
         assert result.outcome == Outcome.MATCHED
         assert len(result.cards) == min(MAX_CARDS, result.eligible_count)
-    assert (result.shortfall_note is not None) == (len(result.cards) < MAX_CARDS)
+    expects_note = len(result.cards) < MAX_CARDS or bool(result.rejections) or result.eligible_count > MAX_CARDS
+    assert (result.shortfall_note is not None) == expects_note
 
 
 @PROPERTY

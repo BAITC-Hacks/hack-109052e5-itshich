@@ -196,7 +196,8 @@
       Object.assign(field('event_date'), {min: meta.calendar_start, max: meta.calendar_end, value: meta.calendar_start});
       $('calendar-note').textContent = `Календарь занятости: ${dateRu(meta.calendar_start)} — ${dateRu(meta.calendar_end)}.`;
       for (const demo of demos) {
-        const button = node('button', '', demo.name);
+        const DEMO_LABELS = {dense: 'Плотная категория: ведущий, Алматы, осень', rare: 'Редкая категория: флорист', empty_no_category: 'Пусто: категории нет в городе', empty_none_eligible: 'Пусто: есть кандидаты, никто не проходит', date_pair_a: 'Пара дат: 4 октября', date_pair_b: 'Пара дат: 5 октября (топ занят)'};
+        const button = node('button', '', demo.title || DEMO_LABELS[demo.name] || demo.name);
         button.type = 'button'; button.title = demo.note || '';
         button.addEventListener('click', () => {
           if (busy) return;

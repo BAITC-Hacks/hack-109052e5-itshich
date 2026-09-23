@@ -83,10 +83,15 @@ class TemplateExplainer:
             contractor, index = facts.contractor, facts.rank - 1
             price, budget = money(contractor.price_from_kzt), money(facts.budget_kzt)
             reserve, day, form = facts.budget_headroom_pct, format_date(facts.free_on_date), facts.format_matched
+            fit = (
+                f"цена от {price} при бюджете {budget} — запас {reserve} %" if reserve else f"цена от {price} — ровно в бюджет {budget}",
+                f"стартовая цена — {price}, это на {reserve} % ниже бюджета {budget}" if reserve else f"стартовая цена — {price}, ровно в бюджет {budget}",
+                f"лимит {budget} оставляет {reserve} % резерва" if reserve else f"лимит {budget} выбран полностью, запаса нет",
+            )[index]
             text = (
-                f"Первый в выдаче: {contractor.name}, цена от {price} при бюджете {budget} — запас {reserve} %; формат — {form}, свободен {day}",
-                f"На втором месте {contractor.name}: {form}, свободен {day}; стартовая цена — {price}, это на {reserve} % ниже бюджета {budget}",
-                f"Замыкает тройку {contractor.name}: {form} со ставкой от {price}; лимит {budget} оставляет {reserve} % резерва, свободен {day}",
+                f"Первый в выдаче: {contractor.name}, {fit}; формат — {form}, свободен {day}",
+                f"На втором месте {contractor.name}: {form}, свободен {day}; {fit}",
+                f"Замыкает тройку {contractor.name}: {form} со ставкой от {price}; {fit}, свободен {day}",
             )[index]
             details = []
             for flag, wording in (
@@ -104,7 +109,7 @@ class TemplateExplainer:
                 for sentence in re.split(r"[.!?\n]", facts.semantic_snippet):
                     quote = sentence.strip()
                     if len(quote) > 90:
-                        quote = quote[:90].rsplit(" ", 1)[0].rstrip(",;:")
+                        quote = quote[:90].rsplit(" ", 1)[0].rstrip(",;:—-") + "…"
                     if len(_words(quote)) >= 3 and not any(p in quote.casefold() for p in BANNED_PHRASES):
                         rarity = sum(c.semantic_snippet == facts.semantic_snippet for c in result.cards)
                         options.append((rarity, ("из описания", "в профиле", "особенность")[index] + f": «{quote}»"))
