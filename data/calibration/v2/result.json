@@ -1,0 +1,4633 @@
+{
+  "version": 2,
+  "chosen_thetas": {
+    "budget": 1.0,
+    "duration": 1.0,
+    "quality": 1.0,
+    "text": 1.0
+  },
+  "train_loss": 0.5944626389122669,
+  "prior_train_loss": 0.5944626389122669,
+  "weights_by_group": {
+    "general": {
+      "budget_fit": 0.25,
+      "semantic": 0.55,
+      "language_fit": 0.0,
+      "duration_fit": 0.05,
+      "data_quality": 0.15
+    },
+    "venue": {
+      "budget_fit": 0.25,
+      "semantic": 0.6,
+      "language_fit": 0.0,
+      "duration_fit": 0.05,
+      "data_quality": 0.1
+    },
+    "host": {
+      "budget_fit": 0.25,
+      "semantic": 0.55,
+      "language_fit": 0.0,
+      "duration_fit": 0.1,
+      "data_quality": 0.1
+    },
+    "no_presence": {
+      "budget_fit": 0.25,
+      "semantic": 0.6,
+      "language_fit": 0.0,
+      "duration_fit": 0.0,
+      "data_quality": 0.15
+    }
+  },
+  "grid_results": [
+    {
+      "theta": [
+        0.5,
+        0.5,
+        0.5
+      ],
+      "train_loss": 0.6711038074062894
+    },
+    {
+      "theta": [
+        0.5,
+        0.5,
+        0.75
+      ],
+      "train_loss": 0.6496779575787133
+    },
+    {
+      "theta": [
+        0.5,
+        0.5,
+        1.0
+      ],
+      "train_loss": 0.644338180487554
+    },
+    {
+      "theta": [
+        0.5,
+        0.5,
+        1.25
+      ],
+      "train_loss": 0.6458746349935848
+    },
+    {
+      "theta": [
+        0.5,
+        0.5,
+        1.5
+      ],
+      "train_loss": 0.6508362855127889
+    },
+    {
+      "theta": [
+        0.5,
+        0.75,
+        0.5
+      ],
+      "train_loss": 0.6479395716617866
+    },
+    {
+      "theta": [
+        0.5,
+        0.75,
+        0.75
+      ],
+      "train_loss": 0.6267927593106418
+    },
+    {
+      "theta": [
+        0.5,
+        0.75,
+        1.0
+      ],
+      "train_loss": 0.6216852006093117
+    },
+    {
+      "theta": [
+        0.5,
+        0.75,
+        1.25
+      ],
+      "train_loss": 0.6234047246758683
+    },
+    {
+      "theta": [
+        0.5,
+        0.75,
+        1.5
+      ],
+      "train_loss": 0.6285779127482065
+    },
+    {
+      "theta": [
+        0.5,
+        1.0,
+        0.5
+      ],
+      "train_loss": 0.6408824212003813
+    },
+    {
+      "theta": [
+        0.5,
+        1.0,
+        0.75
+      ],
+      "train_loss": 0.6199804559107246
+    },
+    {
+      "theta": [
+        0.5,
+        1.0,
+        1.0
+      ],
+      "train_loss": 0.6150497891253723
+    },
+    {
+      "theta": [
+        0.5,
+        1.0,
+        1.25
+      ],
+      "train_loss": 0.6169288973139695
+    },
+    {
+      "theta": [
+        0.5,
+        1.0,
+        1.5
+      ],
+      "train_loss": 0.6222287254157421
+    },
+    {
+      "theta": [
+        0.5,
+        1.25,
+        0.5
+      ],
+      "train_loss": 0.6407553895577851
+    },
+    {
+      "theta": [
+        0.5,
+        1.25,
+        0.75
+      ],
+      "train_loss": 0.6199888819711973
+    },
+    {
+      "theta": [
+        0.5,
+        1.25,
+        1.0
+      ],
+      "train_loss": 0.6152710339498814
+    },
+    {
+      "theta": [
+        0.5,
+        1.25,
+        1.25
+      ],
+      "train_loss": 0.6173222213991154
+    },
+    {
+      "theta": [
+        0.5,
+        1.25,
+        1.5
+      ],
+      "train_loss": 0.6227620633602869
+    },
+    {
+      "theta": [
+        0.5,
+        1.5,
+        0.5
+      ],
+      "train_loss": 0.644114038009313
+    },
+    {
+      "theta": [
+        0.5,
+        1.5,
+        0.75
+      ],
+      "train_loss": 0.6235785720155852
+    },
+    {
+      "theta": [
+        0.5,
+        1.5,
+        1.0
+      ],
+      "train_loss": 0.6189931265907092
+    },
+    {
+      "theta": [
+        0.5,
+        1.5,
+        1.25
+      ],
+      "train_loss": 0.6211678732289373
+    },
+    {
+      "theta": [
+        0.5,
+        1.5,
+        1.5
+      ],
+      "train_loss": 0.6267423248716494
+    },
+    {
+      "theta": [
+        0.75,
+        0.5,
+        0.5
+      ],
+      "train_loss": 0.6503251950395643
+    },
+    {
+      "theta": [
+        0.75,
+        0.5,
+        0.75
+      ],
+      "train_loss": 0.6294188611821233
+    },
+    {
+      "theta": [
+        0.75,
+        0.5,
+        1.0
+      ],
+      "train_loss": 0.624487356090613
+    },
+    {
+      "theta": [
+        0.75,
+        0.5,
+        1.25
+      ],
+      "train_loss": 0.626419583814808
+    },
+    {
+      "theta": [
+        0.75,
+        0.5,
+        1.5
+      ],
+      "train_loss": 0.6317294514947789
+    },
+    {
+      "theta": [
+        0.75,
+        0.75,
+        0.5
+      ],
+      "train_loss": 0.6276752167491215
+    },
+    {
+      "theta": [
+        0.75,
+        0.75,
+        0.75
+      ],
+      "train_loss": 0.6070195281837064
+    },
+    {
+      "theta": [
+        0.75,
+        0.75,
+        1.0
+      ],
+      "train_loss": 0.6022621495851326
+    },
+    {
+      "theta": [
+        0.75,
+        0.75,
+        1.25
+      ],
+      "train_loss": 0.6043303591044855
+    },
+    {
+      "theta": [
+        0.75,
+        0.75,
+        1.5
+      ],
+      "train_loss": 0.6097673693907024
+    },
+    {
+      "theta": [
+        0.75,
+        1.0,
+        0.5
+      ],
+      "train_loss": 0.6211236332574914
+    },
+    {
+      "theta": [
+        0.75,
+        1.0,
+        0.75
+      ],
+      "train_loss": 0.6005762468561865
+    },
+    {
+      "theta": [
+        0.75,
+        1.0,
+        1.0
+      ],
+      "train_loss": 0.5959967030099644
+    },
+    {
+      "theta": [
+        0.75,
+        1.0,
+        1.25
+      ],
+      "train_loss": 0.598200100520249
+    },
+    {
+      "theta": [
+        0.75,
+        1.0,
+        1.5
+      ],
+      "train_loss": 0.6037788011410988
+    },
+    {
+      "theta": [
+        0.75,
+        1.25,
+        0.5
+      ],
+      "train_loss": 0.6213919009470573
+    },
+    {
+      "theta": [
+        0.75,
+        1.25,
+        0.75
+      ],
+      "train_loss": 0.6010228164556923
+    },
+    {
+      "theta": [
+        0.75,
+        1.25,
+        1.0
+      ],
+      "train_loss": 0.5965837822800752
+    },
+    {
+      "theta": [
+        0.75,
+        1.25,
+        1.25
+      ],
+      "train_loss": 0.5988741354278263
+    },
+    {
+      "theta": [
+        0.75,
+        1.25,
+        1.5
+      ],
+      "train_loss": 0.6045566230065417
+    },
+    {
+      "theta": [
+        0.75,
+        1.5,
+        0.5
+      ],
+      "train_loss": 0.6251705216805442
+    },
+    {
+      "theta": [
+        0.75,
+        1.5,
+        0.75
+      ],
+      "train_loss": 0.6048966320508562
+    },
+    {
+      "theta": [
+        0.75,
+        1.5,
+        1.0
+      ],
+      "train_loss": 0.6005748666936594
+    },
+    {
+      "theta": [
+        0.75,
+        1.5,
+        1.25
+      ],
+      "train_loss": 0.6029858142629109
+    },
+    {
+      "theta": [
+        0.75,
+        1.5,
+        1.5
+      ],
+      "train_loss": 0.6087533441682359
+    },
+    {
+      "theta": [
+        1.0,
+        0.5,
+        0.5
+      ],
+      "train_loss": 0.6476563664555688
+    },
+    {
+      "theta": [
+        1.0,
+        0.5,
+        0.75
+      ],
+      "train_loss": 0.6270407068334117
+    },
+    {
+      "theta": [
+        1.0,
+        0.5,
+        1.0
+      ],
+      "train_loss": 0.6223885843401701
+    },
+    {
+      "theta": [
+        1.0,
+        0.5,
+        1.25
+      ],
+      "train_loss": 0.624531637673489
+    },
+    {
+      "theta": [
+        1.0,
+        0.5,
+        1.5
+      ],
+      "train_loss": 0.6300062014421259
+    },
+    {
+      "theta": [
+        1.0,
+        0.75,
+        0.5
+      ],
+      "train_loss": 0.6254190312097138
+    },
+    {
+      "theta": [
+        1.0,
+        0.75,
+        0.75
+      ],
+      "train_loss": 0.604949467622222
+    },
+    {
+      "theta": [
+        1.0,
+        0.75,
+        1.0
+      ],
+      "train_loss": 0.6004418900483266
+    },
+    {
+      "theta": [
+        1.0,
+        0.75,
+        1.25
+      ],
+      "train_loss": 0.6026881648511218
+    },
+    {
+      "theta": [
+        1.0,
+        0.75,
+        1.5
+      ],
+      "train_loss": 0.6083137622415071
+    },
+    {
+      "theta": [
+        1.0,
+        1.0,
+        0.5
+      ],
+      "train_loss": 0.6191566751465263
+    },
+    {
+      "theta": [
+        1.0,
+        1.0,
+        0.75
+      ],
+      "train_loss": 0.5988357477332505
+    },
+    {
+      "theta": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "train_loss": 0.5944626389122669
+    },
+    {
+      "theta": [
+        1.0,
+        1.0,
+        1.25
+      ],
+      "train_loss": 0.5968182663984
+    },
+    {
+      "theta": [
+        1.0,
+        1.0,
+        1.5
+      ],
+      "train_loss": 0.6024900848881588
+    },
+    {
+      "theta": [
+        1.0,
+        1.25,
+        0.5
+      ],
+      "train_loss": 0.6197239237533864
+    },
+    {
+      "theta": [
+        1.0,
+        1.25,
+        0.75
+      ],
+      "train_loss": 0.5995388963328426
+    },
+    {
+      "theta": [
+        1.0,
+        1.25,
+        1.0
+      ],
+      "train_loss": 0.5952392661676913
+    },
+    {
+      "theta": [
+        1.0,
+        1.25,
+        1.25
+      ],
+      "train_loss": 0.5976982761000347
+    },
+    {
+      "theta": [
+        1.0,
+        1.25,
+        1.5
+      ],
+      "train_loss": 0.6034721810136151
+    },
+    {
+      "theta": [
+        1.0,
+        1.5,
+        0.5
+      ],
+      "train_loss": 0.6237183870680352
+    },
+    {
+      "theta": [
+        1.0,
+        1.5,
+        0.75
+      ],
+      "train_loss": 0.6036474019373765
+    },
+    {
+      "theta": [
+        1.0,
+        1.5,
+        1.0
+      ],
+      "train_loss": 0.5994096748883121
+    },
+    {
+      "theta": [
+        1.0,
+        1.5,
+        1.25
+      ],
+      "train_loss": 0.6019797960924177
+    },
+    {
+      "theta": [
+        1.0,
+        1.5,
+        1.5
+      ],
+      "train_loss": 0.6078146798196025
+    },
+    {
+      "theta": [
+        1.25,
+        0.5,
+        0.5
+      ],
+      "train_loss": 0.6532628268165004
+    },
+    {
+      "theta": [
+        1.25,
+        0.5,
+        0.75
+      ],
+      "train_loss": 0.6328275582077804
+    },
+    {
+      "theta": [
+        1.25,
+        0.5,
+        1.0
+      ],
+      "train_loss": 0.6283228867560465
+    },
+    {
+      "theta": [
+        1.25,
+        0.5,
+        1.25
+      ],
+      "train_loss": 0.6305528056741976
+    },
+    {
+      "theta": [
+        1.25,
+        0.5,
+        1.5
+      ],
+      "train_loss": 0.636137290291033
+    },
+    {
+      "theta": [
+        1.25,
+        0.75,
+        0.5
+      ],
+      "train_loss": 0.6312722562873386
+    },
+    {
+      "theta": [
+        1.25,
+        0.75,
+        0.75
+      ],
+      "train_loss": 0.6109600904310517
+    },
+    {
+      "theta": [
+        1.25,
+        0.75,
+        1.0
+      ],
+      "train_loss": 0.6065811820333618
+    },
+    {
+      "theta": [
+        1.25,
+        0.75,
+        1.25
+      ],
+      "train_loss": 0.608898043194883
+    },
+    {
+      "theta": [
+        1.25,
+        0.75,
+        1.5
+      ],
+      "train_loss": 0.6145405489781882
+    },
+    {
+      "theta": [
+        1.25,
+        1.0,
+        0.5
+      ],
+      "train_loss": 0.6252313632541905
+    },
+    {
+      "theta": [
+        1.25,
+        1.0,
+        0.75
+      ],
+      "train_loss": 0.6050470713923981
+    },
+    {
+      "theta": [
+        1.25,
+        1.0,
+        1.0
+      ],
+      "train_loss": 0.6007266419309616
+    },
+    {
+      "theta": [
+        1.25,
+        1.0,
+        1.25
+      ],
+      "train_loss": 0.6031232765279617
+    },
+    {
+      "theta": [
+        1.25,
+        1.0,
+        1.5
+      ],
+      "train_loss": 0.6088804383649551
+    },
+    {
+      "theta": [
+        1.25,
+        1.25,
+        0.5
+      ],
+      "train_loss": 0.6259951063589391
+    },
+    {
+      "theta": [
+        1.25,
+        1.25,
+        0.75
+      ],
+      "train_loss": 0.6059019705802019
+    },
+    {
+      "theta": [
+        1.25,
+        1.25,
+        1.0
+      ],
+      "train_loss": 0.6016625630526385
+    },
+    {
+      "theta": [
+        1.25,
+        1.25,
+        1.25
+      ],
+      "train_loss": 0.6041404265220758
+    },
+    {
+      "theta": [
+        1.25,
+        1.25,
+        1.5
+      ],
+      "train_loss": 0.6099456319970198
+    },
+    {
+      "theta": [
+        1.25,
+        1.5,
+        0.5
+      ],
+      "train_loss": 0.6301314395656256
+    },
+    {
+      "theta": [
+        1.25,
+        1.5,
+        0.75
+      ],
+      "train_loss": 0.6101200451288279
+    },
+    {
+      "theta": [
+        1.25,
+        1.5,
+        1.0
+      ],
+      "train_loss": 0.6059972368788331
+    },
+    {
+      "theta": [
+        1.25,
+        1.5,
+        1.25
+      ],
+      "train_loss": 0.6085063905027117
+    },
+    {
+      "theta": [
+        1.25,
+        1.5,
+        1.5
+      ],
+      "train_loss": 0.614364023495404
+    },
+    {
+      "theta": [
+        1.5,
+        0.5,
+        0.5
+      ],
+      "train_loss": 0.6632500590671281
+    },
+    {
+      "theta": [
+        1.5,
+        0.5,
+        0.75
+      ],
+      "train_loss": 0.642909244971476
+    },
+    {
+      "theta": [
+        1.5,
+        0.5,
+        1.0
+      ],
+      "train_loss": 0.6383990609155126
+    },
+    {
+      "theta": [
+        1.5,
+        0.5,
+        1.25
+      ],
+      "train_loss": 0.6406732796624712
+    },
+    {
+      "theta": [
+        1.5,
+        0.5,
+        1.5
+      ],
+      "train_loss": 0.646293181148707
+    },
+    {
+      "theta": [
+        1.5,
+        0.75,
+        0.5
+      ],
+      "train_loss": 0.6414407381564541
+    },
+    {
+      "theta": [
+        1.5,
+        0.75,
+        0.75
+      ],
+      "train_loss": 0.6212234808239097
+    },
+    {
+      "theta": [
+        1.5,
+        0.75,
+        1.0
+      ],
+      "train_loss": 0.6167850112695024
+    },
+    {
+      "theta": [
+        1.5,
+        0.75,
+        1.25
+      ],
+      "train_loss": 0.6191513685195551
+    },
+    {
+      "theta": [
+        1.5,
+        0.75,
+        1.5
+      ],
+      "train_loss": 0.6248217572880508
+    },
+    {
+      "theta": [
+        1.5,
+        1.0,
+        0.5
+      ],
+      "train_loss": 0.635545572093237
+    },
+    {
+      "theta": [
+        1.5,
+        1.0,
+        0.75
+      ],
+      "train_loss": 0.6153896212478666
+    },
+    {
+      "theta": [
+        1.5,
+        1.0,
+        1.0
+      ],
+      "train_loss": 0.6110662272629491
+    },
+    {
+      "theta": [
+        1.5,
+        1.0,
+        1.25
+      ],
+      "train_loss": 0.6134777283865821
+    },
+    {
+      "theta": [
+        1.5,
+        1.0,
+        1.5
+      ],
+      "train_loss": 0.6192503126841218
+    },
+    {
+      "theta": [
+        1.5,
+        1.25,
+        0.5
+      ],
+      "train_loss": 0.6363825330144205
+    },
+    {
+      "theta": [
+        1.5,
+        1.25,
+        0.75
+      ],
+      "train_loss": 0.6163468690385188
+    },
+    {
+      "theta": [
+        1.5,
+        1.25,
+        1.0
+      ],
+      "train_loss": 0.6120893273007607
+    },
+    {
+      "theta": [
+        1.5,
+        1.25,
+        1.25
+      ],
+      "train_loss": 0.6145593620325518
+    },
+    {
+      "theta": [
+        1.5,
+        1.25,
+        1.5
+      ],
+      "train_loss": 0.620383780681783
+    },
+    {
+      "theta": [
+        1.5,
+        1.5,
+        0.5
+      ],
+      "train_loss": 0.6406643559605616
+    },
+    {
+      "theta": [
+        1.5,
+        1.5,
+        0.75
+      ],
+      "train_loss": 0.6206637439063014
+    },
+    {
+      "theta": [
+        1.5,
+        1.5,
+        1.0
+      ],
+      "train_loss": 0.6164790704649729
+    },
+    {
+      "theta": [
+        1.5,
+        1.5,
+        1.25
+      ],
+      "train_loss": 0.6190170257552017
+    },
+    {
+      "theta": [
+        1.5,
+        1.5,
+        1.5
+      ],
+      "train_loss": 0.6248761891934552
+    }
+  ],
+  "recommended_state": "priors",
+  "recommended_weights_by_group": {
+    "general": {
+      "budget_fit": 0.25,
+      "semantic": 0.55,
+      "language_fit": 0.0,
+      "duration_fit": 0.05,
+      "data_quality": 0.15
+    },
+    "venue": {
+      "budget_fit": 0.25,
+      "semantic": 0.6,
+      "language_fit": 0.0,
+      "duration_fit": 0.05,
+      "data_quality": 0.1
+    },
+    "host": {
+      "budget_fit": 0.25,
+      "semantic": 0.55,
+      "language_fit": 0.0,
+      "duration_fit": 0.1,
+      "data_quality": 0.1
+    },
+    "no_presence": {
+      "budget_fit": 0.25,
+      "semantic": 0.6,
+      "language_fit": 0.0,
+      "duration_fit": 0.0,
+      "data_quality": 0.15
+    }
+  },
+  "held_out_pairwise_gain": 0.0,
+  "acceptance": {
+    "held_out_gain_at_least_5pp": false,
+    "swap_consistency_at_least_80pct": true,
+    "label_shuffle_consistency_at_least_80pct": true
+  },
+  "metrics": {
+    "priors": {
+      "train": {
+        "per_request": [
+          {
+            "id": "q01",
+            "order": [
+              "HK-75012",
+              "HK-35215",
+              "HK-27222",
+              "HK-29829"
+            ],
+            "top3": [
+              "HK-75012",
+              "HK-35215",
+              "HK-27222"
+            ],
+            "pairs": 5,
+            "boundary_pairs": 3,
+            "coverage": 0.8333333333333334,
+            "pairwise_agreement": 0.8,
+            "weighted_pairwise_agreement": 0.8,
+            "boundary_agreement": 1.0,
+            "kendall_tau": 0.33333333333333326
+          },
+          {
+            "id": "q02",
+            "order": [
+              "HK-77838",
+              "HK-75012",
+              "HK-88430",
+              "HK-44923",
+              "HK-29829"
+            ],
+            "top3": [
+              "HK-77838",
+              "HK-75012",
+              "HK-88430"
+            ],
+            "pairs": 9,
+            "boundary_pairs": 6,
+            "coverage": 0.9,
+            "pairwise_agreement": 0.8888888888888888,
+            "weighted_pairwise_agreement": 0.8888888888888888,
+            "boundary_agreement": 1.0,
+            "kendall_tau": 0.8
+          },
+          {
+            "id": "q03",
+            "order": [
+              "HK-68220",
+              "HK-91112",
+              "HK-30583",
+              "HK-16628"
+            ],
+            "top3": [
+              "HK-68220",
+              "HK-91112",
+              "HK-30583"
+            ],
+            "pairs": 6,
+            "boundary_pairs": 3,
+            "coverage": 1.0,
+            "pairwise_agreement": 0.6666666666666666,
+            "weighted_pairwise_agreement": 0.6666666666666666,
+            "boundary_agreement": 0.6666666666666666,
+            "kendall_tau": 0.33333333333333326
+          },
+          {
+            "id": "q04",
+            "order": [
+              "HK-68220",
+              "HK-76268",
+              "HK-30583",
+              "HK-16628",
+              "HK-53108"
+            ],
+            "top3": [
+              "HK-68220",
+              "HK-76268",
+              "HK-30583"
+            ],
+            "pairs": 10,
+            "boundary_pairs": 6,
+            "coverage": 1.0,
+            "pairwise_agreement": 1.0,
+            "weighted_pairwise_agreement": 1.0,
+            "boundary_agreement": 1.0,
+            "kendall_tau": 1.0
+          },
+          {
+            "id": "q05",
+            "order": [
+              "HK-90011",
+              "HK-69010",
+              "HK-72785",
+              "HK-58236"
+            ],
+            "top3": [
+              "HK-90011",
+              "HK-69010",
+              "HK-72785"
+            ],
+            "pairs": 6,
+            "boundary_pairs": 3,
+            "coverage": 1.0,
+            "pairwise_agreement": 0.6666666666666666,
+            "weighted_pairwise_agreement": 0.7272727272727273,
+            "boundary_agreement": 0.6666666666666666,
+            "kendall_tau": 0.33333333333333326
+          },
+          {
+            "id": "q06",
+            "order": [
+              "HK-50695",
+              "HK-90011",
+              "HK-69010",
+              "HK-58236"
+            ],
+            "top3": [
+              "HK-50695",
+              "HK-90011",
+              "HK-69010"
+            ],
+            "pairs": 5,
+            "boundary_pairs": 2,
+            "coverage": 0.8333333333333334,
+            "pairwise_agreement": 0.6,
+            "weighted_pairwise_agreement": 0.6,
+            "boundary_agreement": 0.5,
+            "kendall_tau": 0.33333333333333326
+          },
+          {
+            "id": "q07",
+            "order": [
+              "HK-80581",
+              "HK-97041",
+              "HK-58385",
+              "HK-37181"
+            ],
+            "top3": [
+              "HK-80581",
+              "HK-97041",
+              "HK-58385"
+            ],
+            "pairs": 6,
+            "boundary_pairs": 3,
+            "coverage": 1.0,
+            "pairwise_agreement": 0.5,
+            "weighted_pairwise_agreement": 0.5,
+            "boundary_agreement": 0.0,
+            "kendall_tau": 0.0
+          },
+          {
+            "id": "q08",
+            "order": [
+              "HK-97041",
+              "HK-80581",
+              "HK-58385",
+              "HK-37181"
+            ],
+            "top3": [
+              "HK-97041",
+              "HK-80581",
+              "HK-58385"
+            ],
+            "pairs": 6,
+            "boundary_pairs": 3,
+            "coverage": 1.0,
+            "pairwise_agreement": 0.3333333333333333,
+            "weighted_pairwise_agreement": 0.3333333333333333,
+            "boundary_agreement": 0.0,
+            "kendall_tau": -0.33333333333333337
+          },
+          {
+            "id": "q09",
+            "order": [
+              "HK-44733",
+              "HK-35215",
+              "HK-44923",
+              "HK-88430",
+              "HK-29829"
+            ],
+            "top3": [
+              "HK-44733",
+              "HK-35215",
+              "HK-44923"
+            ],
+            "pairs": 9,
+            "boundary_pairs": 5,
+            "coverage": 0.9,
+            "pairwise_agreement": 1.0,
+            "weighted_pairwise_agreement": 1.0,
+            "boundary_agreement": 1.0,
+            "kendall_tau": 1.0
+          },
+          {
+            "id": "q10",
+            "order": [
+              "HK-77838",
+              "HK-44923",
+              "HK-88430",
+              "HK-29829"
+            ],
+            "top3": [
+              "HK-77838",
+              "HK-44923",
+              "HK-88430"
+            ],
+            "pairs": 6,
+            "boundary_pairs": 3,
+            "coverage": 1.0,
+            "pairwise_agreement": 0.8333333333333334,
+            "weighted_pairwise_agreement": 0.8181818181818182,
+            "boundary_agreement": 1.0,
+            "kendall_tau": 0.6666666666666667
+          }
+        ],
+        "pairwise_agreement": 0.7288888888888889,
+        "weighted_pairwise_agreement": 0.7334343434343434,
+        "boundary_agreement": 0.6833333333333333,
+        "kendall_tau": 0.44666666666666666
+      },
+      "held_out": {
+        "per_request": [
+          {
+            "id": "q11",
+            "order": [
+              "HK-80581",
+              "HK-97041",
+              "HK-26808",
+              "HK-37181"
+            ],
+            "top3": [
+              "HK-80581",
+              "HK-97041",
+              "HK-26808"
+            ],
+            "pairs": 5,
+            "boundary_pairs": 3,
+            "coverage": 0.8333333333333334,
+            "pairwise_agreement": 0.8,
+            "weighted_pairwise_agreement": 0.75,
+            "boundary_agreement": 1.0,
+            "kendall_tau": 0.33333333333333326
+          },
+          {
+            "id": "q12",
+            "order": [
+              "HK-80581",
+              "HK-97041",
+              "HK-26808",
+              "HK-37181"
+            ],
+            "top3": [
+              "HK-80581",
+              "HK-97041",
+              "HK-26808"
+            ],
+            "pairs": 6,
+            "boundary_pairs": 3,
+            "coverage": 1.0,
+            "pairwise_agreement": 0.6666666666666666,
+            "weighted_pairwise_agreement": 0.6666666666666666,
+            "boundary_agreement": 0.6666666666666666,
+            "kendall_tau": 0.33333333333333326
+          },
+          {
+            "id": "q13",
+            "order": [
+              "HK-30583",
+              "HK-35913",
+              "HK-16628",
+              "HK-20640"
+            ],
+            "top3": [
+              "HK-30583",
+              "HK-35913",
+              "HK-16628"
+            ],
+            "pairs": 5,
+            "boundary_pairs": 3,
+            "coverage": 0.8333333333333334,
+            "pairwise_agreement": 0.4,
+            "weighted_pairwise_agreement": 0.4,
+            "boundary_agreement": 0.3333333333333333,
+            "kendall_tau": -0.33333333333333337
+          },
+          {
+            "id": "q14",
+            "order": [
+              "HK-30583",
+              "HK-35913",
+              "HK-16628",
+              "HK-20640"
+            ],
+            "top3": [
+              "HK-30583",
+              "HK-35913",
+              "HK-16628"
+            ],
+            "pairs": 6,
+            "boundary_pairs": 3,
+            "coverage": 1.0,
+            "pairwise_agreement": 0.3333333333333333,
+            "weighted_pairwise_agreement": 0.36363636363636365,
+            "boundary_agreement": 0.3333333333333333,
+            "kendall_tau": -0.33333333333333337
+          },
+          {
+            "id": "q15",
+            "order": [
+              "HK-90011",
+              "HK-99701",
+              "HK-69010",
+              "HK-72785",
+              "HK-58236"
+            ],
+            "top3": [
+              "HK-90011",
+              "HK-99701",
+              "HK-69010"
+            ],
+            "pairs": 10,
+            "boundary_pairs": 6,
+            "coverage": 1.0,
+            "pairwise_agreement": 0.8,
+            "weighted_pairwise_agreement": 0.8,
+            "boundary_agreement": 0.6666666666666666,
+            "kendall_tau": 0.6000000000000001
+          },
+          {
+            "id": "q16",
+            "order": [
+              "HK-90011",
+              "HK-64395",
+              "HK-69010",
+              "HK-58236"
+            ],
+            "top3": [
+              "HK-90011",
+              "HK-64395",
+              "HK-69010"
+            ],
+            "pairs": 6,
+            "boundary_pairs": 3,
+            "coverage": 1.0,
+            "pairwise_agreement": 0.8333333333333334,
+            "weighted_pairwise_agreement": 0.8333333333333334,
+            "boundary_agreement": 1.0,
+            "kendall_tau": 0.6666666666666667
+          }
+        ],
+        "pairwise_agreement": 0.638888888888889,
+        "weighted_pairwise_agreement": 0.6356060606060606,
+        "boundary_agreement": 0.6666666666666666,
+        "kendall_tau": 0.2111111111111111
+      }
+    },
+    "calibrated": {
+      "train": {
+        "per_request": [
+          {
+            "id": "q01",
+            "order": [
+              "HK-75012",
+              "HK-35215",
+              "HK-27222",
+              "HK-29829"
+            ],
+            "top3": [
+              "HK-75012",
+              "HK-35215",
+              "HK-27222"
+            ],
+            "pairs": 5,
+            "boundary_pairs": 3,
+            "coverage": 0.8333333333333334,
+            "pairwise_agreement": 0.8,
+            "weighted_pairwise_agreement": 0.8,
+            "boundary_agreement": 1.0,
+            "kendall_tau": 0.33333333333333326
+          },
+          {
+            "id": "q02",
+            "order": [
+              "HK-77838",
+              "HK-75012",
+              "HK-88430",
+              "HK-44923",
+              "HK-29829"
+            ],
+            "top3": [
+              "HK-77838",
+              "HK-75012",
+              "HK-88430"
+            ],
+            "pairs": 9,
+            "boundary_pairs": 6,
+            "coverage": 0.9,
+            "pairwise_agreement": 0.8888888888888888,
+            "weighted_pairwise_agreement": 0.8888888888888888,
+            "boundary_agreement": 1.0,
+            "kendall_tau": 0.8
+          },
+          {
+            "id": "q03",
+            "order": [
+              "HK-68220",
+              "HK-91112",
+              "HK-30583",
+              "HK-16628"
+            ],
+            "top3": [
+              "HK-68220",
+              "HK-91112",
+              "HK-30583"
+            ],
+            "pairs": 6,
+            "boundary_pairs": 3,
+            "coverage": 1.0,
+            "pairwise_agreement": 0.6666666666666666,
+            "weighted_pairwise_agreement": 0.6666666666666666,
+            "boundary_agreement": 0.6666666666666666,
+            "kendall_tau": 0.33333333333333326
+          },
+          {
+            "id": "q04",
+            "order": [
+              "HK-68220",
+              "HK-76268",
+              "HK-30583",
+              "HK-16628",
+              "HK-53108"
+            ],
+            "top3": [
+              "HK-68220",
+              "HK-76268",
+              "HK-30583"
+            ],
+            "pairs": 10,
+            "boundary_pairs": 6,
+            "coverage": 1.0,
+            "pairwise_agreement": 1.0,
+            "weighted_pairwise_agreement": 1.0,
+            "boundary_agreement": 1.0,
+            "kendall_tau": 1.0
+          },
+          {
+            "id": "q05",
+            "order": [
+              "HK-90011",
+              "HK-69010",
+              "HK-72785",
+              "HK-58236"
+            ],
+            "top3": [
+              "HK-90011",
+              "HK-69010",
+              "HK-72785"
+            ],
+            "pairs": 6,
+            "boundary_pairs": 3,
+            "coverage": 1.0,
+            "pairwise_agreement": 0.6666666666666666,
+            "weighted_pairwise_agreement": 0.7272727272727273,
+            "boundary_agreement": 0.6666666666666666,
+            "kendall_tau": 0.33333333333333326
+          },
+          {
+            "id": "q06",
+            "order": [
+              "HK-50695",
+              "HK-90011",
+              "HK-69010",
+              "HK-58236"
+            ],
+            "top3": [
+              "HK-50695",
+              "HK-90011",
+              "HK-69010"
+            ],
+            "pairs": 5,
+            "boundary_pairs": 2,
+            "coverage": 0.8333333333333334,
+            "pairwise_agreement": 0.6,
+            "weighted_pairwise_agreement": 0.6,
+            "boundary_agreement": 0.5,
+            "kendall_tau": 0.33333333333333326
+          },
+          {
+            "id": "q07",
+            "order": [
+              "HK-80581",
+              "HK-97041",
+              "HK-58385",
+              "HK-37181"
+            ],
+            "top3": [
+              "HK-80581",
+              "HK-97041",
+              "HK-58385"
+            ],
+            "pairs": 6,
+            "boundary_pairs": 3,
+            "coverage": 1.0,
+            "pairwise_agreement": 0.5,
+            "weighted_pairwise_agreement": 0.5,
+            "boundary_agreement": 0.0,
+            "kendall_tau": 0.0
+          },
+          {
+            "id": "q08",
+            "order": [
+              "HK-97041",
+              "HK-80581",
+              "HK-58385",
+              "HK-37181"
+            ],
+            "top3": [
+              "HK-97041",
+              "HK-80581",
+              "HK-58385"
+            ],
+            "pairs": 6,
+            "boundary_pairs": 3,
+            "coverage": 1.0,
+            "pairwise_agreement": 0.3333333333333333,
+            "weighted_pairwise_agreement": 0.3333333333333333,
+            "boundary_agreement": 0.0,
+            "kendall_tau": -0.33333333333333337
+          },
+          {
+            "id": "q09",
+            "order": [
+              "HK-44733",
+              "HK-35215",
+              "HK-44923",
+              "HK-88430",
+              "HK-29829"
+            ],
+            "top3": [
+              "HK-44733",
+              "HK-35215",
+              "HK-44923"
+            ],
+            "pairs": 9,
+            "boundary_pairs": 5,
+            "coverage": 0.9,
+            "pairwise_agreement": 1.0,
+            "weighted_pairwise_agreement": 1.0,
+            "boundary_agreement": 1.0,
+            "kendall_tau": 1.0
+          },
+          {
+            "id": "q10",
+            "order": [
+              "HK-77838",
+              "HK-44923",
+              "HK-88430",
+              "HK-29829"
+            ],
+            "top3": [
+              "HK-77838",
+              "HK-44923",
+              "HK-88430"
+            ],
+            "pairs": 6,
+            "boundary_pairs": 3,
+            "coverage": 1.0,
+            "pairwise_agreement": 0.8333333333333334,
+            "weighted_pairwise_agreement": 0.8181818181818182,
+            "boundary_agreement": 1.0,
+            "kendall_tau": 0.6666666666666667
+          }
+        ],
+        "pairwise_agreement": 0.7288888888888889,
+        "weighted_pairwise_agreement": 0.7334343434343434,
+        "boundary_agreement": 0.6833333333333333,
+        "kendall_tau": 0.44666666666666666
+      },
+      "held_out": {
+        "per_request": [
+          {
+            "id": "q11",
+            "order": [
+              "HK-80581",
+              "HK-97041",
+              "HK-26808",
+              "HK-37181"
+            ],
+            "top3": [
+              "HK-80581",
+              "HK-97041",
+              "HK-26808"
+            ],
+            "pairs": 5,
+            "boundary_pairs": 3,
+            "coverage": 0.8333333333333334,
+            "pairwise_agreement": 0.8,
+            "weighted_pairwise_agreement": 0.75,
+            "boundary_agreement": 1.0,
+            "kendall_tau": 0.33333333333333326
+          },
+          {
+            "id": "q12",
+            "order": [
+              "HK-80581",
+              "HK-97041",
+              "HK-26808",
+              "HK-37181"
+            ],
+            "top3": [
+              "HK-80581",
+              "HK-97041",
+              "HK-26808"
+            ],
+            "pairs": 6,
+            "boundary_pairs": 3,
+            "coverage": 1.0,
+            "pairwise_agreement": 0.6666666666666666,
+            "weighted_pairwise_agreement": 0.6666666666666666,
+            "boundary_agreement": 0.6666666666666666,
+            "kendall_tau": 0.33333333333333326
+          },
+          {
+            "id": "q13",
+            "order": [
+              "HK-30583",
+              "HK-35913",
+              "HK-16628",
+              "HK-20640"
+            ],
+            "top3": [
+              "HK-30583",
+              "HK-35913",
+              "HK-16628"
+            ],
+            "pairs": 5,
+            "boundary_pairs": 3,
+            "coverage": 0.8333333333333334,
+            "pairwise_agreement": 0.4,
+            "weighted_pairwise_agreement": 0.4,
+            "boundary_agreement": 0.3333333333333333,
+            "kendall_tau": -0.33333333333333337
+          },
+          {
+            "id": "q14",
+            "order": [
+              "HK-30583",
+              "HK-35913",
+              "HK-16628",
+              "HK-20640"
+            ],
+            "top3": [
+              "HK-30583",
+              "HK-35913",
+              "HK-16628"
+            ],
+            "pairs": 6,
+            "boundary_pairs": 3,
+            "coverage": 1.0,
+            "pairwise_agreement": 0.3333333333333333,
+            "weighted_pairwise_agreement": 0.36363636363636365,
+            "boundary_agreement": 0.3333333333333333,
+            "kendall_tau": -0.33333333333333337
+          },
+          {
+            "id": "q15",
+            "order": [
+              "HK-90011",
+              "HK-99701",
+              "HK-69010",
+              "HK-72785",
+              "HK-58236"
+            ],
+            "top3": [
+              "HK-90011",
+              "HK-99701",
+              "HK-69010"
+            ],
+            "pairs": 10,
+            "boundary_pairs": 6,
+            "coverage": 1.0,
+            "pairwise_agreement": 0.8,
+            "weighted_pairwise_agreement": 0.8,
+            "boundary_agreement": 0.6666666666666666,
+            "kendall_tau": 0.6000000000000001
+          },
+          {
+            "id": "q16",
+            "order": [
+              "HK-90011",
+              "HK-64395",
+              "HK-69010",
+              "HK-58236"
+            ],
+            "top3": [
+              "HK-90011",
+              "HK-64395",
+              "HK-69010"
+            ],
+            "pairs": 6,
+            "boundary_pairs": 3,
+            "coverage": 1.0,
+            "pairwise_agreement": 0.8333333333333334,
+            "weighted_pairwise_agreement": 0.8333333333333334,
+            "boundary_agreement": 1.0,
+            "kendall_tau": 0.6666666666666667
+          }
+        ],
+        "pairwise_agreement": 0.638888888888889,
+        "weighted_pairwise_agreement": 0.6356060606060606,
+        "boundary_agreement": 0.6666666666666666,
+        "kendall_tau": 0.2111111111111111
+      }
+    },
+    "old_weights_new_anchors": {
+      "train": {
+        "per_request": [
+          {
+            "id": "q01",
+            "order": [
+              "HK-35215",
+              "HK-75012",
+              "HK-27222",
+              "HK-29829"
+            ],
+            "top3": [
+              "HK-35215",
+              "HK-75012",
+              "HK-27222"
+            ],
+            "pairs": 5,
+            "boundary_pairs": 3,
+            "coverage": 0.8333333333333334,
+            "pairwise_agreement": 0.6,
+            "weighted_pairwise_agreement": 0.6,
+            "boundary_agreement": 1.0,
+            "kendall_tau": 0.0
+          },
+          {
+            "id": "q02",
+            "order": [
+              "HK-77838",
+              "HK-75012",
+              "HK-88430",
+              "HK-44923",
+              "HK-29829"
+            ],
+            "top3": [
+              "HK-77838",
+              "HK-75012",
+              "HK-88430"
+            ],
+            "pairs": 9,
+            "boundary_pairs": 6,
+            "coverage": 0.9,
+            "pairwise_agreement": 0.8888888888888888,
+            "weighted_pairwise_agreement": 0.8888888888888888,
+            "boundary_agreement": 1.0,
+            "kendall_tau": 0.8
+          },
+          {
+            "id": "q03",
+            "order": [
+              "HK-68220",
+              "HK-91112",
+              "HK-30583",
+              "HK-16628"
+            ],
+            "top3": [
+              "HK-68220",
+              "HK-91112",
+              "HK-30583"
+            ],
+            "pairs": 6,
+            "boundary_pairs": 3,
+            "coverage": 1.0,
+            "pairwise_agreement": 0.6666666666666666,
+            "weighted_pairwise_agreement": 0.6666666666666666,
+            "boundary_agreement": 0.6666666666666666,
+            "kendall_tau": 0.33333333333333326
+          },
+          {
+            "id": "q04",
+            "order": [
+              "HK-68220",
+              "HK-76268",
+              "HK-30583",
+              "HK-16628",
+              "HK-53108"
+            ],
+            "top3": [
+              "HK-68220",
+              "HK-76268",
+              "HK-30583"
+            ],
+            "pairs": 10,
+            "boundary_pairs": 6,
+            "coverage": 1.0,
+            "pairwise_agreement": 1.0,
+            "weighted_pairwise_agreement": 1.0,
+            "boundary_agreement": 1.0,
+            "kendall_tau": 1.0
+          },
+          {
+            "id": "q05",
+            "order": [
+              "HK-90011",
+              "HK-69010",
+              "HK-58236",
+              "HK-72785"
+            ],
+            "top3": [
+              "HK-90011",
+              "HK-69010",
+              "HK-58236"
+            ],
+            "pairs": 6,
+            "boundary_pairs": 3,
+            "coverage": 1.0,
+            "pairwise_agreement": 0.5,
+            "weighted_pairwise_agreement": 0.5454545454545454,
+            "boundary_agreement": 0.3333333333333333,
+            "kendall_tau": 0.0
+          },
+          {
+            "id": "q06",
+            "order": [
+              "HK-50695",
+              "HK-90011",
+              "HK-69010",
+              "HK-58236"
+            ],
+            "top3": [
+              "HK-50695",
+              "HK-90011",
+              "HK-69010"
+            ],
+            "pairs": 5,
+            "boundary_pairs": 2,
+            "coverage": 0.8333333333333334,
+            "pairwise_agreement": 0.6,
+            "weighted_pairwise_agreement": 0.6,
+            "boundary_agreement": 0.5,
+            "kendall_tau": 0.33333333333333326
+          },
+          {
+            "id": "q07",
+            "order": [
+              "HK-80581",
+              "HK-97041",
+              "HK-58385",
+              "HK-37181"
+            ],
+            "top3": [
+              "HK-80581",
+              "HK-97041",
+              "HK-58385"
+            ],
+            "pairs": 6,
+            "boundary_pairs": 3,
+            "coverage": 1.0,
+            "pairwise_agreement": 0.5,
+            "weighted_pairwise_agreement": 0.5,
+            "boundary_agreement": 0.0,
+            "kendall_tau": 0.0
+          },
+          {
+            "id": "q08",
+            "order": [
+              "HK-80581",
+              "HK-97041",
+              "HK-58385",
+              "HK-37181"
+            ],
+            "top3": [
+              "HK-80581",
+              "HK-97041",
+              "HK-58385"
+            ],
+            "pairs": 6,
+            "boundary_pairs": 3,
+            "coverage": 1.0,
+            "pairwise_agreement": 0.5,
+            "weighted_pairwise_agreement": 0.5,
+            "boundary_agreement": 0.0,
+            "kendall_tau": 0.0
+          },
+          {
+            "id": "q09",
+            "order": [
+              "HK-35215",
+              "HK-44733",
+              "HK-44923",
+              "HK-88430",
+              "HK-29829"
+            ],
+            "top3": [
+              "HK-35215",
+              "HK-44733",
+              "HK-44923"
+            ],
+            "pairs": 9,
+            "boundary_pairs": 5,
+            "coverage": 0.9,
+            "pairwise_agreement": 0.8888888888888888,
+            "weighted_pairwise_agreement": 0.9411764705882353,
+            "boundary_agreement": 1.0,
+            "kendall_tau": 0.8
+          },
+          {
+            "id": "q10",
+            "order": [
+              "HK-77838",
+              "HK-44923",
+              "HK-88430",
+              "HK-29829"
+            ],
+            "top3": [
+              "HK-77838",
+              "HK-44923",
+              "HK-88430"
+            ],
+            "pairs": 6,
+            "boundary_pairs": 3,
+            "coverage": 1.0,
+            "pairwise_agreement": 0.8333333333333334,
+            "weighted_pairwise_agreement": 0.8181818181818182,
+            "boundary_agreement": 1.0,
+            "kendall_tau": 0.6666666666666667
+          }
+        ],
+        "pairwise_agreement": 0.6977777777777778,
+        "weighted_pairwise_agreement": 0.7060368389780154,
+        "boundary_agreement": 0.65,
+        "kendall_tau": 0.39333333333333337
+      },
+      "held_out": {
+        "per_request": [
+          {
+            "id": "q11",
+            "order": [
+              "HK-80581",
+              "HK-97041",
+              "HK-26808",
+              "HK-37181"
+            ],
+            "top3": [
+              "HK-80581",
+              "HK-97041",
+              "HK-26808"
+            ],
+            "pairs": 5,
+            "boundary_pairs": 3,
+            "coverage": 0.8333333333333334,
+            "pairwise_agreement": 0.8,
+            "weighted_pairwise_agreement": 0.75,
+            "boundary_agreement": 1.0,
+            "kendall_tau": 0.33333333333333326
+          },
+          {
+            "id": "q12",
+            "order": [
+              "HK-80581",
+              "HK-97041",
+              "HK-26808",
+              "HK-37181"
+            ],
+            "top3": [
+              "HK-80581",
+              "HK-97041",
+              "HK-26808"
+            ],
+            "pairs": 6,
+            "boundary_pairs": 3,
+            "coverage": 1.0,
+            "pairwise_agreement": 0.6666666666666666,
+            "weighted_pairwise_agreement": 0.6666666666666666,
+            "boundary_agreement": 0.6666666666666666,
+            "kendall_tau": 0.33333333333333326
+          },
+          {
+            "id": "q13",
+            "order": [
+              "HK-30583",
+              "HK-35913",
+              "HK-16628",
+              "HK-20640"
+            ],
+            "top3": [
+              "HK-30583",
+              "HK-35913",
+              "HK-16628"
+            ],
+            "pairs": 5,
+            "boundary_pairs": 3,
+            "coverage": 0.8333333333333334,
+            "pairwise_agreement": 0.4,
+            "weighted_pairwise_agreement": 0.4,
+            "boundary_agreement": 0.3333333333333333,
+            "kendall_tau": -0.33333333333333337
+          },
+          {
+            "id": "q14",
+            "order": [
+              "HK-30583",
+              "HK-35913",
+              "HK-16628",
+              "HK-20640"
+            ],
+            "top3": [
+              "HK-30583",
+              "HK-35913",
+              "HK-16628"
+            ],
+            "pairs": 6,
+            "boundary_pairs": 3,
+            "coverage": 1.0,
+            "pairwise_agreement": 0.3333333333333333,
+            "weighted_pairwise_agreement": 0.36363636363636365,
+            "boundary_agreement": 0.3333333333333333,
+            "kendall_tau": -0.33333333333333337
+          },
+          {
+            "id": "q15",
+            "order": [
+              "HK-90011",
+              "HK-99701",
+              "HK-69010",
+              "HK-58236",
+              "HK-72785"
+            ],
+            "top3": [
+              "HK-90011",
+              "HK-99701",
+              "HK-69010"
+            ],
+            "pairs": 10,
+            "boundary_pairs": 6,
+            "coverage": 1.0,
+            "pairwise_agreement": 0.7,
+            "weighted_pairwise_agreement": 0.7,
+            "boundary_agreement": 0.6666666666666666,
+            "kendall_tau": 0.3999999999999999
+          },
+          {
+            "id": "q16",
+            "order": [
+              "HK-90011",
+              "HK-64395",
+              "HK-69010",
+              "HK-58236"
+            ],
+            "top3": [
+              "HK-90011",
+              "HK-64395",
+              "HK-69010"
+            ],
+            "pairs": 6,
+            "boundary_pairs": 3,
+            "coverage": 1.0,
+            "pairwise_agreement": 0.8333333333333334,
+            "weighted_pairwise_agreement": 0.8333333333333334,
+            "boundary_agreement": 1.0,
+            "kendall_tau": 0.6666666666666667
+          }
+        ],
+        "pairwise_agreement": 0.6222222222222222,
+        "weighted_pairwise_agreement": 0.618939393939394,
+        "boundary_agreement": 0.6666666666666666,
+        "kendall_tau": 0.17777777777777773
+      }
+    }
+  },
+  "consistency": {
+    "per_request": [
+      {
+        "id": "q01",
+        "swap": {
+          "agreement": 0.8333333333333334,
+          "matches": 15,
+          "comparisons": 18,
+          "exact_rankings": 0,
+          "ranking_comparisons": 3
+        },
+        "label_shuffle": {
+          "agreement": 1.0,
+          "matches": 36,
+          "comparisons": 36,
+          "exact_rankings": 6,
+          "ranking_comparisons": 6
+        }
+      },
+      {
+        "id": "q02",
+        "swap": {
+          "agreement": 0.9666666666666667,
+          "matches": 29,
+          "comparisons": 30,
+          "exact_rankings": 2,
+          "ranking_comparisons": 3
+        },
+        "label_shuffle": {
+          "agreement": 0.9333333333333333,
+          "matches": 56,
+          "comparisons": 60,
+          "exact_rankings": 2,
+          "ranking_comparisons": 6
+        }
+      },
+      {
+        "id": "q03",
+        "swap": {
+          "agreement": 1.0,
+          "matches": 18,
+          "comparisons": 18,
+          "exact_rankings": 3,
+          "ranking_comparisons": 3
+        },
+        "label_shuffle": {
+          "agreement": 1.0,
+          "matches": 36,
+          "comparisons": 36,
+          "exact_rankings": 6,
+          "ranking_comparisons": 6
+        }
+      },
+      {
+        "id": "q04",
+        "swap": {
+          "agreement": 1.0,
+          "matches": 30,
+          "comparisons": 30,
+          "exact_rankings": 3,
+          "ranking_comparisons": 3
+        },
+        "label_shuffle": {
+          "agreement": 0.9333333333333333,
+          "matches": 56,
+          "comparisons": 60,
+          "exact_rankings": 2,
+          "ranking_comparisons": 6
+        }
+      },
+      {
+        "id": "q05",
+        "swap": {
+          "agreement": 0.8888888888888888,
+          "matches": 16,
+          "comparisons": 18,
+          "exact_rankings": 1,
+          "ranking_comparisons": 3
+        },
+        "label_shuffle": {
+          "agreement": 0.9444444444444444,
+          "matches": 34,
+          "comparisons": 36,
+          "exact_rankings": 4,
+          "ranking_comparisons": 6
+        }
+      },
+      {
+        "id": "q06",
+        "swap": {
+          "agreement": 0.8333333333333334,
+          "matches": 15,
+          "comparisons": 18,
+          "exact_rankings": 0,
+          "ranking_comparisons": 3
+        },
+        "label_shuffle": {
+          "agreement": 1.0,
+          "matches": 36,
+          "comparisons": 36,
+          "exact_rankings": 6,
+          "ranking_comparisons": 6
+        }
+      },
+      {
+        "id": "q07",
+        "swap": {
+          "agreement": 0.9444444444444444,
+          "matches": 17,
+          "comparisons": 18,
+          "exact_rankings": 2,
+          "ranking_comparisons": 3
+        },
+        "label_shuffle": {
+          "agreement": 0.9444444444444444,
+          "matches": 34,
+          "comparisons": 36,
+          "exact_rankings": 4,
+          "ranking_comparisons": 6
+        }
+      },
+      {
+        "id": "q08",
+        "swap": {
+          "agreement": 0.9444444444444444,
+          "matches": 17,
+          "comparisons": 18,
+          "exact_rankings": 2,
+          "ranking_comparisons": 3
+        },
+        "label_shuffle": {
+          "agreement": 0.9444444444444444,
+          "matches": 34,
+          "comparisons": 36,
+          "exact_rankings": 4,
+          "ranking_comparisons": 6
+        }
+      },
+      {
+        "id": "q09",
+        "swap": {
+          "agreement": 0.8666666666666667,
+          "matches": 26,
+          "comparisons": 30,
+          "exact_rankings": 0,
+          "ranking_comparisons": 3
+        },
+        "label_shuffle": {
+          "agreement": 0.8666666666666667,
+          "matches": 52,
+          "comparisons": 60,
+          "exact_rankings": 1,
+          "ranking_comparisons": 6
+        }
+      },
+      {
+        "id": "q10",
+        "swap": {
+          "agreement": 0.8333333333333334,
+          "matches": 15,
+          "comparisons": 18,
+          "exact_rankings": 0,
+          "ranking_comparisons": 3
+        },
+        "label_shuffle": {
+          "agreement": 0.8888888888888888,
+          "matches": 32,
+          "comparisons": 36,
+          "exact_rankings": 4,
+          "ranking_comparisons": 6
+        }
+      },
+      {
+        "id": "q11",
+        "swap": {
+          "agreement": 0.6111111111111112,
+          "matches": 11,
+          "comparisons": 18,
+          "exact_rankings": 0,
+          "ranking_comparisons": 3
+        },
+        "label_shuffle": {
+          "agreement": 0.8888888888888888,
+          "matches": 32,
+          "comparisons": 36,
+          "exact_rankings": 2,
+          "ranking_comparisons": 6
+        }
+      },
+      {
+        "id": "q12",
+        "swap": {
+          "agreement": 0.6111111111111112,
+          "matches": 11,
+          "comparisons": 18,
+          "exact_rankings": 0,
+          "ranking_comparisons": 3
+        },
+        "label_shuffle": {
+          "agreement": 0.7222222222222222,
+          "matches": 26,
+          "comparisons": 36,
+          "exact_rankings": 1,
+          "ranking_comparisons": 6
+        }
+      },
+      {
+        "id": "q13",
+        "swap": {
+          "agreement": 0.8333333333333334,
+          "matches": 15,
+          "comparisons": 18,
+          "exact_rankings": 0,
+          "ranking_comparisons": 3
+        },
+        "label_shuffle": {
+          "agreement": 1.0,
+          "matches": 36,
+          "comparisons": 36,
+          "exact_rankings": 6,
+          "ranking_comparisons": 6
+        }
+      },
+      {
+        "id": "q14",
+        "swap": {
+          "agreement": 0.8888888888888888,
+          "matches": 16,
+          "comparisons": 18,
+          "exact_rankings": 1,
+          "ranking_comparisons": 3
+        },
+        "label_shuffle": {
+          "agreement": 0.9444444444444444,
+          "matches": 34,
+          "comparisons": 36,
+          "exact_rankings": 4,
+          "ranking_comparisons": 6
+        }
+      },
+      {
+        "id": "q15",
+        "swap": {
+          "agreement": 0.9666666666666667,
+          "matches": 29,
+          "comparisons": 30,
+          "exact_rankings": 2,
+          "ranking_comparisons": 3
+        },
+        "label_shuffle": {
+          "agreement": 0.9666666666666667,
+          "matches": 58,
+          "comparisons": 60,
+          "exact_rankings": 4,
+          "ranking_comparisons": 6
+        }
+      },
+      {
+        "id": "q16",
+        "swap": {
+          "agreement": 1.0,
+          "matches": 18,
+          "comparisons": 18,
+          "exact_rankings": 3,
+          "ranking_comparisons": 3
+        },
+        "label_shuffle": {
+          "agreement": 1.0,
+          "matches": 36,
+          "comparisons": 36,
+          "exact_rankings": 6,
+          "ranking_comparisons": 6
+        }
+      }
+    ],
+    "swap": {
+      "macro_agreement": 0.8763888888888889,
+      "pooled_agreement": 0.8869047619047619,
+      "matches": 298,
+      "comparisons": 336,
+      "exact_rankings": 19,
+      "ranking_comparisons": 48
+    },
+    "label_shuffle": {
+      "macro_agreement": 0.9361111111111111,
+      "pooled_agreement": 0.9345238095238095,
+      "matches": 628,
+      "comparisons": 672,
+      "exact_rankings": 62,
+      "ranking_comparisons": 96
+    }
+  },
+  "majority_orders": {
+    "q01": {
+      "order": [
+        "HK-27222",
+        "HK-75012",
+        "HK-35215",
+        "HK-29829"
+      ],
+      "vote_agreements": 33,
+      "optimal_orders": 2,
+      "majority_cycles": 0
+    },
+    "q02": {
+      "order": [
+        "HK-75012",
+        "HK-77838",
+        "HK-88430",
+        "HK-44923",
+        "HK-29829"
+      ],
+      "vote_agreements": 57,
+      "optimal_orders": 2,
+      "majority_cycles": 0
+    },
+    "q03": {
+      "order": [
+        "HK-68220",
+        "HK-30583",
+        "HK-16628",
+        "HK-91112"
+      ],
+      "vote_agreements": 36,
+      "optimal_orders": 1,
+      "majority_cycles": 0
+    },
+    "q04": {
+      "order": [
+        "HK-68220",
+        "HK-76268",
+        "HK-30583",
+        "HK-16628",
+        "HK-53108"
+      ],
+      "vote_agreements": 58,
+      "optimal_orders": 1,
+      "majority_cycles": 0
+    },
+    "q05": {
+      "order": [
+        "HK-90011",
+        "HK-72785",
+        "HK-58236",
+        "HK-69010"
+      ],
+      "vote_agreements": 34,
+      "optimal_orders": 1,
+      "majority_cycles": 0
+    },
+    "q06": {
+      "order": [
+        "HK-90011",
+        "HK-50695",
+        "HK-58236",
+        "HK-69010"
+      ],
+      "vote_agreements": 33,
+      "optimal_orders": 2,
+      "majority_cycles": 0
+    },
+    "q07": {
+      "order": [
+        "HK-37181",
+        "HK-80581",
+        "HK-97041",
+        "HK-58385"
+      ],
+      "vote_agreements": 35,
+      "optimal_orders": 1,
+      "majority_cycles": 0
+    },
+    "q08": {
+      "order": [
+        "HK-37181",
+        "HK-80581",
+        "HK-97041",
+        "HK-58385"
+      ],
+      "vote_agreements": 35,
+      "optimal_orders": 1,
+      "majority_cycles": 0
+    },
+    "q09": {
+      "order": [
+        "HK-44733",
+        "HK-35215",
+        "HK-44923",
+        "HK-88430",
+        "HK-29829"
+      ],
+      "vote_agreements": 54,
+      "optimal_orders": 2,
+      "majority_cycles": 0
+    },
+    "q10": {
+      "order": [
+        "HK-44923",
+        "HK-77838",
+        "HK-88430",
+        "HK-29829"
+      ],
+      "vote_agreements": 33,
+      "optimal_orders": 1,
+      "majority_cycles": 0
+    },
+    "q11": {
+      "order": [
+        "HK-97041",
+        "HK-26808",
+        "HK-80581",
+        "HK-37181"
+      ],
+      "vote_agreements": 29,
+      "optimal_orders": 2,
+      "majority_cycles": 0
+    },
+    "q12": {
+      "order": [
+        "HK-97041",
+        "HK-80581",
+        "HK-37181",
+        "HK-26808"
+      ],
+      "vote_agreements": 29,
+      "optimal_orders": 1,
+      "majority_cycles": 0
+    },
+    "q13": {
+      "order": [
+        "HK-35913",
+        "HK-20640",
+        "HK-16628",
+        "HK-30583"
+      ],
+      "vote_agreements": 33,
+      "optimal_orders": 2,
+      "majority_cycles": 0
+    },
+    "q14": {
+      "order": [
+        "HK-35913",
+        "HK-20640",
+        "HK-16628",
+        "HK-30583"
+      ],
+      "vote_agreements": 34,
+      "optimal_orders": 1,
+      "majority_cycles": 0
+    },
+    "q15": {
+      "order": [
+        "HK-90011",
+        "HK-72785",
+        "HK-99701",
+        "HK-69010",
+        "HK-58236"
+      ],
+      "vote_agreements": 59,
+      "optimal_orders": 1,
+      "majority_cycles": 0
+    },
+    "q16": {
+      "order": [
+        "HK-90011",
+        "HK-69010",
+        "HK-64395",
+        "HK-58236"
+      ],
+      "vote_agreements": 36,
+      "optimal_orders": 1,
+      "majority_cycles": 0
+    }
+  },
+  "coverage": {
+    "eligible_pairs": 112,
+    "retained_pairs": 106,
+    "hard": 96,
+    "excluded": 6,
+    "soft": 10
+  },
+  "labels": [
+    {
+      "request_id": "q01",
+      "a": "HK-27222",
+      "b": "HK-29829",
+      "votes_a": 6,
+      "vote_fraction": 1.0,
+      "kind": "hard",
+      "y": 1.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q01",
+      "a": "HK-27222",
+      "b": "HK-35215",
+      "votes_a": 6,
+      "vote_fraction": 1.0,
+      "kind": "hard",
+      "y": 1.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q01",
+      "a": "HK-27222",
+      "b": "HK-75012",
+      "votes_a": 3,
+      "vote_fraction": 0.5,
+      "kind": "excluded",
+      "y": null,
+      "weight": 0.0
+    },
+    {
+      "request_id": "q01",
+      "a": "HK-29829",
+      "b": "HK-35215",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q01",
+      "a": "HK-29829",
+      "b": "HK-75012",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q01",
+      "a": "HK-35215",
+      "b": "HK-75012",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q02",
+      "a": "HK-29829",
+      "b": "HK-44923",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q02",
+      "a": "HK-29829",
+      "b": "HK-75012",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q02",
+      "a": "HK-29829",
+      "b": "HK-77838",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q02",
+      "a": "HK-29829",
+      "b": "HK-88430",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q02",
+      "a": "HK-44923",
+      "b": "HK-75012",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q02",
+      "a": "HK-44923",
+      "b": "HK-77838",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q02",
+      "a": "HK-44923",
+      "b": "HK-88430",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q02",
+      "a": "HK-75012",
+      "b": "HK-77838",
+      "votes_a": 6,
+      "vote_fraction": 1.0,
+      "kind": "hard",
+      "y": 1.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q02",
+      "a": "HK-75012",
+      "b": "HK-88430",
+      "votes_a": 6,
+      "vote_fraction": 1.0,
+      "kind": "hard",
+      "y": 1.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q02",
+      "a": "HK-77838",
+      "b": "HK-88430",
+      "votes_a": 3,
+      "vote_fraction": 0.5,
+      "kind": "excluded",
+      "y": null,
+      "weight": 0.0
+    },
+    {
+      "request_id": "q03",
+      "a": "HK-16628",
+      "b": "HK-30583",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q03",
+      "a": "HK-16628",
+      "b": "HK-68220",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q03",
+      "a": "HK-16628",
+      "b": "HK-91112",
+      "votes_a": 6,
+      "vote_fraction": 1.0,
+      "kind": "hard",
+      "y": 1.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q03",
+      "a": "HK-30583",
+      "b": "HK-68220",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q03",
+      "a": "HK-30583",
+      "b": "HK-91112",
+      "votes_a": 6,
+      "vote_fraction": 1.0,
+      "kind": "hard",
+      "y": 1.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q03",
+      "a": "HK-68220",
+      "b": "HK-91112",
+      "votes_a": 6,
+      "vote_fraction": 1.0,
+      "kind": "hard",
+      "y": 1.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q04",
+      "a": "HK-16628",
+      "b": "HK-30583",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q04",
+      "a": "HK-16628",
+      "b": "HK-53108",
+      "votes_a": 6,
+      "vote_fraction": 1.0,
+      "kind": "hard",
+      "y": 1.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q04",
+      "a": "HK-16628",
+      "b": "HK-68220",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q04",
+      "a": "HK-16628",
+      "b": "HK-76268",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q04",
+      "a": "HK-30583",
+      "b": "HK-53108",
+      "votes_a": 6,
+      "vote_fraction": 1.0,
+      "kind": "hard",
+      "y": 1.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q04",
+      "a": "HK-30583",
+      "b": "HK-68220",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q04",
+      "a": "HK-30583",
+      "b": "HK-76268",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q04",
+      "a": "HK-53108",
+      "b": "HK-68220",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q04",
+      "a": "HK-53108",
+      "b": "HK-76268",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q04",
+      "a": "HK-68220",
+      "b": "HK-76268",
+      "votes_a": 4,
+      "vote_fraction": 0.6666666666666666,
+      "kind": "soft",
+      "y": 0.83,
+      "weight": 0.5
+    },
+    {
+      "request_id": "q05",
+      "a": "HK-58236",
+      "b": "HK-69010",
+      "votes_a": 4,
+      "vote_fraction": 0.6666666666666666,
+      "kind": "soft",
+      "y": 0.83,
+      "weight": 0.5
+    },
+    {
+      "request_id": "q05",
+      "a": "HK-58236",
+      "b": "HK-72785",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q05",
+      "a": "HK-58236",
+      "b": "HK-90011",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q05",
+      "a": "HK-69010",
+      "b": "HK-72785",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q05",
+      "a": "HK-69010",
+      "b": "HK-90011",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q05",
+      "a": "HK-72785",
+      "b": "HK-90011",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q06",
+      "a": "HK-50695",
+      "b": "HK-58236",
+      "votes_a": 3,
+      "vote_fraction": 0.5,
+      "kind": "excluded",
+      "y": null,
+      "weight": 0.0
+    },
+    {
+      "request_id": "q06",
+      "a": "HK-50695",
+      "b": "HK-69010",
+      "votes_a": 6,
+      "vote_fraction": 1.0,
+      "kind": "hard",
+      "y": 1.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q06",
+      "a": "HK-50695",
+      "b": "HK-90011",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q06",
+      "a": "HK-58236",
+      "b": "HK-69010",
+      "votes_a": 6,
+      "vote_fraction": 1.0,
+      "kind": "hard",
+      "y": 1.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q06",
+      "a": "HK-58236",
+      "b": "HK-90011",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q06",
+      "a": "HK-69010",
+      "b": "HK-90011",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q07",
+      "a": "HK-37181",
+      "b": "HK-58385",
+      "votes_a": 6,
+      "vote_fraction": 1.0,
+      "kind": "hard",
+      "y": 1.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q07",
+      "a": "HK-37181",
+      "b": "HK-80581",
+      "votes_a": 6,
+      "vote_fraction": 1.0,
+      "kind": "hard",
+      "y": 1.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q07",
+      "a": "HK-37181",
+      "b": "HK-97041",
+      "votes_a": 6,
+      "vote_fraction": 1.0,
+      "kind": "hard",
+      "y": 1.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q07",
+      "a": "HK-58385",
+      "b": "HK-80581",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q07",
+      "a": "HK-58385",
+      "b": "HK-97041",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q07",
+      "a": "HK-80581",
+      "b": "HK-97041",
+      "votes_a": 5,
+      "vote_fraction": 0.8333333333333334,
+      "kind": "hard",
+      "y": 1.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q08",
+      "a": "HK-37181",
+      "b": "HK-58385",
+      "votes_a": 6,
+      "vote_fraction": 1.0,
+      "kind": "hard",
+      "y": 1.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q08",
+      "a": "HK-37181",
+      "b": "HK-80581",
+      "votes_a": 6,
+      "vote_fraction": 1.0,
+      "kind": "hard",
+      "y": 1.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q08",
+      "a": "HK-37181",
+      "b": "HK-97041",
+      "votes_a": 6,
+      "vote_fraction": 1.0,
+      "kind": "hard",
+      "y": 1.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q08",
+      "a": "HK-58385",
+      "b": "HK-80581",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q08",
+      "a": "HK-58385",
+      "b": "HK-97041",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q08",
+      "a": "HK-80581",
+      "b": "HK-97041",
+      "votes_a": 5,
+      "vote_fraction": 0.8333333333333334,
+      "kind": "hard",
+      "y": 1.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q09",
+      "a": "HK-29829",
+      "b": "HK-35215",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q09",
+      "a": "HK-29829",
+      "b": "HK-44733",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q09",
+      "a": "HK-29829",
+      "b": "HK-44923",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q09",
+      "a": "HK-29829",
+      "b": "HK-88430",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q09",
+      "a": "HK-35215",
+      "b": "HK-44733",
+      "votes_a": 2,
+      "vote_fraction": 0.3333333333333333,
+      "kind": "soft",
+      "y": 0.17,
+      "weight": 0.5
+    },
+    {
+      "request_id": "q09",
+      "a": "HK-35215",
+      "b": "HK-44923",
+      "votes_a": 6,
+      "vote_fraction": 1.0,
+      "kind": "hard",
+      "y": 1.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q09",
+      "a": "HK-35215",
+      "b": "HK-88430",
+      "votes_a": 6,
+      "vote_fraction": 1.0,
+      "kind": "hard",
+      "y": 1.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q09",
+      "a": "HK-44733",
+      "b": "HK-44923",
+      "votes_a": 5,
+      "vote_fraction": 0.8333333333333334,
+      "kind": "hard",
+      "y": 1.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q09",
+      "a": "HK-44733",
+      "b": "HK-88430",
+      "votes_a": 6,
+      "vote_fraction": 1.0,
+      "kind": "hard",
+      "y": 1.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q09",
+      "a": "HK-44923",
+      "b": "HK-88430",
+      "votes_a": 3,
+      "vote_fraction": 0.5,
+      "kind": "excluded",
+      "y": null,
+      "weight": 0.0
+    },
+    {
+      "request_id": "q10",
+      "a": "HK-29829",
+      "b": "HK-44923",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q10",
+      "a": "HK-29829",
+      "b": "HK-77838",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q10",
+      "a": "HK-29829",
+      "b": "HK-88430",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q10",
+      "a": "HK-44923",
+      "b": "HK-77838",
+      "votes_a": 5,
+      "vote_fraction": 0.8333333333333334,
+      "kind": "hard",
+      "y": 1.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q10",
+      "a": "HK-44923",
+      "b": "HK-88430",
+      "votes_a": 6,
+      "vote_fraction": 1.0,
+      "kind": "hard",
+      "y": 1.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q10",
+      "a": "HK-77838",
+      "b": "HK-88430",
+      "votes_a": 4,
+      "vote_fraction": 0.6666666666666666,
+      "kind": "soft",
+      "y": 0.83,
+      "weight": 0.5
+    },
+    {
+      "request_id": "q11",
+      "a": "HK-26808",
+      "b": "HK-37181",
+      "votes_a": 4,
+      "vote_fraction": 0.6666666666666666,
+      "kind": "soft",
+      "y": 0.83,
+      "weight": 0.5
+    },
+    {
+      "request_id": "q11",
+      "a": "HK-26808",
+      "b": "HK-80581",
+      "votes_a": 3,
+      "vote_fraction": 0.5,
+      "kind": "excluded",
+      "y": null,
+      "weight": 0.0
+    },
+    {
+      "request_id": "q11",
+      "a": "HK-26808",
+      "b": "HK-97041",
+      "votes_a": 2,
+      "vote_fraction": 0.3333333333333333,
+      "kind": "soft",
+      "y": 0.17,
+      "weight": 0.5
+    },
+    {
+      "request_id": "q11",
+      "a": "HK-37181",
+      "b": "HK-80581",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q11",
+      "a": "HK-37181",
+      "b": "HK-97041",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q11",
+      "a": "HK-80581",
+      "b": "HK-97041",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q12",
+      "a": "HK-26808",
+      "b": "HK-37181",
+      "votes_a": 2,
+      "vote_fraction": 0.3333333333333333,
+      "kind": "soft",
+      "y": 0.17,
+      "weight": 0.5
+    },
+    {
+      "request_id": "q12",
+      "a": "HK-26808",
+      "b": "HK-80581",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q12",
+      "a": "HK-26808",
+      "b": "HK-97041",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q12",
+      "a": "HK-37181",
+      "b": "HK-80581",
+      "votes_a": 2,
+      "vote_fraction": 0.3333333333333333,
+      "kind": "soft",
+      "y": 0.17,
+      "weight": 0.5
+    },
+    {
+      "request_id": "q12",
+      "a": "HK-37181",
+      "b": "HK-97041",
+      "votes_a": 2,
+      "vote_fraction": 0.3333333333333333,
+      "kind": "soft",
+      "y": 0.17,
+      "weight": 0.5
+    },
+    {
+      "request_id": "q12",
+      "a": "HK-80581",
+      "b": "HK-97041",
+      "votes_a": 1,
+      "vote_fraction": 0.16666666666666666,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q13",
+      "a": "HK-16628",
+      "b": "HK-20640",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q13",
+      "a": "HK-16628",
+      "b": "HK-30583",
+      "votes_a": 3,
+      "vote_fraction": 0.5,
+      "kind": "excluded",
+      "y": null,
+      "weight": 0.0
+    },
+    {
+      "request_id": "q13",
+      "a": "HK-16628",
+      "b": "HK-35913",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q13",
+      "a": "HK-20640",
+      "b": "HK-30583",
+      "votes_a": 6,
+      "vote_fraction": 1.0,
+      "kind": "hard",
+      "y": 1.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q13",
+      "a": "HK-20640",
+      "b": "HK-35913",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q13",
+      "a": "HK-30583",
+      "b": "HK-35913",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q14",
+      "a": "HK-16628",
+      "b": "HK-20640",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q14",
+      "a": "HK-16628",
+      "b": "HK-30583",
+      "votes_a": 4,
+      "vote_fraction": 0.6666666666666666,
+      "kind": "soft",
+      "y": 0.83,
+      "weight": 0.5
+    },
+    {
+      "request_id": "q14",
+      "a": "HK-16628",
+      "b": "HK-35913",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q14",
+      "a": "HK-20640",
+      "b": "HK-30583",
+      "votes_a": 6,
+      "vote_fraction": 1.0,
+      "kind": "hard",
+      "y": 1.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q14",
+      "a": "HK-20640",
+      "b": "HK-35913",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q14",
+      "a": "HK-30583",
+      "b": "HK-35913",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q15",
+      "a": "HK-58236",
+      "b": "HK-69010",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q15",
+      "a": "HK-58236",
+      "b": "HK-72785",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q15",
+      "a": "HK-58236",
+      "b": "HK-90011",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q15",
+      "a": "HK-58236",
+      "b": "HK-99701",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q15",
+      "a": "HK-69010",
+      "b": "HK-72785",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q15",
+      "a": "HK-69010",
+      "b": "HK-90011",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q15",
+      "a": "HK-69010",
+      "b": "HK-99701",
+      "votes_a": 1,
+      "vote_fraction": 0.16666666666666666,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q15",
+      "a": "HK-72785",
+      "b": "HK-90011",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q15",
+      "a": "HK-72785",
+      "b": "HK-99701",
+      "votes_a": 6,
+      "vote_fraction": 1.0,
+      "kind": "hard",
+      "y": 1.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q15",
+      "a": "HK-90011",
+      "b": "HK-99701",
+      "votes_a": 6,
+      "vote_fraction": 1.0,
+      "kind": "hard",
+      "y": 1.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q16",
+      "a": "HK-58236",
+      "b": "HK-64395",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q16",
+      "a": "HK-58236",
+      "b": "HK-69010",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q16",
+      "a": "HK-58236",
+      "b": "HK-90011",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q16",
+      "a": "HK-64395",
+      "b": "HK-69010",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q16",
+      "a": "HK-64395",
+      "b": "HK-90011",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    },
+    {
+      "request_id": "q16",
+      "a": "HK-69010",
+      "b": "HK-90011",
+      "votes_a": 0,
+      "vote_fraction": 0.0,
+      "kind": "hard",
+      "y": 0.0,
+      "weight": 1.0
+    }
+  ],
+  "retained_pairs": [
+    {
+      "request_id": "q01",
+      "a": "HK-27222",
+      "b": "HK-29829",
+      "y": 1.0,
+      "weight": 1.0,
+      "votes": 6
+    },
+    {
+      "request_id": "q01",
+      "a": "HK-27222",
+      "b": "HK-35215",
+      "y": 1.0,
+      "weight": 1.0,
+      "votes": 6
+    },
+    {
+      "request_id": "q01",
+      "a": "HK-29829",
+      "b": "HK-35215",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q01",
+      "a": "HK-29829",
+      "b": "HK-75012",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q01",
+      "a": "HK-35215",
+      "b": "HK-75012",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q02",
+      "a": "HK-29829",
+      "b": "HK-44923",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q02",
+      "a": "HK-29829",
+      "b": "HK-75012",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q02",
+      "a": "HK-29829",
+      "b": "HK-77838",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q02",
+      "a": "HK-29829",
+      "b": "HK-88430",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q02",
+      "a": "HK-44923",
+      "b": "HK-75012",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q02",
+      "a": "HK-44923",
+      "b": "HK-77838",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q02",
+      "a": "HK-44923",
+      "b": "HK-88430",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q02",
+      "a": "HK-75012",
+      "b": "HK-77838",
+      "y": 1.0,
+      "weight": 1.0,
+      "votes": 6
+    },
+    {
+      "request_id": "q02",
+      "a": "HK-75012",
+      "b": "HK-88430",
+      "y": 1.0,
+      "weight": 1.0,
+      "votes": 6
+    },
+    {
+      "request_id": "q03",
+      "a": "HK-16628",
+      "b": "HK-30583",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q03",
+      "a": "HK-16628",
+      "b": "HK-68220",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q03",
+      "a": "HK-16628",
+      "b": "HK-91112",
+      "y": 1.0,
+      "weight": 1.0,
+      "votes": 6
+    },
+    {
+      "request_id": "q03",
+      "a": "HK-30583",
+      "b": "HK-68220",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q03",
+      "a": "HK-30583",
+      "b": "HK-91112",
+      "y": 1.0,
+      "weight": 1.0,
+      "votes": 6
+    },
+    {
+      "request_id": "q03",
+      "a": "HK-68220",
+      "b": "HK-91112",
+      "y": 1.0,
+      "weight": 1.0,
+      "votes": 6
+    },
+    {
+      "request_id": "q04",
+      "a": "HK-16628",
+      "b": "HK-30583",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q04",
+      "a": "HK-16628",
+      "b": "HK-53108",
+      "y": 1.0,
+      "weight": 1.0,
+      "votes": 6
+    },
+    {
+      "request_id": "q04",
+      "a": "HK-16628",
+      "b": "HK-68220",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q04",
+      "a": "HK-16628",
+      "b": "HK-76268",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q04",
+      "a": "HK-30583",
+      "b": "HK-53108",
+      "y": 1.0,
+      "weight": 1.0,
+      "votes": 6
+    },
+    {
+      "request_id": "q04",
+      "a": "HK-30583",
+      "b": "HK-68220",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q04",
+      "a": "HK-30583",
+      "b": "HK-76268",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q04",
+      "a": "HK-53108",
+      "b": "HK-68220",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q04",
+      "a": "HK-53108",
+      "b": "HK-76268",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q04",
+      "a": "HK-68220",
+      "b": "HK-76268",
+      "y": 0.83,
+      "weight": 0.5,
+      "votes": 4
+    },
+    {
+      "request_id": "q05",
+      "a": "HK-58236",
+      "b": "HK-69010",
+      "y": 0.83,
+      "weight": 0.5,
+      "votes": 4
+    },
+    {
+      "request_id": "q05",
+      "a": "HK-58236",
+      "b": "HK-72785",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q05",
+      "a": "HK-58236",
+      "b": "HK-90011",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q05",
+      "a": "HK-69010",
+      "b": "HK-72785",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q05",
+      "a": "HK-69010",
+      "b": "HK-90011",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q05",
+      "a": "HK-72785",
+      "b": "HK-90011",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q06",
+      "a": "HK-50695",
+      "b": "HK-69010",
+      "y": 1.0,
+      "weight": 1.0,
+      "votes": 6
+    },
+    {
+      "request_id": "q06",
+      "a": "HK-50695",
+      "b": "HK-90011",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q06",
+      "a": "HK-58236",
+      "b": "HK-69010",
+      "y": 1.0,
+      "weight": 1.0,
+      "votes": 6
+    },
+    {
+      "request_id": "q06",
+      "a": "HK-58236",
+      "b": "HK-90011",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q06",
+      "a": "HK-69010",
+      "b": "HK-90011",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q07",
+      "a": "HK-37181",
+      "b": "HK-58385",
+      "y": 1.0,
+      "weight": 1.0,
+      "votes": 6
+    },
+    {
+      "request_id": "q07",
+      "a": "HK-37181",
+      "b": "HK-80581",
+      "y": 1.0,
+      "weight": 1.0,
+      "votes": 6
+    },
+    {
+      "request_id": "q07",
+      "a": "HK-37181",
+      "b": "HK-97041",
+      "y": 1.0,
+      "weight": 1.0,
+      "votes": 6
+    },
+    {
+      "request_id": "q07",
+      "a": "HK-58385",
+      "b": "HK-80581",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q07",
+      "a": "HK-58385",
+      "b": "HK-97041",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q07",
+      "a": "HK-80581",
+      "b": "HK-97041",
+      "y": 1.0,
+      "weight": 1.0,
+      "votes": 5
+    },
+    {
+      "request_id": "q08",
+      "a": "HK-37181",
+      "b": "HK-58385",
+      "y": 1.0,
+      "weight": 1.0,
+      "votes": 6
+    },
+    {
+      "request_id": "q08",
+      "a": "HK-37181",
+      "b": "HK-80581",
+      "y": 1.0,
+      "weight": 1.0,
+      "votes": 6
+    },
+    {
+      "request_id": "q08",
+      "a": "HK-37181",
+      "b": "HK-97041",
+      "y": 1.0,
+      "weight": 1.0,
+      "votes": 6
+    },
+    {
+      "request_id": "q08",
+      "a": "HK-58385",
+      "b": "HK-80581",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q08",
+      "a": "HK-58385",
+      "b": "HK-97041",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q08",
+      "a": "HK-80581",
+      "b": "HK-97041",
+      "y": 1.0,
+      "weight": 1.0,
+      "votes": 5
+    },
+    {
+      "request_id": "q09",
+      "a": "HK-29829",
+      "b": "HK-35215",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q09",
+      "a": "HK-29829",
+      "b": "HK-44733",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q09",
+      "a": "HK-29829",
+      "b": "HK-44923",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q09",
+      "a": "HK-29829",
+      "b": "HK-88430",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q09",
+      "a": "HK-35215",
+      "b": "HK-44733",
+      "y": 0.17,
+      "weight": 0.5,
+      "votes": 2
+    },
+    {
+      "request_id": "q09",
+      "a": "HK-35215",
+      "b": "HK-44923",
+      "y": 1.0,
+      "weight": 1.0,
+      "votes": 6
+    },
+    {
+      "request_id": "q09",
+      "a": "HK-35215",
+      "b": "HK-88430",
+      "y": 1.0,
+      "weight": 1.0,
+      "votes": 6
+    },
+    {
+      "request_id": "q09",
+      "a": "HK-44733",
+      "b": "HK-44923",
+      "y": 1.0,
+      "weight": 1.0,
+      "votes": 5
+    },
+    {
+      "request_id": "q09",
+      "a": "HK-44733",
+      "b": "HK-88430",
+      "y": 1.0,
+      "weight": 1.0,
+      "votes": 6
+    },
+    {
+      "request_id": "q10",
+      "a": "HK-29829",
+      "b": "HK-44923",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q10",
+      "a": "HK-29829",
+      "b": "HK-77838",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q10",
+      "a": "HK-29829",
+      "b": "HK-88430",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q10",
+      "a": "HK-44923",
+      "b": "HK-77838",
+      "y": 1.0,
+      "weight": 1.0,
+      "votes": 5
+    },
+    {
+      "request_id": "q10",
+      "a": "HK-44923",
+      "b": "HK-88430",
+      "y": 1.0,
+      "weight": 1.0,
+      "votes": 6
+    },
+    {
+      "request_id": "q10",
+      "a": "HK-77838",
+      "b": "HK-88430",
+      "y": 0.83,
+      "weight": 0.5,
+      "votes": 4
+    },
+    {
+      "request_id": "q11",
+      "a": "HK-26808",
+      "b": "HK-37181",
+      "y": 0.83,
+      "weight": 0.5,
+      "votes": 4
+    },
+    {
+      "request_id": "q11",
+      "a": "HK-26808",
+      "b": "HK-97041",
+      "y": 0.17,
+      "weight": 0.5,
+      "votes": 2
+    },
+    {
+      "request_id": "q11",
+      "a": "HK-37181",
+      "b": "HK-80581",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q11",
+      "a": "HK-37181",
+      "b": "HK-97041",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q11",
+      "a": "HK-80581",
+      "b": "HK-97041",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q12",
+      "a": "HK-26808",
+      "b": "HK-37181",
+      "y": 0.17,
+      "weight": 0.5,
+      "votes": 2
+    },
+    {
+      "request_id": "q12",
+      "a": "HK-26808",
+      "b": "HK-80581",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q12",
+      "a": "HK-26808",
+      "b": "HK-97041",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q12",
+      "a": "HK-37181",
+      "b": "HK-80581",
+      "y": 0.17,
+      "weight": 0.5,
+      "votes": 2
+    },
+    {
+      "request_id": "q12",
+      "a": "HK-37181",
+      "b": "HK-97041",
+      "y": 0.17,
+      "weight": 0.5,
+      "votes": 2
+    },
+    {
+      "request_id": "q12",
+      "a": "HK-80581",
+      "b": "HK-97041",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 1
+    },
+    {
+      "request_id": "q13",
+      "a": "HK-16628",
+      "b": "HK-20640",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q13",
+      "a": "HK-16628",
+      "b": "HK-35913",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q13",
+      "a": "HK-20640",
+      "b": "HK-30583",
+      "y": 1.0,
+      "weight": 1.0,
+      "votes": 6
+    },
+    {
+      "request_id": "q13",
+      "a": "HK-20640",
+      "b": "HK-35913",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q13",
+      "a": "HK-30583",
+      "b": "HK-35913",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q14",
+      "a": "HK-16628",
+      "b": "HK-20640",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q14",
+      "a": "HK-16628",
+      "b": "HK-30583",
+      "y": 0.83,
+      "weight": 0.5,
+      "votes": 4
+    },
+    {
+      "request_id": "q14",
+      "a": "HK-16628",
+      "b": "HK-35913",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q14",
+      "a": "HK-20640",
+      "b": "HK-30583",
+      "y": 1.0,
+      "weight": 1.0,
+      "votes": 6
+    },
+    {
+      "request_id": "q14",
+      "a": "HK-20640",
+      "b": "HK-35913",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q14",
+      "a": "HK-30583",
+      "b": "HK-35913",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q15",
+      "a": "HK-58236",
+      "b": "HK-69010",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q15",
+      "a": "HK-58236",
+      "b": "HK-72785",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q15",
+      "a": "HK-58236",
+      "b": "HK-90011",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q15",
+      "a": "HK-58236",
+      "b": "HK-99701",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q15",
+      "a": "HK-69010",
+      "b": "HK-72785",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q15",
+      "a": "HK-69010",
+      "b": "HK-90011",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q15",
+      "a": "HK-69010",
+      "b": "HK-99701",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 1
+    },
+    {
+      "request_id": "q15",
+      "a": "HK-72785",
+      "b": "HK-90011",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q15",
+      "a": "HK-72785",
+      "b": "HK-99701",
+      "y": 1.0,
+      "weight": 1.0,
+      "votes": 6
+    },
+    {
+      "request_id": "q15",
+      "a": "HK-90011",
+      "b": "HK-99701",
+      "y": 1.0,
+      "weight": 1.0,
+      "votes": 6
+    },
+    {
+      "request_id": "q16",
+      "a": "HK-58236",
+      "b": "HK-64395",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q16",
+      "a": "HK-58236",
+      "b": "HK-69010",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q16",
+      "a": "HK-58236",
+      "b": "HK-90011",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q16",
+      "a": "HK-64395",
+      "b": "HK-69010",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q16",
+      "a": "HK-64395",
+      "b": "HK-90011",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    },
+    {
+      "request_id": "q16",
+      "a": "HK-69010",
+      "b": "HK-90011",
+      "y": 0.0,
+      "weight": 1.0,
+      "votes": 0
+    }
+  ],
+  "api": {
+    "jobs": 96,
+    "attempts": 98,
+    "raw_responses": 98,
+    "errors": 0,
+    "invalid_responses": 2,
+    "snapshots": {
+      "gpt-5.4-2026-03-05": 98
+    },
+    "usage": {
+      "prompt_tokens": 142457,
+      "completion_tokens": 78008,
+      "total_tokens": 220465
+    },
+    "confidence": {
+      "5": 66,
+      "4": 125,
+      "3": 168,
+      "2": 48,
+      "1": 1
+    }
+  },
+  "requests_sha256": "fb97c6358a8e60be35236c3adcf98ecde287612ce7148ed7b23efe069002485f",
+  "judgments_sha256": "84a10cdbbd403ff1eb61bc09c146287142488e6cf41fc2c021d1b5deb1e40db0"
+}
