@@ -244,7 +244,7 @@ def test_home_serves_qalau_and_docs_keep_separate_routes(client):
     assert response.status_code == 200
     assert "QALAU" in response.text
     assert 'src="app.mjs"' in response.text
-    assert "Для разработчиков" in client.get("/docs-ui").text
+    assert 'href="/docs-ui" aria-current="page"' in client.get("/docs-ui").text
     assert "swagger-ui" in client.get("/docs").text
 
 

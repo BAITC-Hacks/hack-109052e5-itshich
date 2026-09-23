@@ -12,7 +12,7 @@
 </head>
 <body class="test-report">
   <main>
-    <nav aria-label="Навигация"><a href="/" class="brand">QALAU<span class="brand-dot">.</span></a><a href="/docs-ui">Документация ↗</a></nav>
+    <header class="header shared-header"><div class="header-inner"><a class="brand" href="/" aria-label="QALAU — к началу подбора">QALAU<span class="brand-dot">.</span></a><nav class="header-nav" aria-label="Основная навигация"><a href="/">Подбор</a><a href="/docs-ui">Документация</a><a href="/tests" aria-current="page">Тесты</a></nav></div></header>
     <header><p class="eyebrow">Проверка качества</p><h1>Результаты тестов</h1><p id="metadata">Загружаем отчёт…</p></header>
     <section id="live-cases" aria-labelledby="live-title">
       <div class="live-heading"><div><p class="eyebrow">Настоящие запросы · фактические ответы</p><h2 id="live-title">Живые тест-кейсы</h2></div><button id="run-cases" type="button">Прогнать сейчас</button></div>
@@ -34,7 +34,7 @@
       <button type="button" data-filter="e2e" aria-pressed="false">E2E</button>
     </div>
     <div id="suites"></div>
-    <section class="demo-section"><h2>Демо-запросы</h2><p>Ожидаемые результаты сценариев; не результаты их выполнения.</p><div id="demos"></div></section>
+    <section class="demo-section"><h2>Примеры запросов</h2><p>Ожидаемые результаты сценариев; не результаты их выполнения.</p><div id="demos"></div></section>
     <footer>QALAU · Отчёт последнего запуска <a href="/">Вернуться к подбору →</a></footer>
   </main>
 <script>
@@ -100,7 +100,7 @@ function render() {
     card.append(el('p', `ID по порядку: ${demo.expected_card_ids.length ? demo.expected_card_ids.join(' → ') : 'нет'}`, 'ordered-ids'));
     $('#demos').append(card);
   }
-  if (!report.demo?.length) $('#demos').append(el('p','Демо-запросы не добавлены в отчёт.'));
+  if (!report.demo?.length) $('#demos').append(el('p','Примеры запросов не добавлены в отчёт.'));
   renderSuites();
 }
 for (const button of document.querySelectorAll('[data-filter]')) button.addEventListener('click', () => {

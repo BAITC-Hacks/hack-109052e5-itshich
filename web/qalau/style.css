@@ -127,6 +127,37 @@
 .rejections li+li{margin-top:10px}
 @media(max-width:760px){.outcome-banner{padding:18px}.outcome-banner h2{font-size:21px}.vendor .vendor-name{font-size:24px}.result-footer{font-size:11px}}
 
+/* UX pass */
+.header.shared-header{position:sticky;top:0;z-index:20;height:auto;min-height:76px;padding:0 40px;background:var(--bg);border-bottom:1px solid var(--line)}
+.shared-header .header-inner{display:flex;flex-wrap:wrap;align-items:center;min-height:76px;gap:20px 48px;padding:0;max-width:1120px;margin:auto}
+.shared-header .brand{color:var(--text);font-size:28px;flex:none}
+.shared-header .header-nav{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-start;gap:24px;margin:0;padding:0;border:0}
+.shared-header .header-nav a{display:inline-flex;align-items:center;min-height:44px;padding:12px 0;color:var(--muted);font-size:14px;text-decoration:none;border-bottom:2px solid transparent}
+.shared-header .header-nav a[aria-current="page"]{color:var(--text);border-bottom-color:currentColor}
+#service-title,#conditions-title,#results-title{scroll-margin-top:100px}
+.back-button{margin:0 0 20px;min-height:44px}
+#result-content[aria-busy="true"]>*{opacity:.4;transition:opacity .15s}
+#result-loading{padding:22px 0}
+.vendor:focus-visible{outline:2px solid var(--accent);outline-offset:-4px}
+.vendor-name,.vendor p,.facts dd{overflow-wrap:anywhere;min-width:0}
+.vendor .why{min-height:0;padding:20px 0;margin:16px 0}
+.vendor .why h4{font-size:13px;color:var(--accent);margin:0 0 12px}
+.vendor .price{margin:18px 0}
+.vendor .available{margin:12px 0}
+@media(max-width:760px){
+ .header.shared-header{padding:10px 24px;min-height:0}
+ .shared-header .header-inner{min-height:0;gap:4px 24px}
+ .shared-header .brand{font-size:25px}
+ .shared-header .header-nav{width:100%;gap:22px}
+ .shared-header .header-nav a{font-size:13px;padding:10px 0}
+ #service-title,#conditions-title,#results-title{scroll-margin-top:128px}
+ .comparison{display:grid;grid-template-columns:minmax(0,1fr);width:100%}
+ .vendor{width:100%;min-width:0}
+ .vendor+.vendor{border-left:0;border-top:1px solid var(--line)}
+ .field-grid{grid-template-columns:minmax(0,1fr)}
+ .field,.money-input{min-width:0}
+}
+
 /* Generated ambient light; the overlay keeps even the brightest pixels quiet. */
 body{
  background-color:var(--bg);
