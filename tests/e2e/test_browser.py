@@ -287,12 +287,12 @@ def test_qalau_loading_until_backend_response(page, live_server, fake_pipeline, 
 
 
 @pytest.mark.e2e
-@pytest.mark.parametrize("path", ["/", "/docs-ui", "/tests"])
+@pytest.mark.parametrize("path", ["/", "/docs-ui", "/tests", "/cases"])
 def test_shared_navigation(page, live_server, path):
     page.set_viewport_size({"width": 400, "height": 900})
     page.goto(live_server + path, wait_until="networkidle")
     nav = page.get_by_role("navigation", name="Основная навигация", exact=True)
-    for label, href in [("Подбор", "/"), ("Документация", "/docs-ui"), ("Тесты", "/tests")]:
+    for label, href in [("Подбор", "/"), ("Документация", "/docs-ui"), ("Тесты", "/tests"), ("Кейсы", "/cases")]:
         link = nav.get_by_role("link", name=label, exact=True)
         expect(link).to_be_visible()
         expect(link).to_have_attribute("href", href)
@@ -417,7 +417,7 @@ def test_live_tests_rerun_compares_saved_and_fresh(page, live_server, fake_pipel
             result['cards'].reverse()
             return result
         monkeypatch.setattr(fake_pipeline, 'answer', reverse)
-    page.goto(live_server + '/tests#live-tests', wait_until='networkidle')
+    page.goto(live_server + '/cases#live-tests', wait_until='networkidle')
     expect(page.get_by_role('heading', name='Лайв-тесты пайплайна')).to_be_visible()
     page.get_by_role('button', name='Прогнать заново', exact=True).click()
     expect(page.locator('.diff-order')).to_have_text('Порядок id: ' + ('изменилось' if swapped else 'совпало'))
@@ -435,7 +435,7 @@ def test_live_tests_api_error_and_run_all(page, live_server):
     page.route('**/api/live-tests', lambda route: route.fulfill(json={'cases': [
         {'name': name, 'request': test_api.REQUEST, **saved} for name in ['Первый', 'Второй']]}))
     page.route('**/api/match', lambda route: route.fulfill(status=422, json={'detail': 'Ошибка календаря'}))
-    page.goto(live_server + '/tests#live-tests', wait_until='networkidle')
+    page.goto(live_server + '/cases#live-tests', wait_until='networkidle')
     page.get_by_role('button', name='Прогнать все', exact=True).click()
     expect(page.locator('.run-status')).to_have_text(['Ошибка календаря', 'Ошибка календаря'])
     expect(page.get_by_role('button', name='Прогнать все', exact=True)).to_be_enabled()
