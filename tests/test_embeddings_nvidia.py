@@ -23,12 +23,13 @@ class FakeClient:
         self.embeddings, self.calls = self, []
         self.vectors, self.dimensions, self.error = vectors, dimensions, error
 
-    def create(self, *, model, input, encoding_format, extra_body):
+    def create(self, *, model, input, encoding_format, extra_body=None):
         self.calls.append(dict(model=model, input=input, encoding_format=encoding_format, extra_body=extra_body))
         if self.error:
             raise self.error
+        kind = extra_body["input_type"] if extra_body else "passage"
         return SimpleNamespace(data=[SimpleNamespace(index=i, embedding=(
-            self.vectors[extra_body["input_type"], text] if self.vectors is not None
+            self.vectors[kind, text] if self.vectors is not None
             else [1.0] + [0.0] * (self.dimensions - 1))) for i, text in reversed(list(enumerate(input)))])
 
 
@@ -237,3 +238,29 @@ def test_failed_atomic_replace_preserves_disk_and_reuses_memory(tmp_path, monkey
     client.error = AssertionError("Vector is already in memory")
     assert scorer.cache_texts(["Второй"]) == 0
     assert path.read_bytes() == original and not list(tmp_path.glob(".embeddings-nvidia-*"))
+
+
+def test_self_hosted_tei_mode_needs_no_key_and_sends_no_nim_fields(monkeypatch, tmp_path):
+    """A TEI/NIM server on a Brev GPU: NVIDIA_BASE_URL set, no NVIDIA_API_KEY, non-nvidia model."""
+    from matcher import embeddings_nvidia as nvidia
+    monkeypatch.delenv("NVIDIA_API_KEY", raising=False)
+    monkeypatch.setenv("NVIDIA_BASE_URL", "http://localhost:8000/v1")
+    monkeypatch.setenv("NVIDIA_EMBEDDING_MODEL", "BAAI/bge-m3")
+    monkeypatch.setenv("NVIDIA_EMBEDDING_DIMENSIONS", "4")
+    import openai
+    seen = {}
+    monkeypatch.setattr(openai, "OpenAI", lambda **kwargs: seen.update(kwargs) or object())
+    assert config.create_nvidia_client() is not None
+    assert seen["base_url"] == "http://localhost:8000/v1" and seen["api_key"] == "none"
+    fake = FakeClient(dimensions=4)
+    scorer = nvidia.NvidiaEmbeddingScorer(cache_path=tmp_path / "nv.json", client=fake)
+    assert (scorer.model, scorer.dimensions) == ("BAAI/bge-m3", 4)
+    assert scorer.cache_texts(["корпоратив Ведущий Алматы"], "query") == 1
+    assert fake.calls[0]["model"] == "BAAI/bge-m3" and fake.calls[0]["extra_body"] is None
+    assert nvidia.content_key("BAAI/bge-m3", "query", "корпоратив Ведущий Алматы") in scorer._vectors
+
+
+def test_hosted_nim_without_key_is_still_refused(monkeypatch):
+    monkeypatch.delenv("NVIDIA_API_KEY", raising=False)
+    monkeypatch.delenv("NVIDIA_BASE_URL", raising=False)
+    assert config.create_nvidia_client() is None

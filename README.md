@@ -48,8 +48,14 @@ uv run python scripts/browser_check.py      # живая проверка стр
 
 ### Второй backend эмбеддингов: NVIDIA NIM
 
-Для `nvidia/nemotron-3-embed-1b` задайте `NVIDIA_API_KEY` в `.env` и соберите
-отдельный кэш запросов, описаний и предложений:
+Два способа получить векторы NVIDIA, оба дают один и тот же кэш:
+
+- hosted NIM `nvidia/nemotron-3-embed-1b`: задайте `NVIDIA_API_KEY` в `.env`;
+- своя модель на NVIDIA GPU в Brev без ключа NVIDIA: на инстансе
+  `docker run -d --gpus all -p 8000:80 ghcr.io/huggingface/text-embeddings-inference:1.8 --model-id BAAI/bge-m3`,
+  локально `brev port-forward <instance> --port 8000:8000` и в `.env`
+  `NVIDIA_BASE_URL=http://localhost:8000/v1`, `NVIDIA_EMBEDDING_MODEL=BAAI/bge-m3`,
+  `NVIDIA_EMBEDDING_DIMENSIONS=1024`. Сервер нужен один раз, на время сборки.
 
 ```bash
 uv run python scripts/build_embeddings.py --provider nvidia --anchors
@@ -60,9 +66,8 @@ uv run python scripts/build_embeddings.py --provider nvidia --anchors
 с кодом 2. `EMBEDDING_PROVIDER=nvidia` выбирает этот backend; по умолчанию
 используется `openai`. Готовый кэш работает без ключа; при отсутствии
 нужного вектора или якорей подбор переходит на `lexical`.
-Для выдачи `semantic_backend=nvidia` через HTTP требуется добавить `nvidia`
-в общие типы ответа; состояние интеграции описано в
-[`docs/worker-reports/a-nvidia.md`](docs/worker-reports/a-nvidia.md).
+В ответе API поле `semantic_backend` принимает `embeddings`, `nvidia` или
+`lexical`. Подробности: [`docs/worker-reports/a-nvidia.md`](docs/worker-reports/a-nvidia.md).
 
 ## Что происходит внутри
 

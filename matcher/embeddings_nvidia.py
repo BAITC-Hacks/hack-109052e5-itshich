@@ -12,8 +12,18 @@ from matcher import config
 from matcher.embeddings import SemanticUnavailable, request_text, split_sentences
 from matcher.model import CALENDAR_START, Contractor, MatchRequest
 
-EMBEDDING_MODEL = "nvidia/nemotron-3-embed-1b"
+EMBEDDING_MODEL = "nvidia/nemotron-3-embed-1b"  # hosted NIM default
 EMBEDDING_DIMENSIONS = 2048
+# Self-hosted alternative on a Brev GPU (TEI, no NVIDIA key):
+#   NVIDIA_BASE_URL=http://localhost:8000/v1 NVIDIA_EMBEDDING_MODEL=BAAI/bge-m3 NVIDIA_EMBEDDING_DIMENSIONS=1024
+
+
+def default_model() -> str:
+    return os.getenv("NVIDIA_EMBEDDING_MODEL", EMBEDDING_MODEL)
+
+
+def default_dimensions() -> int:
+    return int(os.getenv("NVIDIA_EMBEDDING_DIMENSIONS", EMBEDDING_DIMENSIONS))
 InputType = Literal["query", "passage"]
 
 
@@ -53,8 +63,10 @@ class NvidiaEmbeddingScorer:
     name = "nvidia"
 
     def __init__(self, cache_path: str | Path | None = None, *, client=None,
-                 model: str = EMBEDDING_MODEL, dimensions: int = EMBEDDING_DIMENSIONS,
+                 model: str | None = None, dimensions: int | None = None,
                  api_key: str | None = None):
+        model = default_model() if model is None else model
+        dimensions = default_dimensions() if dimensions is None else dimensions
         self.model, self.dimensions = model, dimensions
         self.cache_path = Path(cache_path) if cache_path is not None else Path(__file__).resolve().parents[1] / "data/embeddings_nvidia.json"
         self.client, self.api_key = client, api_key
@@ -118,14 +130,16 @@ class NvidiaEmbeddingScorer:
         if self.client is None:
             self.client = config.create_nvidia_client(self.api_key)
         if self.client is None:
-            raise SemanticUnavailable(f"Не задан NVIDIA_API_KEY; в кэше отсутствуют векторы: {len(missing)}")
+            raise SemanticUnavailable(f"Не задан NVIDIA_API_KEY (или NVIDIA_BASE_URL); в кэше отсутствуют векторы: {len(missing)}")
         try:
             items = list(missing.items())
             for offset in range(0, len(items), 64):
                 batch = dict(items[offset:offset + 64])
+                # input_type/truncate are NIM-only fields; TEI and other OpenAI-compatible servers reject them.
+                extra = ({"extra_body": {"input_type": input_type, "truncate": "NONE"}}
+                         if self.model.startswith("nvidia/") else {})
                 response = self.client.embeddings.create(model=self.model, input=list(batch.values()),
-                                                         encoding_format="float",
-                                                         extra_body={"input_type": input_type, "truncate": "NONE"})
+                                                         encoding_format="float", **extra)
                 entries = sorted(response.data, key=lambda item: item.index)
                 if [item.index for item in entries] != list(range(len(batch))) or not all(
                         _valid_vector(item.embedding, self.dimensions) for item in entries):
@@ -159,8 +173,9 @@ class NvidiaEmbeddingScorer:
 
 def build_cache(source: Path, output: Path, *, anchors: bool = False) -> int:
     """Build all catalogue queries, descriptions and sentences for the CLI."""
-    if not os.getenv("NVIDIA_API_KEY"):
-        print("Не задан NVIDIA_API_KEY: добавьте ключ для сборки кэша NVIDIA NIM.", file=sys.stderr)
+    if config.create_nvidia_client() is None:
+        print("Не задан NVIDIA_API_KEY: добавьте ключ для сборки кэша NVIDIA NIM "
+              "или NVIDIA_BASE_URL самостоятельно поднятого сервера (TEI на Brev).", file=sys.stderr)
         return 2
     from matcher.data import load_contractors
 

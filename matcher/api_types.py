@@ -14,7 +14,7 @@ from matcher.model import (
     RejectReason,
 )
 
-SemanticBackend = Literal["embeddings", "lexical"]
+SemanticBackend = Literal["embeddings", "nvidia", "lexical"]
 ExplanationSource = Literal["llm", "template"]
 OUTCOME_TITLES = {
     Outcome.MATCHED: "Подобрали",
