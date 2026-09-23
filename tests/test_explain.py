@@ -80,8 +80,8 @@ def test_template_starts_with_primary_reason_and_adds_only_one_other_family():
     explanations = TemplateExplainer().explain(match)
     first, second, third = (e.text for e in explanations)
 
-    assert first.startswith("В тройке, потому что более привлекательный вариант на эту дату занят (Кики).")
-    assert "без этой брони" not in first and "14.11.2026" not in first and "25 %" in first
+    assert first.startswith("Хикару: свободен 14.11.2026 и берёт формат «корпоратив».")
+    assert "Кики" not in first and "занят" not in first and "25 %" in first
     assert "500\u2009000 ₸" in second and "600\u2009000 ₸" in second and "17 %" in second
     assert "английский" in second and "38 %" not in second
     assert "казахский" in third and TAGS["business_forum"][0] in third
@@ -105,14 +105,18 @@ def test_validator_requires_every_primary_number_even_when_other_facts_are_groun
     assert any("primary" in problem and missing in problem for problem in problems)
 
 
-def test_validator_requires_named_busy_competitor_but_not_the_date():
+def test_validator_rejects_any_mention_of_another_contractor():
     from matcher.explain import validate_explanations
 
-    facts = reason_cards()[0]
-    valid = "В тройке, потому что более привлекательный вариант на эту дату занят (Кики). Цена от 600000 ₸."
+    match = result(*reason_cards())
+    facts = match.cards[0]
+    valid = "Хикару: свободен 14.11.2026 и берёт формат «корпоратив». Цена от 600000 ₸, запас 25 %."
     assert validate_explanations(result(facts), [valid]) == []
-    for replacement in ("другой кандидат", "Кикимора"):
-        assert any("competitor" in p for p in validate_explanations(result(facts), [valid.replace("Кики", replacement)]))
+    busy = valid + " Более привлекательный вариант (Кики) занят."
+    assert any("another contractor (Кики)" in p for p in validate_explanations(result(facts), [busy]))
+    neighbour = valid + " Дешевле, чем Микаса."
+    texts = [neighbour, *(e.text for e in __import__("matcher.explain", fromlist=["TemplateExplainer"]).TemplateExplainer().explain(match)[1:])]
+    assert any("another contractor (Микаса)" in p for p in validate_explanations(match, texts))
 
 
 def test_validator_grounds_all_reason_evidence_and_the_template_triple():
@@ -184,8 +188,9 @@ def test_template_renders_each_reason_at_all_ranks_with_caveats(code, family, ev
         assert "город проставлен при подготовке датасета" in text
         assert "синтетический профиль" in text
         for key, value in evidence.items():
-            if key != "tag" and not (code == "AVAILABILITY_REPLACEMENT" and key == "date"):
+            if key not in ("tag", "competitor", "scarcity"):
                 assert value in text
+        assert "Кики" not in text and "свободны" not in text
         assert "0.913" not in text
         if code == "DURATION_NOT_APPLICABLE":
             assert "работа не привязана к присутствию на площадке" in text.casefold()
@@ -333,7 +338,7 @@ def test_template_never_uses_snippets(snippet):
 
 
 LLM_TEXTS = [
-    "В тройке, потому что более привлекательный вариант на эту дату занят (Кики). Цена от 600\u2009000 ₸ оставляет запас 25 % при бюджете 800\u2009000 ₸.",
+    "Хикару: свободен 14.11.2026 и берёт формат «корпоратив». Цена от 600\u2009000 ₸ оставляет запас 25 % при бюджете 800\u2009000 ₸.",
     "Микаса: цена от 500\u2009000 ₸ на 17 % ниже следующей — 600\u2009000 ₸. Работает на запрошенном языке: английский.",
     "Рен: среди показанных только здесь заявлен казахский язык. Для корпоратива полезен опыт бизнес-форумов и конференций.",
 ]
@@ -378,7 +383,10 @@ def test_llm_returns_valid_ordered_explanations_and_uses_compact_grounded_prompt
     assert [c["id"] for c in payload["карточки"]] == ["c1", "c2", "c3"]
     for c, facts in zip(payload["карточки"], match.cards):
         assert set(c) == {"id", "имя", "позиция", "главная_причина", "поддерживающие", "оговорки"}
-        assert {k: v for k, v in c["главная_причина"].items() if k != "смысл"} == {"код": facts.reasons[0].code, "факты": facts.reasons[0].evidence}
+        # The competitor name is proof for the code, never shown to the LLM.
+        assert {k: v for k, v in c["главная_причина"].items() if k != "смысл"} == {
+            "код": facts.reasons[0].code,
+            "факты": {k: v for k, v in facts.reasons[0].evidence.items() if k != "competitor"}}
         assert c["главная_причина"]["смысл"]
     assert payload["карточки"][2]["оговорки"] == [{
         "код": "PRICE_IMPUTED", "формулировка": "цена проставлена при подготовке датасета, уточняйте",
@@ -411,7 +419,7 @@ def test_llm_falls_back_for_the_entire_result_when_any_response_is_invalid(failu
     if failure == "primary_number":
         content = llm_json([LLM_TEXTS[0], LLM_TEXTS[1].replace("600\u2009000 ₸", "другого кандидата"), LLM_TEXTS[2]])
     if failure == "competitor":
-        content = llm_json([LLM_TEXTS[0].replace("Кики", "конкурент"), *LLM_TEXTS[1:]])
+        content = llm_json([LLM_TEXTS[0] + " Более привлекательный вариант (Кики) занят.", *LLM_TEXTS[1:]])
     if failure == "quote":
         content = llm_json([*LLM_TEXTS[:2], LLM_TEXTS[2] + " «Модерирует дискуссии и церемонии награждения»"])
     if failure == "swap":
@@ -626,10 +634,8 @@ def test_template_outputs_pass_validation_for_six_typical_triples(profile, tmp_p
     assert validate_explanations(match, texts) == []
     assert TemplateExplainer().explain(match) == TemplateExplainer().explain(run(request, list(reversed(catalogue)), LexicalScorer()))
     assert all(c.contractor.description not in text for c, text in zip(match.cards, texts))
-    if profile in {"scarcity", "december"}:
-        # Said once, on the first card; the note describes the whole result.
-        assert "в эту дату свободны" in texts[0]
-        assert all("в эту дату свободны" not in text for text in texts[1:])
+    # Cards speak only about themselves: no counts of busy or free competitors.
+    assert all("свободны" not in text and "Занятый" not in text for text in texts)
 
 
 @pytest.mark.parametrize("change", ["card", "prompt"])

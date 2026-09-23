@@ -84,9 +84,9 @@ PHRASES = {
         "По близости описания к запросу опережает соседей",
     ),
     "AVAILABILITY_REPLACEMENT": (
-        "В тройке, потому что более привлекательный вариант на эту дату занят ({competitor})",
-        "Более привлекательный вариант ({competitor}) на эту дату занят, поэтому здесь {name}",
-        "Поднялся в тройку: {competitor} на эту дату занят",
+        "Свободен {date} и берёт формат «{format}»",
+        "На {date} свободен, формат «{format}» в его списке",
+        "Доступен {date}; работает с форматом «{format}»",
     ),
     "AVAILABILITY_ONLY_FREE": (
         "Единственный подходящий вариант на {date}",
@@ -109,44 +109,33 @@ def _primary(facts: CardFacts) -> Reason | None:
 
 
 def _phrase(reason: Reason, facts: CardFacts, variant: int | None = None) -> str:
-    evidence = {**reason.evidence, "name": facts.contractor.name}
+    evidence = {**reason.evidence, "name": facts.contractor.name, "format": facts.format_matched}
     text = PHRASES[reason.code][facts.rank - 1 if variant is None else variant].format_map(evidence)
     if reason.code == "DESCRIPTION_CLOSEST_IN_SHOWN" and "aspect" in evidence:
         text += ": " + evidence["aspect"]
     if reason.family == ReasonFamily.BUDGET and facts.contractor.price_from_kzt * 100 > facts.budget_kzt * 85:
         text = "Бюджет впритык: " + text[:1].lower() + text[1:]
-    if "scarcity" in evidence and reason.code != "AVAILABILITY_SCARCE" and (
-            _says_scarcity(facts) or reason.code == "AVAILABILITY_ONLY_FREE"):
-        text += "; " + evidence["scarcity"]
     return text
 
 
-def _says_scarcity(facts: CardFacts) -> bool:
-    """The date-scarcity note is a property of the whole result, so it is said
-    once, on the first card, instead of being repeated on every card."""
-    return facts.rank == 1
-
-
 def _supporting(facts: CardFacts, primary: Reason | None) -> list[Reason]:
+    # A card explains its own merits only: how many others are busy is shown in
+    # the rejections block, never inside the card text.
     return [r for r in facts.reasons if r is not primary and r.family != ReasonFamily.DATA_QUALITY
-            and not (r.code == "AVAILABILITY_SCARCE" and not _says_scarcity(facts))]
+            and r.code != "AVAILABILITY_SCARCE"]
 
 
 def _reason_text(facts: CardFacts) -> str:
     primary = _primary(facts)
     text = _phrase(primary, facts)
-    named = primary.code != "AVAILABILITY_REPLACEMENT" or facts.rank == 2
-    if primary.code != "AVAILABILITY_REPLACEMENT":
-        text = facts.contractor.name + ": " + text[:1].lower() + text[1:]
+    text = facts.contractor.name + ": " + text[:1].lower() + text[1:]
     caveats = [_phrase(r, facts) for r in facts.reasons if r.family == ReasonFamily.DATA_QUALITY]
     supports = [r for r in _supporting(facts, primary) if r.family != primary.family]
     # Fit complete phrases, never crop a fact or a name to the character limit.
     for support in [*supports[:1], None]:
         details = ([_phrase(support, facts)] if support else []) + caveats
         body = "; ".join(details)
-        if not named:
-            body = facts.contractor.name + (": " + body[:1].lower() + body[1:] if body else " подходит на эту дату")
-        elif body:
+        if body:
             body = body[:1].upper() + body[1:]
         rendered = text + (". " + body if body else "") + "."
         if len(rendered) < 60:
@@ -199,9 +188,8 @@ def _fact_tokens(facts: CardFacts) -> set[tuple[str, str]]:
     tokens = {("number", n) for n in _allowed_numbers(facts)}
     tokens.add(("name", _normalise(facts.contractor.name)))
     for reason in facts.reasons:
-        for key in ("competitor", "aspect"):
-            if value := reason.evidence.get(key):
-                tokens.add(("name" if key == "competitor" else "aspect", _normalise(value)))
+        if value := reason.evidence.get("aspect"):
+            tokens.add(("aspect", _normalise(value)))
     for aspect in aspects.load_aspects().get(facts.contractor.id, ()):
         if aspect.polarity == "positive" and aspect.relevant_to(facts.format_matched):
             tokens.add(("aspect", _normalise(aspect.label)))
@@ -218,7 +206,6 @@ def _grounding(facts: CardFacts, text: str) -> tuple[int, set[str]]:
                 for language in facts.languages_matched)
     hits += _contains(text, f"{day.day} {MONTHS[day.month - 1]}")
     hits += sum(_contains(text, value) for kind, value in _fact_tokens(facts) if kind == "aspect")
-    hits += any(_contains(text, r.evidence.get("competitor", "")) for r in facts.reasons)
     return hits, numbers - allowed
 
 
@@ -250,8 +237,7 @@ def validate_explanations(result: MatchResult, texts: list[str] | tuple[str, ...
         if primary:
             required = set().union(*(
                 _numbers(value) for key, value in primary.evidence.items()
-                if key in NUMBER_KEYS and not (primary.code == "AVAILABILITY_REPLACEMENT" and key == "date")
-                and not (key == "scarcity" and not _says_scarcity(facts))))
+                if key in NUMBER_KEYS and key not in ("date", "scarcity")))
             missing = required - _numbers(text)
             if missing:
                 problems.append(f"{prefix}: missing primary numbers {sorted(missing)}")
@@ -261,8 +247,12 @@ def validate_explanations(result: MatchResult, texts: list[str] | tuple[str, ...
             if (facts.contractor.price_from_kzt * 100 <= facts.budget_kzt * 85
                     and "впритык" in text.casefold()):
                 problems.append(f"{prefix}: впритык is only for headroom below 15 %")
-            if primary.code == "AVAILABILITY_REPLACEMENT" and not _contains(text, primary.evidence["competitor"]):
-                problems.append(f"{prefix}: missing primary competitor")
+        # The card must speak about itself: no other contractor, shown or not.
+        others = [c.contractor.name for c in result.cards if c is not facts]
+        others += [r.evidence["competitor"] for r in facts.reasons if "competitor" in r.evidence]
+        for other in others:
+            if other and other != facts.contractor.name and _contains(text, other):
+                problems.append(f"{prefix}: mentions another contractor ({other})")
         for quote in re.findall(r"«([^»]+)»", text):
             if len(_words(quote)) >= 4 and _normalise(quote.rstrip("…")) in _normalise(facts.contractor.description):
                 problems.append(f"{prefix}: description quote is forbidden")
@@ -315,31 +305,30 @@ SYSTEM_PROMPT = (
     "поле «факты» содержит разрешённые числа, имена и аспекты. Приведи её числа и имена. "
     "Слово «впритык» пиши ТОЛЬКО если в «смысле» сказано «Бюджет впритык» (запас меньше 15 %); "
     "при запасе 15 % и больше это слово запрещено.\n"
-    "2. AVAILABILITY_REPLACEMENT объясни коротко и обязательно назови занятого конкурента. "
-    "Дата брони не нужна. Пример: «В тройке, потому что более привлекательный вариант на эту дату занят (Кики).»\n"
-    "3. Во втором предложении добавь одну поддерживающую причину или оговорку готовой формулировкой. "
-    "Если есть scarcity, упомяни, сколько свободны из общего числа в категории.\n"
+    "2. Говори только об этой карточке и её достоинствах. Никогда не называй других подрядчиков, "
+    "не сравнивай с теми, кого нет в выдаче, и не считай, сколько занято или свободно. "
+    "AVAILABILITY_REPLACEMENT означает: кандидат свободен на дату и проходит все условия; "
+    "пример: «Свободен 05.10.2026 и берёт формат «корпоратив».»\n"
+    "3. Во втором предложении добавь одну поддерживающую причину или оговорку готовой формулировкой.\n"
     "4. Аспекты передают особенности подрядчика. Не цитируй описание и не придумывай фактов; "
     "полного описания здесь нет. Не используй общие похвалы.\n"
     "5. Числа только из фактов карточки и запроса: цена от, бюджет, проценты, часы, части даты, "
     "число свободных и размер категории. Сводка отказов — лишь контекст, её числа не переносить в карточки. "
     "Сохраняй формат чисел; цена всегда «от», не обещай итоговую стоимость. Не упоминай баллы и коды.\n"
-    "6. Каждый текст должен содержать имя этой карточки или число, имя конкурента либо аспект, "
+    "6. Каждый текст должен содержать имя этой карточки или число либо аспект, "
     "которого нет у остальных карточек с другой главной причиной. Одной смены слов недостаточно. "
     "Меняй зачины, но не меняй главные причины и порядок карточек.\n"
     "Верни только JSON {\"explanations\":[{\"id\":\"...\",\"text\":\"...\"}]}. "
     "Запрещённые фразы: " + "; ".join(BANNED_PHRASES)
 )
 
-EVIDENCE_KEYS = NUMBER_KEYS | {"language", "languages", "aspect", "tag", "competitor", "format"}
+EVIDENCE_KEYS = (NUMBER_KEYS | {"language", "languages", "aspect", "tag", "format"}) - {"scarcity"}
 
 
 def build_prompt_payload(result: MatchResult) -> dict:
     """Expose only selected codes and display evidence, never scores or raw flags."""
     def encoded(reason: Reason, card: CardFacts) -> dict:
         evidence = {k: v for k, v in reason.evidence.items() if k in EVIDENCE_KEYS}
-        if not _says_scarcity(card):
-            evidence.pop("scarcity", None)
         return {"код": reason.code, "смысл": _phrase(reason, card, 0), "факты": evidence}
 
     req = result.request
@@ -373,7 +362,7 @@ def _json(value) -> str:
 
 _log = logging.getLogger(__name__)
 CACHE_PATH = Path(__file__).resolve().parents[1] / "data" / "explanations_cache.json"
-PROMPT_VERSION = sha256(_json([SYSTEM_PROMPT, PHRASES, "b6-aspects-v1"]).encode()).hexdigest()[:12]
+PROMPT_VERSION = sha256(_json([SYSTEM_PROMPT, PHRASES, "b7-own-merits-v1"]).encode()).hexdigest()[:12]
 
 
 class LLMExplainer:
