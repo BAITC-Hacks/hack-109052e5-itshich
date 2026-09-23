@@ -1,4 +1,5 @@
 from collections import Counter
+from shutil import copyfile
 
 import pytest
 
@@ -7,7 +8,11 @@ from matcher import data
 from matcher.model import CALENDAR_END, CALENDAR_START
 
 
-def test_loads_real_catalogue_with_flags_lists_and_calendar(real_contractors):
+def test_loads_real_catalogue_with_flags_lists_and_calendar(tmp_path):
+    from matcher.pipeline import DATA_PATH
+
+    # Isolate the original 66-row source from the optional extra catalogue.
+    real_contractors = load_contractors(copyfile(DATA_PATH, tmp_path / "contractors.csv"))
     assert len(real_contractors) == 66
     assert [c.id for c in real_contractors] == sorted(c.id for c in real_contractors)
     assert Counter(c.city for c in real_contractors) == {
