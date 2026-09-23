@@ -45,6 +45,7 @@ uv run python scripts/run_demo.py      # 6 демо-запросов, кажды
 uv run python scripts/build_embeddings.py   # пересчитать кэш эмбеддингов (нужен ключ)
 uv run python scripts/browser_check.py      # живая проверка страницы: сервер должен быть запущен на :8000
 uv run python scripts/test_report.py        # прогнать тесты и обновить data/test_report.json для /tests
+uv run python scripts/run_cases.py          # лайв-кейсы из demo/cases.json: вход, карточки, коды причин, объяснения (раздел на /tests)
 ```
 
 Все тесты идут без сети и без ключа. Полный прогон около 15 секунд.
@@ -212,7 +213,8 @@ uv run python scripts/test_report.py        # прогнать тесты и о�
 - Детерминизм: тот же запрос даёт тот же порядок и тот же текст (кэш).
 - Демо: 6 воспроизводимых сценариев кнопками, включая пару дат, где выдача
   меняется из-за занятости.
-- Страницы: `/` интерфейс, `/tests` результаты тестов, `/docs-ui` описание.
+- Страницы: `/` интерфейс, `/tests` результаты тестов и лайв-кейсы
+  (`demo/cases.json`, `GET /api/cases`, `POST /api/cases/run`), `/docs-ui` описание.
 
 ## Технологии
 
@@ -228,7 +230,7 @@ uv run python scripts/test_report.py        # прогнать тесты и о�
 ## Структура репозитория
 
 ```
-app.py                 FastAPI: GET /, POST /api/match, GET /api/meta, GET /api/demo, /tests, /docs-ui
+app.py                 FastAPI: GET /, POST /api/match, GET /api/meta, GET /api/demo, /api/cases, /tests, /docs-ui
 matcher/model.py       общие типы (контракт между модулями)
 matcher/data.py        загрузка CSV (+ data/synthetic_extra.csv)
 matcher/filtering.py   валидация запроса, пул, причины отказа
