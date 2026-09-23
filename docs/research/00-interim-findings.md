@@ -17,9 +17,9 @@
 
 ## 2. Состояние репозитория (важно)
 
-- `matcher/explain.py` и `matcher/embeddings.py` (worker «bravo») в `main`
-  отсутствуют. `pipeline.answer()` падает: `ModuleNotFoundError: matcher.explain`.
-  `/api/match` сейчас не работает, хотя `pytest` зелёный (124 теста на фейках).
+- Обновление после merge codex-bravo/delta (origin/main 9188ed3): `explain.py`,
+  `embeddings.py`, кэш `data/embeddings.json` и `data/explanations_cache.json`
+  есть, `/api/match` работает офлайн (backend `embeddings`, объяснения из кэша LLM).
 - Текущая формула ранжирования (`matcher/ranking.py`):
   `0.35 budget_fit + 0.35 semantic + 0.10 language + 0.10 duration + 0.10 data_quality`.
 - Семантика без ключа: `LexicalScorer` (стемы по формату/категории), `hits/4`.
@@ -43,6 +43,19 @@
 [0,1] через (cos+1)/2, сожмётся в узкий диапазон (~0.7–0.85) и при весе 0.35
 почти перестанет влиять. Нужна нормализация внутри пула (min-max или z-score
 по eligible) либо rank-based fusion.
+
+## 3b. Замер с реальными эмбеддингами (text-embedding-3-small, кэш из репо)
+
+| запрос | eligible | semantic min | max | sd | budget sd | 0.35·sd(sem) | 0.35·sd(budget) |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| dense | 5 | 0.623 | 0.754 | 0.043 | 0.227 | 0.015 | 0.079 |
+| rare | 2 | 0.693 | 0.757 | 0.032 | 0.100 | 0.011 | 0.035 |
+| date_pair_b | 4 | 0.680 | 0.705 | 0.010 | 0.272 | 0.003 | 0.095 |
+
+Вывод: при отображении `(cos+1)/2` семантика реально весит в 5–30 раз меньше
+бюджета, хотя номинальные веса равны (0.35 / 0.35). Порядок сейчас почти
+целиком определяется ценой «от». Нужна калибровка шкалы косинуса
+(фиксированные якоря P05/P95 по каталогу, см. `01-weights-codex.md`).
 
 ## 4. Найденные открытые источники (первичный список)
 
