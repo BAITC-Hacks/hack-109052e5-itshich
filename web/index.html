@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Подбор подрядчиков</title>
+  <style>
+    :root { color-scheme: light; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #192e29; background: #f4f6f3; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-size: 16px; line-height: 1.5; }
+    main { max-width: 1160px; margin: 0 auto; padding: 42px 24px 56px; }
+    header { margin-bottom: 28px; }
+    .eyebrow { color: #466158; font-size: 12px; letter-spacing: .13em; font-weight: 700; text-transform: uppercase; }
+    h1 { font-size: clamp(30px, 4vw, 44px); line-height: 1.12; letter-spacing: -.035em; margin: 12px 0; }
+    h2, h3, p { margin: 0; }
+    header p, .muted { color: #5d6c66; }
+    .panel { background: #fff; padding: 26px; border: 1px solid #dce3dc; border-radius: 16px; }
+    .panel h2 { font-size: 20px; margin-bottom: 20px; }
+    fieldset { padding: 0; margin: 0; border: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+    label { display: flex; flex-direction: column; gap: 7px; font-size: 14px; font-weight: 600; min-width: 0; }
+    label span { color: #5d6c66; font-size: 12px; font-weight: 400; }
+    input, select, button { font: inherit; }
+    input, select { width: 100%; min-width: 0; min-height: 46px; border: 1px solid #b9c7bf; border-radius: 8px; padding: 10px 12px; color: #192e29; background: #fff; }
+    button { cursor: pointer; min-height: 46px; border: 1px solid #b9c7bf; border-radius: 8px; padding: 10px 16px; color: #24463a; background: #fff; }
+    button:hover { background: #eef4ef; border-color: #698978; }
+    button:disabled { cursor: wait; opacity: .65; }
+    :focus-visible { outline: 3px solid #3c826d; outline-offset: 3px; }
+    #submit { align-self: end; background: #225b47; color: #fff; border-color: #225b47; font-weight: 650; }
+    #submit:hover { background: #174534; }
+    .hint { margin-top: 16px; font-size: 13px; color: #5d6c66; }
+    .demos { margin-top: 22px; }
+    .demos h2 { font-size: 14px; font-weight: 600; margin-bottom: 10px; }
+    #demo-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+    #demo-buttons button { font-size: 13px; min-height: 42px; }
+    #results { margin-top: 30px; }
+    #banner { border-radius: 12px; padding: 22px 24px; border-left: 5px solid; }
+    #banner h2 { font-size: clamp(23px, 3vw, 30px); line-height: 1.25; letter-spacing: -.02em; }
+    [data-outcome="matched"] { background: #e0eee5; color: #164a34; border-color: #2c7a50; }
+    [data-outcome="no_category_in_city"] { background: #fcf0d5; color: #6d490b; border-color: #b88016; }
+    [data-outcome="none_eligible"], [data-outcome="error"] { background: #f8e6e3; color: #813b31; border-color: #b75445; }
+    #shortfall { margin: 14px 0 20px; color: #46594f; }
+    #cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 20px; }
+    .card { background: #fff; border: 1px solid #dce3dc; border-radius: 12px; padding: 22px; min-width: 0; overflow-wrap: anywhere; }
+    .card-heading { display: flex; gap: 12px; align-items: center; margin-bottom: 6px; }
+    .rank { display: grid; place-items: center; flex: 0 0 30px; height: 30px; border-radius: 50%; background: #eaf0eb; font-size: 14px; font-weight: 700; }
+    .card h3 { font-size: 21px; line-height: 1.25; }
+    .location { color: #5d6c66; font-size: 14px; }
+    .price { font-size: 25px; font-weight: 650; letter-spacing: -.02em; margin: 17px 0 12px; }
+    .badges { display: flex; flex-wrap: wrap; gap: 5px; }
+    .badge { padding: 3px 7px; border-radius: 4px; background: #f1eee5; color: #65562d; font-size: 11px; }
+    .explanation { background: #f0f5ef; border-left: 3px solid #89ac91; padding: 12px; margin: 18px 0 14px; font-size: 14px; }
+    .facts { color: #5d6c66; font-size: 12px; }
+    details { border-top: 1px solid #d5ded6; padding-top: 18px; margin-top: 24px; }
+    summary { cursor: pointer; font-weight: 600; padding: 6px 0; }
+    #rejections-list { padding-left: 22px; color: #526158; }
+    #rejections-list li { margin: 10px 0; overflow-wrap: anywhere; }
+    #result-footer { margin-top: 24px; color: #5d6c66; font-size: 12px; overflow-wrap: anywhere; }
+    [hidden] { display: none !important; }
+    @media (max-width: 800px) { fieldset { grid-template-columns: repeat(2, minmax(0, 1fr)); } #cards { grid-template-columns: 1fr; } }
+    @media (max-width: 480px) { main { padding: 24px 16px 40px; } .panel, .card { padding: 18px; } fieldset { grid-template-columns: 1fr; gap: 14px; } #banner { padding: 19px 16px; } #demo-buttons button { flex: 1 1 auto; } }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="eyebrow">События · Казахстан</div>
+    <h1>Подбор подрядчиков</h1>
+    <p>Условия вашего события — до трёх кандидатов с объяснением выбора.</p>
+  </header>
+  <section class="panel" aria-labelledby="form-title">
+    <h2 id="form-title">Ваше событие</h2>
+    <form id="match-form">
+      <fieldset id="fields" disabled aria-label="Параметры события">
+        <label for="city">Город<select id="city" name="city" required></select></label>
+        <label for="event_date">Дата<input id="event_date" name="event_date" type="date" required></label>
+        <label for="event_format">Тип мероприятия<select id="event_format" name="event_format" required></select></label>
+        <label for="category">Категория<select id="category" name="category" required></select></label>
+        <label for="budget_kzt">Бюджет ₸<input id="budget_kzt" name="budget_kzt" type="number" min="1" step="1" value="800000" required></label>
+        <label for="duration_hours">Длительность ч <span>необязательно</span><input id="duration_hours" name="duration_hours" type="number" min="1" step="1" placeholder="Не указана"></label>
+        <label for="language">Язык <span>необязательно</span><select id="language" name="language"><option value="">Любой</option></select></label>
+        <button id="submit" type="submit">Подобрать</button>
+      </fieldset>
+    </form>
+    <p class="hint">Проверяем стартовую цену, доступность и условия. Итоговая стоимость зависит от деталей события.</p>
+    <p class="hint" id="calendar-note">Загружаем каталог…</p>
+  </section>
+  <section class="demos" id="demos" aria-labelledby="demo-title" hidden>
+    <h2 id="demo-title">Демо-запросы</h2><div id="demo-buttons"></div>
+  </section>
+  <section id="results" aria-label="Результат подбора" hidden>
+    <div id="banner" role="status" aria-live="polite"><h2 id="outcome-title"></h2></div>
+    <p id="shortfall" hidden></p>
+    <div id="cards"></div>
+    <details id="rejections" hidden><summary></summary><ul id="rejections-list"></ul></details>
+    <p id="result-footer" hidden></p>
+  </section>
+  <noscript><p>Включите JavaScript, чтобы заполнить форму и увидеть результат подбора.</p></noscript>
+</main>
+<script>
+  'use strict';
+  const $ = id => document.getElementById(id);
+  const form = $('match-form');
+  const field = name => form.elements.namedItem(name);
+  let metadata;
+  let busy = false;
+  const money = value => new Intl.NumberFormat('ru-RU').format(value).replace(/\u00a0/g, '\u2009');
+  const dateRu = value => value.split('-').reverse().join('.');
+  function node(tag, className, text) {
+    const element = document.createElement(tag);
+    if (className) element.className = className;
+    if (text != null) element.textContent = text;
+    return element;
+  }
+  async function fetchJSON(url, options) {
+    const response = await fetch(url, options);
+    let body;
+    try { body = await response.json(); } catch { throw new Error('Сервис временно недоступен. Попробуйте ещё раз.'); }
+    if (!response.ok) throw new Error(typeof body.detail === 'string' ? body.detail : 'Проверьте поля запроса: дату, бюджет и длительность.');
+    return body;
+  }
+  function updateCategories() {
+    const previous = field('category').value;
+    field('category').replaceChildren(...metadata.categories.map(category => new Option(
+      `${category} (${metadata.counts[field('city').value]?.[category] || 0})`, category)));
+    if (metadata.categories.includes(previous)) field('category').value = previous;
+  }
+  function showError(message) {
+    $('results').hidden = false;
+    $('banner').dataset.outcome = 'error';
+    $('outcome-title').textContent = message;
+    $('shortfall').hidden = true;
+    $('cards').replaceChildren();
+    $('rejections').hidden = true;
+    $('result-footer').hidden = true;
+  }
+  function render(result) {
+    $('results').hidden = false;
+    $('banner').dataset.outcome = result.outcome;
+    $('outcome-title').textContent = result.outcome_title_ru;
+    $('shortfall').textContent = result.shortfall_note || '';
+    $('shortfall').hidden = !result.shortfall_note;
+    $('cards').replaceChildren(...result.cards.slice(0, 3).map((card, index) => {
+      const article = node('article', 'card');
+      const heading = node('div', 'card-heading');
+      const rank = node('span', 'rank', index + 1);
+      rank.setAttribute('aria-label', `Место ${index + 1}`);
+      heading.append(rank, node('h3', '', card.name));
+      const badges = node('div', 'badges');
+      for (const [flag, label] of [['synthetic', 'синтетический профиль'], ['price_imputed', 'цена проставлена'], ['city_imputed', 'город проставлен']]) {
+        if (card[flag]) badges.append(node('span', 'badge', label));
+      }
+      const facts = card.facts;
+      const hours = facts.max_hours == null ? 'не привязан к присутствию на площадке' : `до ${facts.max_hours} ч`;
+      article.append(heading, node('p', 'location', `${card.category} · ${card.city}`),
+        node('p', 'price', `от ${money(card.price_from_kzt)} ₸`), badges,
+        node('p', 'explanation', card.explanation),
+        node('p', 'facts', `свободен ${dateRu(facts.free_on_date)} · запас бюджета ${facts.budget_headroom_pct} % · ${hours}`));
+      return article;
+    }));
+    $('rejections').hidden = result.rejections.length === 0;
+    $('rejections').open = false;
+    $('rejections').querySelector('summary').textContent = `Почему остальные не попали (${result.rejections.length})`;
+    $('rejections-list').replaceChildren(...result.rejections.map(item =>
+      node('li', '', `${item.name} — ${item.reasons.map(reason => reason.label).join('; ')}`)));
+    $('result-footer').hidden = false;
+    $('result-footer').textContent = `семантика: ${result.semantic_backend} · ответ за ${Math.round(result.timing_ms)} мс · источник объяснений: ${result.cards[0]?.explanation_source || 'template'}`;
+  }
+  function setBusy(value) {
+    busy = value;
+    $('fields').disabled = value;
+    form.setAttribute('aria-busy', String(value));
+    $('submit').textContent = value ? 'Подбираем…' : 'Подобрать';
+    $('demo-buttons').querySelectorAll('button').forEach(button => { button.disabled = value; });
+  }
+  form.addEventListener('submit', async event => {
+    event.preventDefault();
+    if (busy) return;
+    const request = Object.fromEntries(new FormData(form));
+    request.budget_kzt = Number(request.budget_kzt);
+    request.duration_hours = request.duration_hours === '' ? null : Number(request.duration_hours);
+    request.language = request.language || null;
+    setBusy(true);
+    try { render(await fetchJSON('/api/match', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(request)})); }
+    catch (error) { showError(error instanceof TypeError ? 'Не удалось связаться с сервисом. Попробуйте ещё раз.' : error.message); }
+    finally { setBusy(false); }
+  });
+  field('city').addEventListener('change', updateCategories);
+  async function init() {
+    try {
+      const [meta, demos] = await Promise.all([fetchJSON('/api/meta'), fetchJSON('/api/demo').catch(() => [])]);
+      metadata = meta;
+      for (const [name, values] of [['city', meta.cities], ['event_format', meta.formats], ['language', meta.languages]]) {
+        field(name).replaceChildren(...(name === 'language' ? [new Option('Любой', '')] : []), ...values.map(value => new Option(value, value)));
+      }
+      updateCategories();
+      Object.assign(field('event_date'), {min: meta.calendar_start, max: meta.calendar_end, value: meta.calendar_start});
+      $('calendar-note').textContent = `Календарь занятости: ${dateRu(meta.calendar_start)} — ${dateRu(meta.calendar_end)}.`;
+      for (const demo of demos) {
+        const button = node('button', '', demo.name);
+        button.type = 'button'; button.title = demo.note || '';
+        button.addEventListener('click', () => {
+          if (busy) return;
+          field('city').value = demo.request.city; updateCategories();
+          if (![...field('category').options].some(option => option.value === demo.request.category)) {
+            field('category').add(new Option(`${demo.request.category} (0)`, demo.request.category));
+          }
+          for (const name of ['city', 'event_date', 'event_format', 'category', 'budget_kzt', 'duration_hours', 'language']) {
+            field(name).value = demo.request[name] ?? '';
+          }
+          form.requestSubmit();
+        });
+        $('demo-buttons').append(button);
+      }
+      $('demos').hidden = demos.length === 0;
+      setBusy(false);
+    } catch (error) {
+      $('calendar-note').textContent = 'Не удалось загрузить каталог.';
+      showError(error instanceof TypeError ? 'Не удалось загрузить каталог. Обновите страницу.' : error.message);
+    }
+  }
+  init();
+</script>
+</body>
+</html>

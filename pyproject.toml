@@ -22,6 +22,7 @@ dev = [
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"
+markers = ["e2e: browser tests with Playwright (needs `uv run playwright install chromium`)"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["matcher"]
