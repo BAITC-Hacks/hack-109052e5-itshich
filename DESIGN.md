@@ -346,16 +346,16 @@ top three does not prove replacement.
   one other reason and caveats follow. Templates use the same codes, retain
   whole facts and include the card's name for differentiation. Callers without
   reason codes receive structural templates, also without description quotes.
-- Replacement templates are short: «В тройке, потому что более привлекательный
-  вариант на эту дату занят ({competitor}).», «Более привлекательный вариант
-  ({competitor}) на эту дату занят, поэтому здесь {name}.», or «Поднялся в тройку:
-  {competitor} на эту дату занят.». A date is not required; the competitor is.
+- Replacement templates speak about the card itself: «Свободен {date} и берёт
+  формат «{format}»». The busy competitor stays in the reason evidence as proof
+  and is never sent to the LLM or rendered; a card text must not name any other
+  contractor, shown or not. Busy/free counts are not spoken inside cards.
 - Validation checks length, sentence count, at least two grounded facts and
   banned praise. Allowed numbers: price, budget, headroom_pct, next_price,
   diff_pct, max_hours, requested_hours, date parts and scarcity N/M. Digits in
   descriptions, names, proof quotes or arbitrary evidence do not extend this
   set. Decimal values are checked whole. Require every primary number except
-  the optional replacement date, and the primary replacement's competitor name.
+  dates and scarcity; reject any mention of another contractor's name.
 - A «…» fragment of four or more words copied from the description is rejected,
   including normalized case/whitespace and a trailing ellipsis. Primary codes
   must differ unless diversity_limited is true.
