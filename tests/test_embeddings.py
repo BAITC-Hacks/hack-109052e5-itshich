@@ -81,6 +81,39 @@ def test_missing_embeddings_are_written_through_and_reused_offline(tmp_path):
     assert offline.score(REQUEST, [CONTRACTOR]) == {"c1": 0.854}
 
 
+def test_persist_rounds_existing_and_new_vectors_to_six_decimals(tmp_path):
+    from matcher.embeddings import EmbeddingScorer
+
+    path = tmp_path / "embeddings.json"
+    vector = [0.123456789, -0.987654321]
+    write_cache(path, {CONTRACTOR.description: vector})
+    scorer = EmbeddingScorer(cache_path=path, model=MODEL,
+                             client=FakeEmbeddingsClient({QUERY: vector}))
+    scores = scorer.score(REQUEST, [CONTRACTOR])
+    data = json.loads(path.read_text())
+    assert data["vectors"] == {cache_key(text): [0.123457, -0.987654]
+                               for text in (QUERY, CONTRACTOR.description)}
+    assert path.read_text() == json.dumps(data, sort_keys=True, separators=(",", ":"))
+    assert scores == EmbeddingScorer(cache_path=path, model=MODEL, api_key="").score(REQUEST, [CONTRACTOR])
+    assert all(score == round(score, 3) for score in scores.values())
+
+
+def test_build_script_compacts_existing_cache_without_key_or_csv(tmp_path):
+    target = tmp_path / "embeddings.json"
+    write_cache(target, {QUERY: [0.123456789, -0.987654321]}, model="cached-model")
+    command = [sys.executable, str(Path(__file__).resolve().parents[1] / "scripts/build_embeddings.py"),
+               "--compact", "--output", str(target), "--csv", str(tmp_path / "missing.csv")]
+    env = {**os.environ, "OPENAI_API_KEY": ""}
+    first = subprocess.run(command, env=env, capture_output=True, text=True)
+    assert first.returncode == 0, first.stderr
+    expected = {"model": "cached-model", "vectors": {cache_key(QUERY, "cached-model"): [0.123457, -0.987654]}}
+    assert target.read_text() == json.dumps(expected, sort_keys=True, separators=(",", ":"))
+    original = target.read_bytes()
+    second = subprocess.run(command, env=env, capture_output=True, text=True)
+    assert second.returncode == 0, second.stderr
+    assert target.read_bytes() == original
+
+
 @pytest.mark.parametrize("long_sentence", [False, True])
 def test_snippet_splits_all_boundaries_and_picks_highest_cosine_with_stable_ties(tmp_path, long_sentence):
     from matcher.embeddings import EmbeddingScorer

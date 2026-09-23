@@ -30,6 +30,26 @@ def demo_queries():
 
 
 @pytest.fixture
+def offline_demo_scorer(monkeypatch, real_contractors, demo_queries):
+    # Import first: config loads .env once, then the test explicitly removes its key.
+    from matcher.embeddings import EmbeddingScorer, SemanticUnavailable, request_text, split_sentences
+    from matcher.pipeline import choose_scorer
+
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+    scorer = choose_scorer()
+    assert isinstance(scorer, EmbeddingScorer), "Demo verification must use the production EmbeddingScorer"
+    texts = [text for contractor in real_contractors
+             for text in [contractor.description, *split_sentences(contractor.description)]]
+    texts.extend(request_text(MatchRequest(**(entry["request"] | {
+        "event_date": date.fromisoformat(entry["request"]["event_date"])}))) for entry in demo_queries)
+    try:
+        scorer.cache_texts(texts)
+    except SemanticUnavailable as error:
+        pytest.fail(f"Offline demo embedding cache is incomplete; lexical fallback is forbidden: {error}")
+    return scorer
+
+
+@pytest.fixture
 def match_request():
     return MatchRequest("Алматы", date(2026, 11, 14), "корпоратив", "Ведущий", 800_000)
 

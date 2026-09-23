@@ -27,6 +27,7 @@ def main(path: Path = DEMO_PATH) -> int:
         result = answer(request)
         repeated = answer(request)
         print(f"\n{query['name']}: {result['outcome']} — {result['outcome_title_ru']}")
+        print(f"  semantic_backend: {result['semantic_backend']}")
         if result["shortfall_note"]:
             print(result["shortfall_note"])
         for rank, card in enumerate(result["cards"], 1):
@@ -38,10 +39,15 @@ def main(path: Path = DEMO_PATH) -> int:
         order = [card["id"] for card in result["cards"]]
         repeated_order = [card["id"] for card in repeated["cards"]]
         same = order == repeated_order
-        stable &= same
+        expected = (order == query.get("expected_card_ids", order)
+                    and result["outcome"] == query.get("expected_outcome", result["outcome"])
+                    and result["semantic_backend"] == query.get("semantic_backend", result["semantic_backend"])
+                    and repeated["semantic_backend"] == result["semantic_backend"])
+        stable &= same and expected
         print(f"  Первый порядок: {order}")
         print(f"  Повторный порядок: {repeated_order}")
         print(f"  Порядок совпадает: {'да' if same else 'НЕТ'}")
+        print(f"  Демо соответствует сохранённому результату: {'да' if expected else 'НЕТ'}")
     return 0 if stable else 1
 
 

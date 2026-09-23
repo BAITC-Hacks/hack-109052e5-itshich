@@ -80,23 +80,29 @@ def test_matched_shortfall_distinguishes_small_pool_from_rejections(sample_contr
 @pytest.mark.parametrize("name", [
     "dense", "rare", "empty_no_category", "empty_none_eligible", "date_pair_a", "date_pair_b",
 ])
-def test_saved_demo_outcomes_and_ordered_cards_are_reproducible(real_contractors, demo_queries, name):
+def test_saved_demo_outcomes_and_ordered_cards_are_reproducible(real_contractors, demo_queries, name, offline_demo_scorer):
     entry, = [entry for entry in demo_queries if entry["name"] == name]
     request = MatchRequest(**(entry["request"] | {"event_date": date.fromisoformat(entry["request"]["event_date"])}))
-    result = run(request, real_contractors, LexicalScorer())
+    result = run(request, real_contractors, offline_demo_scorer)
+    assert result.semantic_backend == entry["semantic_backend"] == "embeddings"
     assert result.outcome.value == entry["expected_outcome"]
     assert [card.contractor.id for card in result.cards] == entry["expected_card_ids"]
-    assert result == run(request, real_contractors, LexicalScorer())
+    assert result == run(request, list(reversed(real_contractors)), offline_demo_scorer)
+    from matcher.pipeline import answer
+
+    response = answer(request)
+    assert response["semantic_backend"] == "embeddings", "Offline pipeline silently fell back to lexical"
+    assert [card["id"] for card in response["cards"]] == entry["expected_card_ids"]
 
 
-def test_demo_requests_have_required_real_data_characteristics(real_contractors, demo_queries):
+def test_demo_requests_have_required_real_data_characteristics(real_contractors, demo_queries, offline_demo_scorer):
     assert len(demo_queries) == 6
     results = {}
     for entry in demo_queries:
-        assert set(entry) == {"name", "request", "expected_outcome", "expected_card_ids", "note"}
+        assert set(entry) == {"name", "request", "expected_outcome", "expected_card_ids", "note", "semantic_backend"}
         assert entry["note"]
         request = MatchRequest(**(entry["request"] | {"event_date": date.fromisoformat(entry["request"]["event_date"])}))
-        results[entry["name"]] = run(request, real_contractors, LexicalScorer())
+        results[entry["name"]] = run(request, real_contractors, offline_demo_scorer)
     dense = results["dense"]
     assert (dense.request.category, dense.request.city, dense.request.event_format) == ("Ведущий", "Алматы", "корпоратив")
     assert dense.request.event_date.month in (10, 11) and dense.eligible_count >= 5
