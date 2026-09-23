@@ -55,6 +55,14 @@ def tests_report():
         return {"runs": [], "note": "отчёт ещё не сформирован"}
 
 
+@app.get("/api/live-tests")
+def live_tests_report():
+    try:
+        return json.loads((ROOT / "data" / "live_tests.json").read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        return {"cases": [], "note": "лайв-тесты ещё не прогнаны"}
+
+
 @app.get("/api/cases")
 def cases_report():
     try:

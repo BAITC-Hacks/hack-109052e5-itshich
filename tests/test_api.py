@@ -109,6 +109,7 @@ def test_match_returns_ranked_cards_and_grounded_facts(client):
     assert body["cards"][0] == {
         "id": "z-first", "name": "Арман", "category": "Ведущий", "city": "Алматы",
         "price_from_kzt": 600_000, "price_imputed": True, "city_imputed": True,
+        "reasons": [],
         "synthetic": True, "explanation": "Арман: цена от 600000 ₸, свободен 14.11.2026.",
         "explanation_source": "template", "facts": {
             "budget_headroom_pct": 25, "format_matched": "корпоратив",
@@ -273,3 +274,15 @@ def test_report_routes_read_optional_files(client, monkeypatch, tmp_path, file_e
     page = client.get("/tests")
     assert page.status_code == (200 if file_exists else 404)
     assert ("Результаты проверок" if file_exists else "ещё не") in page.text
+
+
+def test_api_card_reasons_preserve_primary_and_labels(client, fake_pipeline, monkeypatch):
+    from matcher.model import Reason, ReasonFamily
+    def with_reasons(request, contractors, scorer):
+        result = fake_run(request, contractors, scorer)
+        return replace(result, cards=tuple(replace(card, reasons=(Reason(
+            "BUDGET_HEADROOM", ReasonFamily.BUDGET, {}, primary=True),)) for card in result.cards))
+    monkeypatch.setattr(fake_pipeline, "run", with_reasons)
+    body = client.post("/api/match", json=REQUEST).json()
+    assert all(card["reasons"] == [{"code": "BUDGET_HEADROOM", "primary": True,
+                                   "label": "Запас бюджета"}] for card in body["cards"])

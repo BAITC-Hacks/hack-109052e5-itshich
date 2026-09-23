@@ -30,6 +30,28 @@ REASON_LABELS = {
 }
 
 
+CARD_REASON_LABELS = {
+    "AVAILABILITY_ONLY_FREE": "Свободен на нужную дату",
+    "AVAILABILITY_REPLACEMENT": "Доступен на выбранную дату",
+    "AVAILABILITY_SCARCE": "Мало свободных профилей",
+    "BUDGET_HEADROOM": "Запас бюджета",
+    "BUDGET_LOWER_THAN_SHOWN": "Доступная стартовая цена",
+    "BUDGET_FITS": "Укладывается в бюджет",
+    "LANGUAGE_REQUEST_MATCH": "Нужный язык",
+    "LANGUAGE_UNIQUE_IN_SHOWN": "Дополнительный язык",
+    "LANGUAGE_OPTIONS": "Выбор языков",
+    "DURATION_NOT_APPLICABLE": "Без ограничения часов присутствия",
+    "DURATION_HEADROOM": "Запас по длительности",
+    "DURATION_MAX_IN_SHOWN": "Продолжительная программа",
+    "DESCRIPTION_ASPECT": "Опыт для формата мероприятия",
+    "DESCRIPTION_CLOSEST_IN_SHOWN": "Описание соответствует запросу",
+    "FORMAT_SUPPORTED": "Поддерживает формат",
+    "PRICE_IMPUTED": "Цена проставлена",
+    "CITY_IMPUTED": "Город проставлен",
+    "SYNTHETIC": "Синтетический профиль",
+}
+
+
 class MatchRequestDTO(BaseModel):
     city: str
     event_date: date
@@ -68,6 +90,12 @@ class FactsDTO(BaseModel):
 
 
 class CardDTO(BaseModel):
+    # Scope card reasons here to preserve the existing rejection ReasonDTO API.
+    class ReasonDTO(BaseModel):
+        code: str
+        primary: bool
+        label: str
+
     id: str
     name: str
     category: str
@@ -79,6 +107,7 @@ class CardDTO(BaseModel):
     explanation: str
     explanation_source: ExplanationSource
     facts: FactsDTO
+    reasons: tuple[ReasonDTO, ...] = ()
 
 
 class ReasonDTO(BaseModel):
@@ -127,6 +156,9 @@ def to_dto(result: MatchResult, explanations: tuple[Explanation, ...],
             price_imputed=contractor.price_imputed, city_imputed=contractor.city_imputed,
             synthetic=contractor.synthetic, explanation=explanation.text,
             explanation_source=explanation.source,
+            reasons=tuple(CardDTO.ReasonDTO(code=reason.code, primary=reason.primary,
+                label=CARD_REASON_LABELS.get(reason.code, reason.code))
+                for reason in facts.reasons if reason.code != "AVAILABILITY_SCARCE"),
             facts=FactsDTO(
                 budget_headroom_pct=facts.budget_headroom_pct,
                 format_matched=facts.format_matched, languages_matched=facts.languages_matched,

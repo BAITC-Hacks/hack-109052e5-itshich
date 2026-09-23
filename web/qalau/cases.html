@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Живые тест-кейсы — QALAU</title>
-  <style>.test-report main>footer,main>footer{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px 24px;margin-top:48px;padding:24px 0 40px;border-top:1px solid rgba(255,255,255,.08);background:transparent;box-shadow:none;font-size:12px;letter-spacing:.01em;color:var(--muted)}main>footer a{margin-left:auto;padding:6px 0;text-decoration:underline;text-underline-offset:4px}</style>
-  <style>.pytest-only{display:none}</style>
   <link rel="stylesheet" href="/style.css">
+  <style>main>footer{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px 24px;margin-top:48px;padding:24px 0 40px;border-top:1px solid rgba(255,255,255,.08);background:transparent;box-shadow:none;font-size:12px;letter-spacing:.01em;color:var(--muted)}main>footer a{margin-left:auto;padding:6px 0;text-decoration:underline;text-underline-offset:4px}</style>
+  <style>.pytest-only{display:none}</style>
   <link rel="stylesheet" href="/tests.css">
   <style>
 :root{color-scheme:dark;--bg:#191b19;--surface:#222521;--text:#eeeee7;--muted:#b2b9ae;--line:#42493f;--accent:#c6d4b1;--tint:#30392b;--error:#ffb5ac;font-family:Plex,'Segoe UI',sans-serif;color:var(--text);background:var(--bg)}*{box-sizing:border-box}body{margin:0}main{margin:auto}button{font:inherit;color:inherit;cursor:pointer}a{color:inherit;text-underline-offset:4px}a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:4px}h1,h2,h3,p{margin:0}h1{font-family:Serif,Georgia,serif;font-size:clamp(34px,4vw,52px);font-weight:450;line-height:1.12;letter-spacing:-.035em}h2{font-size:20px;font-weight:500}h3{font-size:17px;font-weight:500}p{line-height:1.6}.brand{font-size:25px;font-weight:600;text-decoration:none}.brand-dot{color:var(--accent)}
@@ -15,19 +15,9 @@
 </head>
 <body class="test-report">
   <main>
-    <header class="header shared-header"><div class="header-inner"><a class="brand" href="/" aria-label="QALAU — к началу подбора">QALAU<span class="brand-dot">.</span></a><nav class="header-nav" aria-label="Основная навигация"><a href="/">Подбор</a><a href="/docs-ui">Документация</a><a href="/tests">Тесты</a><a href="/cases" aria-current="page">Кейсы</a></nav></div></header>
+    <nav aria-label="Навигация"><a href="/" class="brand">QALAU<span class="brand-dot">.</span></a><a href="/docs-ui">Документация ↗</a></nav>
     <header><p class="eyebrow">Реальные запросы · фактические ответы</p><h1>Живые тест-кейсы</h1><p id="metadata">Загружаем отчёт…</p></header>
-    <section id="live-cases" aria-labelledby="live-title">
-      <div class="live-heading"><div><p class="eyebrow">Настоящие запросы · фактические ответы</p><h2 id="live-title">Живые тест-кейсы</h2></div><button id="run-cases" type="button">Прогнать сейчас</button></div>
-      <p id="cases-summary" aria-live="polite">Загружаем живые кейсы…</p>
-      <p id="cases-metadata" class="live-meta"></p>
-      <p id="cases-notice" role="status" aria-live="polite"></p>
-      <div class="filters" role="group" aria-label="Фильтр живых кейсов">
-        <button type="button" data-case-filter="all" aria-pressed="true">Все</button>
-        <button type="button" data-case-filter="failed" aria-pressed="false">Ошибки</button>
-      </div>
-      <div id="case-list"></div>
-    </section>
+    <p class="live-jump"><a href="#live-tests">Лайв-тесты пайплайна ↓</a></p>
     <div class="pytest-only">
     <h2 class="pytest-title">Автоматические тесты · pytest</h2>
     <div id="notice" role="status" aria-live="polite"></div>
@@ -38,11 +28,19 @@
       <button type="button" data-filter="e2e" aria-pressed="false">E2E</button>
     </div>
     <div id="suites"></div>
-    <section class="demo-section"><h2>Примеры запросов</h2><p>Ожидаемые результаты сценариев; не результаты их выполнения.</p><div id="demos"></div></section>
+    <section class="demo-section"><h2>Демо-запросы</h2><p>Ожидаемые результаты сценариев; не результаты их выполнения.</p><div id="demos"></div></section>
     </div>
-    <footer>QALAU · Живые тест-кейсы <a href="/">Вернуться к подбору →</a></footer>
+    <section id="live-tests" aria-labelledby="live-title">
+      <div class="live-heading"><div><p class="eyebrow">Сохранённый результат → живой пайплайн</p><h2 id="live-title">Лайв-тесты пайплайна</h2></div><button id="run-cases" type="button" disabled>Прогнать все</button></div>
+      <p id="cases-summary" aria-live="polite">Загружаем лайв-тесты…</p>
+      <p id="cases-metadata" class="live-meta"></p>
+      <p id="cases-notice" role="status" aria-live="polite"></p>
+      <div id="case-list"></div>
+    </section>
+    <footer>QALAU · Отчёт последнего запуска <a href="/">Вернуться к подбору →</a></footer>
   </main>
-<script>
+<script type="module">
+import {selectProfiles} from '/api.mjs';
 'use strict';
 const $ = selector => document.querySelector(selector);
 const kinds = {e2e: 'E2E · Сквозные проверки', api: 'API · Проверки интерфейса', property: 'Свойства · Property-based', unit: 'Модульные тесты', other: 'Другие проверки'};
@@ -98,6 +96,10 @@ function render() {
   for (const [label, value, cls] of [['Пройдено',s.passed,'passed'],['Ошибки',s.failed+s.errors,'failed'],['Пропущено',s.skipped,'skipped'],['Всего',s.total,''],['Время тестов',seconds(s.duration_s),'']]) {
     const tile = el('div', undefined, `metric ${cls}`); tile.append(el('span',label), el('strong',value)); $('#metrics').append(tile);
   }
+  if (report.live_tests) {
+    const live = report.live_tests, tile = el('div', undefined, 'metric');
+    tile.append(el('span', 'Лайв-тесты'), el('strong', `${live.cases_count} кейсов`), el('p', `${live.generated_at || 'не прогнаны'} · ${live.git_sha || '—'}`, 'live-meta')); $('#metrics').append(tile);
+  }
   for (const demo of report.demo || []) {
     const card = el('article'); card.append(el('h3',demo.name), el('pre',JSON.stringify(demo.request,null,2)));
     const outcome = {matched:'Подобраны подрядчики', no_category_in_city:'В городе нет этой категории', none_eligible:'Нет подходящих кандидатов'};
@@ -105,7 +107,7 @@ function render() {
     card.append(el('p', `ID по порядку: ${demo.expected_card_ids.length ? demo.expected_card_ids.join(' → ') : 'нет'}`, 'ordered-ids'));
     $('#demos').append(card);
   }
-  if (!report.demo?.length) $('#demos').append(el('p','Примеры запросов не добавлены в отчёт.'));
+  if (!report.demo?.length) $('#demos').append(el('p','Демо-запросы не добавлены в отчёт.'));
   renderSuites();
 }
 for (const button of document.querySelectorAll('[data-filter]')) button.addEventListener('click', () => {
@@ -113,89 +115,93 @@ for (const button of document.querySelectorAll('[data-filter]')) button.addEvent
   for (const other of document.querySelectorAll('[data-filter]')) other.setAttribute('aria-pressed', String(other === button));
   if (report) renderSuites();
 });
-let liveReport = {cases: []}, caseFilter = 'all';
-const outcomeTitles = {matched:'Подобрали', no_category_in_city:'В этом городе такой категории нет', none_eligible:'Кандидаты есть, но…', request_error:'Ошибка запроса 422'};
+let liveReport = {cases: []};
+const outcomeTitles = {matched:'Подобрали', no_category_in_city:'В этом городе такой категории нет', none_eligible:'Нет подходящих кандидатов', request_error:'Ошибка запроса 422'};
 const money = value => Number(value).toLocaleString('ru-RU') + ' ₸';
+const runButtons = [], runners = [];
+let activeRuns = 0, runningAll = false;
+function resultView(item, title, className) {
+  const block = el('div', undefined, className);
+  block.append(el('h4', title), el('p', `${outcomeTitles[item.outcome] || item.outcome} · ${item.outcome}`, 'case-outcome'));
+  block.append(el('p', `Пул: ${item.pool_size} · Подходят: ${item.eligible_count} · ${item.timing_ms} мс`, 'live-meta'));
+  if (item.shortfall_note) block.append(el('p', item.shortfall_note, 'shortfall'));
+  const cards = el('ol', undefined, 'live-cards');
+  for (const card of item.cards || []) {
+    const row = el('li', undefined, 'live-card');
+    row.append(el('p', card.name, 'card-name'), el('p', `от ${money(card.price_from_kzt)}`, 'card-price'));
+    for (const flag of card.flags || ['synthetic','price_imputed','city_imputed'].filter(f => card[f])) row.append(el('span', flag, 'badge'));
+    const reasons = el('ul', undefined, 'card-reasons');
+    for (const reason of card.reasons || []) {
+      if (reason.code === 'AVAILABILITY_SCARCE') continue;
+      const line = el('li', undefined, reason.primary ? 'primary-reason' : '');
+      line.append(el('code', `${reason.primary ? '★ ' : ''}${reason.code}`), el('span', ` · ${reason.label || reason.code}`)); reasons.append(line);
+    }
+    row.append(reasons, el('p', card.explanation, 'card-explanation'), el('p', `${card.id} · ${card.explanation_source}`, 'live-meta')); cards.append(row);
+  }
+  block.append(cards); return block;
+}
+function signatures(item) {
+  const cards = item.cards || [], byId = [...cards].sort((a,b) => a.id.localeCompare(b.id));
+  return [cards.map(c => c.id), byId.map(c => [c.id, (c.reasons || []).filter(r => r.primary).map(r => r.code)]), byId.map(c => [c.id, c.explanation])];
+}
+function syncButtons() {
+  $('#run-cases').disabled = runningAll || activeRuns > 0 || !runners.length;
+  for (const button of runButtons) button.disabled = runningAll || button.dataset.running === 'true';
+}
 function renderCases() {
-  const cases = liveReport.cases || [], summary = liveReport.summary;
-  $('#cases-summary').textContent = summary
-    ? `Пройдено ${summary.passed} · Ошибок ${summary.failed} · Всего ${summary.total}`
-    : 'Запусков пока нет';
-  $('#cases-metadata').textContent = liveReport.generated_at
-    ? `${new Date(liveReport.generated_at).toLocaleString('ru-RU')} · время вашего устройства · коммит ${liveReport.git_sha}` : '';
-  const list = $('#case-list'); list.replaceChildren();
-  for (const item of cases.filter(c => caseFilter !== 'failed' || c.status === 'failed')) {
-    const block = el('article', undefined, `live-case ${item.status}`);
-    const heading = el('div', undefined, 'case-heading');
-    heading.append(el('h3', item.title), el('span', statuses[item.status] || item.status, `badge ${item.status}`));
-    block.append(heading, el('p', item.id, 'live-meta'));
+  const cases = liveReport.cases || [];
+  $('#cases-summary').textContent = `Кейсов: ${cases.length}`;
+  $('#cases-metadata').textContent = liveReport.generated_at ? `${new Date(liveReport.generated_at).toLocaleString('ru-RU')} · коммит ${liveReport.git_sha} · модель ${liveReport.model}` : '';
+  const list = $('#case-list'); list.replaceChildren(); runners.length = 0; runButtons.length = 0;
+  for (const item of cases) {
+    const block = el('article', undefined, 'live-case'), input = el('div', undefined, 'case-input');
+    input.append(el('h3', item.name));
     const request = item.request, chips = el('ul', undefined, 'request-chips');
-    for (const value of [request.city, request.event_date, request.event_format, request.category,
-      money(request.budget_kzt), request.duration_hours == null ? null : `${request.duration_hours} ч`, request.language]) {
+    for (const value of [request.city, request.event_date, request.event_format, request.category, money(request.budget_kzt), request.duration_hours == null ? null : `${request.duration_hours} ч`, request.language]) {
       if (value != null) chips.append(el('li', value));
     }
-    block.append(chips);
-    const response = item.response, outcome = response.status_code === 422 ? 'request_error' : response.outcome;
-    block.append(el('h4', outcomeTitles[outcome] || response.outcome_title_ru || 'Ошибка запуска', 'case-outcome'));
-    if (response.shortfall_note || response.detail) block.append(el('p', response.shortfall_note || response.detail, 'shortfall'));
-    const cards = el('ol', undefined, 'live-cards');
-    for (const [index, card] of (response.cards || []).entries()) {
-      const row = el('li', undefined, 'live-card');
-      row.append(el('p', `${index + 1}. ${card.name}`, 'card-name'), el('p', `от ${money(card.price_from_kzt)}`, 'card-price'));
-      const reasons = card.facts?.reasons || item.card_reasons?.[card.id] || [];
-      const primary = reasons.find(reason => reason.primary);
-      const reasonLine = el('p', undefined, 'primary-reason');
-      reasonLine.append(el('span', 'Главная причина: '), el('code', primary?.code || 'не передана'));
-      const phrase = primary?.phrase || primary?.label || primary?.text;
-      if (phrase) reasonLine.append(el('span', ` · ${phrase}`));
-      row.append(reasonLine, el('p', card.explanation || 'Объяснение отсутствует', 'card-explanation'),
-        el('p', `${card.id} · explanation_source: ${card.explanation_source || '—'}`, 'live-meta'));
-      cards.append(row);
+    const button = el('button', 'Прогнать заново', 'run-case'); button.type = 'button'; runButtons.push(button);
+    const status = el('p', '', 'run-status'); status.setAttribute('role', 'status');
+    const diff = el('div', undefined, 'case-diff'); diff.setAttribute('aria-live', 'polite');
+    input.append(chips, button, status, diff);
+    const outputs = el('div', undefined, 'case-outputs'), fresh = el('div', undefined, 'fresh-slot');
+    outputs.append(resultView(item, 'Сохранённый результат', 'saved-result'), fresh);
+    if (item.checks?.length) {
+      const checks = el('details', undefined, 'case-checks'); checks.append(el('summary', `Проверки ожиданий · ${item.checks.filter(c => c.ok).length}/${item.checks.length}`));
+      for (const check of item.checks) checks.append(el('p', `${check.ok ? '✓' : '✕'} ${check.name}: ${check.detail}`, check.ok ? 'check-ok' : 'check-failed'));
+      input.append(checks);
     }
-    if (cards.children.length) block.append(cards);
-    const checks = el('details', undefined, 'case-checks');
-    checks.open = item.status === 'failed';
-    checks.append(el('summary', `Проверки ожиданий · ${item.checks.filter(c => c.ok).length}/${item.checks.length}`));
-    const checkList = el('ul');
-    for (const check of item.checks) {
-      const row = el('li', undefined, check.ok ? 'check-ok' : 'check-failed');
-      row.append(el('strong', `${check.ok ? '✓ OK' : '✕ FAIL'} · ${check.name}`), el('p', check.detail));
-      checkList.append(row);
-    }
-    checks.append(checkList); block.append(checks);
-    block.append(el('p', `${Number(item.timing_ms).toLocaleString('ru-RU')} мс · semantic_backend: ${item.semantic_backend || '—'} · explanation_source: ${(item.explanation_source || []).join(', ') || '—'}`, 'live-meta case-timing'));
-    list.append(block);
+    const run = async () => {
+      if (button.dataset.running === 'true') return;
+      button.dataset.running = 'true'; activeRuns++; syncButtons(); status.textContent = 'Выполняем запрос…';
+      try {
+        const result = await selectProfiles({city:request.city, date:request.event_date, format:request.event_format, category:request.category, budget:request.budget_kzt, hours:request.duration_hours, language:request.language});
+        fresh.replaceChildren(resultView(result, 'Свежий результат', 'fresh-result')); outputs.classList.add('has-fresh'); diff.replaceChildren();
+        const old = signatures(item), next = signatures(result);
+        for (const [i, axis] of ['order', 'primary', 'explanation'].entries()) {
+          const same = JSON.stringify(old[i]) === JSON.stringify(next[i]);
+          diff.append(el('p', `${['Порядок id','Главные коды','Объяснения'][i]}: ${same ? 'совпало' : 'изменилось'}`, `diff-${axis} ${same ? 'check-ok' : 'check-failed'}`));
+        }
+        status.textContent = `Готово · ${result.timing_ms} мс`;
+      } catch (error) { status.textContent = error.message; }
+      finally { button.dataset.running = 'false'; activeRuns--; syncButtons(); }
+    };
+    button.addEventListener('click', run); runners.push(run); block.append(input, outputs); list.append(block);
   }
-  if (!list.children.length) list.append(el('p', caseFilter === 'failed' && cases.length
-    ? 'Ошибок нет: все ожидания выполнены.' : liveReport.note || 'Кейсы ещё не запущены. Нажмите «Прогнать сейчас».', 'live-empty'));
+  if (!cases.length) list.append(el('p', liveReport.note || 'лайв-тесты ещё не прогнаны', 'live-empty'));
+  syncButtons();
 }
-async function loadCases(run = false) {
-  const button = $('#run-cases');
-  button.disabled = true;
-  button.textContent = run ? 'Выполняем…' : 'Загружаем…';
-  $('#live-cases').setAttribute('aria-busy', 'true');
-  $('#cases-notice').textContent = run ? 'Подбор и объяснения для всех кейсов. Свежий запуск может занять около минуты; предыдущий отчёт остаётся ниже.' : '';
-  try {
-    const response = await fetch(run ? '/api/cases/run' : '/api/cases', {method:run ? 'POST' : 'GET', cache:'no-store'});
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    liveReport = await response.json();
-    renderCases();
-    $('#cases-notice').textContent = run ? 'Запуск завершён. Ниже свежие результаты.' : '';
-  } catch (error) {
-    $('#cases-notice').textContent = `Не удалось ${run ? 'запустить' : 'загрузить'} кейсы (${error.message}). Можно повторить запуск.`;
-    if (!liveReport.summary) $('#cases-summary').textContent = 'Отчёт недоступен';
-  } finally {
-    button.disabled = false; button.textContent = 'Прогнать сейчас';
-    $('#live-cases').setAttribute('aria-busy', 'false');
-  }
-}
-$('#run-cases').addEventListener('click', () => loadCases(true));
-for (const button of document.querySelectorAll('[data-case-filter]')) button.addEventListener('click', () => {
-  caseFilter = button.dataset.caseFilter;
-  for (const other of document.querySelectorAll('[data-case-filter]')) other.setAttribute('aria-pressed', String(other === button));
-  renderCases();
+$('#run-cases').addEventListener('click', async () => {
+  runningAll = true; syncButtons(); $('#cases-notice').textContent = 'Выполняем все запросы…';
+  try { for (const run of runners) await run(); $('#cases-notice').textContent = 'Прогон завершён. Результаты и ошибки показаны у каждого кейса.'; }
+  finally { runningAll = false; syncButtons(); }
 });
-loadCases();
+fetch('/api/live-tests', {cache:'no-store'}).then(response => {
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  return response.json();
+}).then(data => { liveReport = data; renderCases(); }).catch(error => {
+  $('#cases-summary').textContent = 'Отчёт недоступен'; $('#cases-notice').textContent = error.message;
+});
 fetch('/api/tests', {cache:'no-store'}).then(response => {
   if (!response.ok) throw new Error(`HTTP ${response.status}`);
   return response.json();

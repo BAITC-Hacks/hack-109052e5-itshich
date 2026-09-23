@@ -69,6 +69,10 @@ def write_report(source, output):
     if demo_path.exists():
         keys = ('name', 'request', 'expected_outcome', 'expected_card_ids')
         report['demo'] = [{key: entry[key] for key in keys} for entry in json.loads(demo_path.read_text(encoding='utf-8'))]
+    live_path = ROOT / 'data/live_tests.json'
+    live = json.loads(live_path.read_text(encoding='utf-8')) if live_path.exists() else {}
+    report['live_tests'] = dict(cases_count=len(live.get('cases', [])),
+                               generated_at=live.get('generated_at'), git_sha=live.get('git_sha'))
     output.parent.mkdir(parents=True, exist_ok=True)
     # Replace atomically so HTTP readers never see a partially written report.
     with tempfile.NamedTemporaryFile(mode='w', encoding='utf-8', dir=output.parent, delete=False) as handle:
