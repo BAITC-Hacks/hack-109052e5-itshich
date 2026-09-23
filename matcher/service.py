@@ -3,9 +3,9 @@ from __future__ import annotations
 
 from collections import Counter
 
+from matcher import ranking, reasons
 from matcher.filtering import filter_pool
 from matcher.model import MAX_CARDS, Contractor, MatchRequest, MatchResult, Outcome, Rejection, RejectReason, SemanticScorer
-from matcher.ranking import rank
 
 
 _RELATED = (
@@ -77,7 +77,8 @@ def _rejection_summary(request: MatchRequest, rejections: tuple[Rejection, ...])
 
 def run(request: MatchRequest, contractors: list[Contractor], scorer: SemanticScorer) -> MatchResult:
     pool, eligible, rejections = filter_pool(contractors, request)
-    cards = rank(eligible, request, scorer) if eligible else ()
+    all_scored = ranking.score_all(eligible, request, scorer) if eligible else ()
+    cards = all_scored[:MAX_CARDS]
     outcome, note = Outcome.MATCHED, None
     if not pool:
         outcome, note = Outcome.NO_CATEGORY_IN_CITY, _no_category(request, contractors)
@@ -109,8 +110,9 @@ def run(request: MatchRequest, contractors: list[Contractor], scorer: SemanticSc
             note += " Не прошли условия: " + _rejection_summary(request, rejections) + "."
     if note is not None and any(len(r.reasons) > 1 for r in rejections):
         note += " Причины могут пересекаться."
-    return MatchResult(
+    result = MatchResult(
         request=request, outcome=outcome, cards=cards, rejections=rejections,
         pool_size=len(pool), eligible_count=len(eligible), shortfall_note=note,
         semantic_backend=scorer.name,
     )
+    return reasons.assign(result, all_scored, contractors, scorer)

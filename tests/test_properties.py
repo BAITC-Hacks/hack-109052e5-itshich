@@ -1,4 +1,4 @@
-"""Domain properties exercised only through the four agreed public seams."""
+"""Domain properties exercised through public matching and reason seams."""
 import csv
 from dataclasses import replace
 from pathlib import Path
@@ -6,12 +6,13 @@ from tempfile import TemporaryDirectory
 
 from hypothesis import given, settings, strategies as st
 
+from matcher import ranking, reasons
 from matcher.data import load_contractors
 from matcher.filtering import filter_pool
 from matcher.lexical import LexicalScorer
 from matcher.model import (
     CALENDAR_END, CALENDAR_START, CITIES, EVENT_FORMATS, LANGUAGES, MAX_CARDS,
-    Contractor, MatchRequest, Outcome, RejectReason,
+    Contractor, MatchRequest, MatchResult, Outcome, ReasonFamily, RejectReason,
 )
 from matcher.service import run
 
@@ -207,3 +208,40 @@ def test_loader_round_trip(catalogue):
                     "description": c.description,
                 })
         assert load_contractors(path) == sorted(catalogue, key=lambda c: c.id)
+
+
+@PROPERTY
+@given(cases())
+def test_assign_preserves_ranked_cards_and_emits_deterministic_grounded_reasons(case):
+    catalogue, request = case
+    scorer = LexicalScorer()
+    pool, eligible, rejected = filter_pool(catalogue, request)
+    scored = ranking.score_all(eligible, request, scorer)
+    original = MatchResult(request, Outcome.MATCHED, scored[:MAX_CARDS], rejected,
+                           len(pool), len(eligible), None, scorer.name)
+    assigned = reasons.assign(original, scored, catalogue, scorer)
+    assert assigned == reasons.assign(original, scored, catalogue, scorer)
+    assert assigned == reasons.assign(original, tuple(reversed(scored)), list(reversed(catalogue)), scorer)
+    assert assigned == reasons.assign(assigned, scored, catalogue, scorer)
+    assert tuple(replace(c, reasons=()) for c in assigned.cards) == original.cards
+    allowed_primary = {
+        "BUDGET_HEADROOM", "BUDGET_LOWER_THAN_SHOWN", "BUDGET_FITS", "LANGUAGE_REQUEST_MATCH",
+        "LANGUAGE_UNIQUE_IN_SHOWN", "LANGUAGE_OPTIONS", "DURATION_HEADROOM", "DURATION_MAX_IN_SHOWN",
+        "DURATION_NOT_APPLICABLE", "DESCRIPTION_ASPECT", "DESCRIPTION_CLOSEST_IN_SHOWN",
+        "AVAILABILITY_REPLACEMENT", "AVAILABILITY_ONLY_FREE",
+    }
+    for card in assigned.cards:
+        assert card.reasons and card.reasons[0].primary
+        assert sum(r.primary for r in card.reasons) == 1
+        assert card.reasons[0].code in allowed_primary
+        substantive = [r for r in card.reasons if r.family != ReasonFamily.DATA_QUALITY]
+        assert len(substantive) <= 3
+        assert len({r.family for r in substantive}) == len(substantive)
+        for reason in card.reasons:
+            assert all(isinstance(value, str) for value in reason.evidence.values())
+            if "quote" in reason.evidence:
+                quote = reason.evidence["quote"]
+                assert quote and len(quote) <= 120 and quote in card.contractor.description
+        assert {r.code for r in card.reasons if r.family == ReasonFamily.DATA_QUALITY} == {
+            flag.upper() for flag in card.caveats}
+    assert assigned.diversity_limited == (len({c.reasons[0].code for c in assigned.cards}) < len(assigned.cards))

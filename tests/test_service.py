@@ -87,6 +87,10 @@ def test_saved_demo_outcomes_and_ordered_cards_are_reproducible(real_contractors
     assert result.semantic_backend == entry["semantic_backend"] == "embeddings"
     assert result.outcome.value == entry["expected_outcome"]
     assert [card.contractor.id for card in result.cards] == entry["expected_card_ids"]
+    for card in result.cards:
+        assert card.reasons and card.reasons[0].primary
+        assert sum(reason.primary for reason in card.reasons) == 1
+        assert card.reasons[0].code not in {"FORMAT_SUPPORTED", "PRICE_IMPUTED", "CITY_IMPUTED", "SYNTHETIC"}
     assert result == run(request, list(reversed(real_contractors)), offline_demo_scorer)
     from matcher.pipeline import answer
 
