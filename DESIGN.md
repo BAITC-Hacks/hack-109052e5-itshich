@@ -224,69 +224,117 @@ user-facing strings; English code and comments. Every module <= ~250 lines.
 
 ## Reasons: "why this card" is computed by code (matcher/reasons.py)
 
-Source: docs/research/02-reasons-codex.md + team decisions. The LLM never
-decides reasons; it receives reason codes with evidence and only phrases them.
+This is the current B5/B6 contract, superseding the initial explanation design
+above. The LLM only phrases selected reasons; code chooses contractors, order,
+primary reasons and supporting facts. No changes to ranking or model types.
 
-Hooks already in place: `ranking.score_all(eligible, request, scorer)` returns
-CardFacts for EVERY eligible contractor (rank 1..n, same order rule);
-`ranking.weights_for(request)` returns the weights dict (keys == model.FEATURES);
-`filtering.filter_pool(..., ignore_date=True)` drops the busy check.
-Types: `model.Reason`, `model.ReasonFamily`, `CardFacts.reasons`,
-`MatchResult.diversity_limited`.
+`reasons.assign(result, all_scored, contractors, scorer) -> MatchResult` returns
+new cards with reasons. `service.run` calls `ranking.score_all` for every eligible
+contractor, takes the first MAX_CARDS, then assigns reasons without reordering.
 
-### Contributions (exact, linear score)
-For card i and feature f: `phi_if = w_f * (x_if - mean_f(eligible))` where the
-mean is over ALL eligible (score_all), not just the top-3. Pairwise contrast
-against every other shown card j and against the best non-shown eligible k:
-`delta_ij_f = w_f * (x_if - x_jf)`. Round to 4 decimals.
+### Contributions
+
+For card i and feature f: `phi_if = w_f * (x_if - mean_f(eligible))`. The mean
+includes all eligible contractors, not just shown cards. Pairwise contrasts
+`delta_ij_f = w_f * (x_if - x_jf)` include other shown cards and the best unshown
+eligible contractor. Values are rounded to four decimals; weights come from
+`ranking.weights_for(request)`.
+
+### Aspect evidence
+
+Use `matcher.aspects.load_aspects()` and its documented offline JSON schema.
+Only positive aspects for which `Aspect.relevant_to(request.event_format)` is
+true qualify. Choose the lexicographically first tag among equally relevant
+aspects. Evidence is exactly `{"aspect": Aspect.label, "tag": Aspect.tag}`;
+labels come from `matcher.aspects.TAGS`.
+
+The offline tag's proof quote never enters reason evidence, prompt payloads or
+card text. Missing files, absent tags, negative/neutral tags and irrelevant tags
+yield no DESCRIPTION_ASPECT reason. The uniquely highest semantic score may
+still yield DESCRIPTION_CLOSEST_IN_SHOWN with empty evidence, supporting only.
 
 ### Taxonomy (codes -> evidence keys)
+
 | family | code | when | evidence |
 | --- | --- | --- | --- |
 | budget | BUDGET_HEADROOM | phi_budget > 0 or headroom_pct >= 30 | price, budget, headroom_pct |
-| budget | BUDGET_LOWER_THAN_SHOWN | cheapest among shown (unique) | price, next_price, diff_pct |
-| budget | BUDGET_FITS | always true for eligible; used only when nothing stronger | price, budget |
-| format | FORMAT_SUPPORTED | always (eligibility); never primary | format |
+| budget | BUDGET_LOWER_THAN_SHOWN | uniquely cheapest among shown | price, next_price, diff_pct |
+| budget | BUDGET_FITS | fallback, or tight budget with no other budget reason | price, budget |
+| format | FORMAT_SUPPORTED | eligibility; supporting only | format |
 | language | LANGUAGE_REQUEST_MATCH | language requested | language |
-| language | LANGUAGE_UNIQUE_IN_SHOWN | only shown card with lang L (L not requested) | language |
-| language | LANGUAGE_OPTIONS | 3 languages, no request | languages |
-| duration | DURATION_HEADROOM | hours requested, max_hours not None, phi_duration > 0 | requested_hours, max_hours |
-| duration | DURATION_MAX_IN_SHOWN | largest max_hours among shown (unique) | max_hours |
-| duration | DURATION_NOT_APPLICABLE | max_hours None (never primary unless nothing else) | — |
-| description_semantic | DESCRIPTION_ASPECT | phi_semantic > 0 or snippet exists; must carry a verbatim quote | quote (<= 120 chars, substring of description), semantic_score |
-| description_semantic | DESCRIPTION_CLOSEST_IN_SHOWN | highest semantic among shown (unique) | quote |
-| availability_contrast | AVAILABILITY_REPLACEMENT | i in top3(on date) and i not in top3(ignore date); competitor j in top3(ignore date), j busy on date, and i not in top3(eligible_on_date + [j]) | competitor, date |
-| availability_contrast | AVAILABILITY_ONLY_FREE | pool > 1 and eligible == 1 and >= 1 rejection is BUSY_ON_DATE | date, busy_count |
-| data_quality_caveat | PRICE_IMPUTED / CITY_IMPUTED / SYNTHETIC | flags | — (caveat, never primary) |
+| language | LANGUAGE_UNIQUE_IN_SHOWN | only shown card with unrequested language L | language |
+| language | LANGUAGE_OPTIONS | three languages, none requested | languages |
+| duration | DURATION_HEADROOM | hours requested, known max_hours, phi_duration > 0 | requested_hours, max_hours |
+| duration | DURATION_MAX_IN_SHOWN | uniquely largest max_hours among shown | max_hours |
+| duration | DURATION_NOT_APPLICABLE | max_hours is None; supporting only | — |
+| description_semantic | DESCRIPTION_ASPECT | relevant positive offline tag | aspect, tag |
+| description_semantic | DESCRIPTION_CLOSEST_IN_SHOWN | uniquely highest semantic among shown | aspect, tag if available; otherwise empty, supporting only |
+| availability_contrast | AVAILABILITY_REPLACEMENT | confirmed counterfactual displacement by busy competitor | competitor, date; scarcity when active |
+| availability_contrast | AVAILABILITY_ONLY_FREE | pool > 1, eligible == 1, at least one busy rejection | date; scarcity when active |
+| availability_contrast | AVAILABILITY_SCARCE | December or at least half the category pool busy; supporting only | scarcity |
+| data_quality_caveat | PRICE_IMPUTED / CITY_IMPUTED / SYNTHETIC | flags; never primary | — |
 
-### Selecting the primary reason per card, diverse across the triple
-1. Candidates for card i: reasons with contribution >= 0.2 * max positive
-   contribution of that card, plus AVAILABILITY_REPLACEMENT / *_IN_SHOWN /
-   LANGUAGE_REQUEST_MATCH when they apply (contrast reasons count as strong:
-   utility A = 1.0). Utility `U = 0.65*A + 0.25*D + 0.10*Q` with A = normalized
-   contribution (phi / max phi of card), D = normalized min delta vs other shown
-   cards for that feature, Q = 1 if the fact is unique in the shown set else 0.
-2. Triple: enumerate combinations (<= 6 candidates per card => <= 216),
-   maximize sum of U minus 0.5 per repeated code and 0.1 per repeated family;
-   ties -> lexicographic by codes. Card order is NEVER changed. If the best
-   combination still repeats a code, set MatchResult.diversity_limited=True.
-3. Output per card: primary first (primary=True), then up to 2 supporting
-   reasons (highest U, different family), then caveats. FORMAT_SUPPORTED is
-   included as supporting only when no other supporting reason exists.
-4. Evidence strings are pre-formatted with textfmt (money, dates) so the LLM
-   copies them verbatim.
+AVAILABILITY_REPLACEMENT requires i in top3(on date), i not in top3(ignore date),
+and a busy j in top3(ignore date) that passes all other filters. Restoring j alone
+to the eligible set must remove i from top3. Merely being outside the date-free
+top three does not prove replacement.
 
-`reasons.assign(result: MatchResult, all_scored: tuple[CardFacts, ...], contractors, scorer) -> MatchResult`
-returns a new MatchResult whose cards carry reasons. service.run calls
-score_all once, slices top-3, then assign().
+### Priority rules and diversity
+
+1. Base utility is `0.65*A + 0.25*D + 0.10*Q`: normalized positive contribution,
+   normalized minimum contrast against other shown cards, and unique evidence.
+   Contrast codes and LANGUAGE_REQUEST_MATCH use A = 1. Candidates normally
+   need at least 20% of the card's maximum positive contribution; strong contrast
+   and boosted pain-point reasons also qualify.
+2. Before truncating candidates or searching combinations, add deterministic
+   utility boosts: BUDGET_* +0.3 if exact budget headroom is below 15%;
+   AVAILABILITY_* +0.3 in December or when >= 50% of the pool has BUSY_ON_DATE;
+   LANGUAGE_REQUEST_MATCH +0.2 for a requested language; DURATION_HEADROOM +0.2
+   for requested hours. The budget comparison uses prices, avoiding rounding
+   errors at the 15% boundary. A rendered tight-budget reason says «впритык».
+3. Scarcity evidence is `{"scarcity": "в эту дату свободны N из M"}`. M is the
+   city/category pool size, N is M minus busy rejections, including contractors
+   rejected for other conditions. N is not eligible_count. Enrich existing
+   availability reasons or offer AVAILABILITY_SCARCE to every card.
+4. Enumerate up to six candidates per card. Maximize total boosted utility minus
+   0.5 per repeated code and 0.1 per repeated family. Ties use code/id tuples.
+   Set diversity_limited if the selected primary codes still repeat.
+5. Emit the primary, up to two supporting reasons from different families, then
+   caveats. Give scarcity a supporting slot when the primary is another family.
+   FORMAT_SUPPORTED fills an otherwise empty supporting slot. Evidence numbers
+   use `textfmt` display formats. Card scores, ids and order are preserved.
 
 ### Explanations from codes (matcher/explain.py)
-- Prompt payload per card: {id, имя, позиция, главная причина: {code, evidence},
-  поддерживающие: [...], оговорки: [...]} + запрос. No full description, no
-  raw flags. Rule to the model: the first sentence states the primary reason
-  with its numbers; the second may add one supporting reason or caveat.
-- TemplateExplainer renders from codes with one Russian phrase pattern per
-  code (3 variants keyed by rank), then joins: primary + 1 supporting + caveats.
-- Validator additions: the text must contain every number in the primary
-  reason's evidence (price/headroom/hours/date) and the competitor name for
-  AVAILABILITY_REPLACEMENT; quotes must be substrings of the description.
+
+- Prompt: request, ordered cards with code + «смысл» + whitelisted facts,
+  aspect labels/tags, names, caveats, and a single-line rejection count by reason.
+  Rejection counts may overlap. No description, snippet, proof quote, raw score
+  or raw flags. Rejection counts provide context, not extra allowed card numbers.
+- Each card has 1–2 sentences, 60–260 characters. Primary comes first; at most
+  one other reason and caveats follow. Templates use the same codes, retain
+  whole facts and include the card's name for differentiation. Callers without
+  reason codes receive structural templates, also without description quotes.
+- Replacement templates are short: «В тройке, потому что более привлекательный
+  вариант на эту дату занят ({competitor}).», «Более привлекательный вариант
+  ({competitor}) на эту дату занят, поэтому здесь {name}.», or «Поднялся в тройку:
+  {competitor} на эту дату занят.». A date is not required; the competitor is.
+- Validation checks length, sentence count, at least two grounded facts and
+  banned praise. Allowed numbers: price, budget, headroom_pct, next_price,
+  diff_pct, max_hours, requested_hours, date parts and scarcity N/M. Digits in
+  descriptions, names, proof quotes or arbitrary evidence do not extend this
+  set. Decimal values are checked whole. Require every primary number except
+  the optional replacement date, and the primary replacement's competitor name.
+- A «…» fragment of four or more words copied from the description is rejected,
+  including normalized case/whitespace and a trailing ellipsis. Primary codes
+  must differ unless diversity_limited is true.
+- Directed swap-test: for every i != j with different primary codes, collect the
+  numbers, names and aspect labels mentioned in text_i. At least one token must
+  be absent from j's allowed facts. Merely changing wording is insufficient.
+  Equal primary codes are exempt from this pairwise test; diversity validation
+  still applies. Relevant positive tags are included even if not selected as
+  j's headline. Any validation failure triggers templates for the whole result.
+- LLM settings remain temperature=0, seed=42, timeout=8, json_object. Memory and
+  file caches hash request, complete ordered cards, selected primary codes and
+  evidence, model and PROMPT_VERSION. Unordered busy-date sets are serialized
+  in sorted order, so file-cache replay works across processes. Only successful
+  LLM texts persist; fallbacks remain cached in memory.
