@@ -126,3 +126,24 @@
 .rejections ul{padding:0 20px 20px;line-height:1.7;font-size:13px;color:var(--muted)}
 .rejections li+li{margin-top:10px}
 @media(max-width:760px){.outcome-banner{padding:18px}.outcome-banner h2{font-size:21px}.vendor .vendor-name{font-size:24px}.result-footer{font-size:11px}}
+
+/* Generated ambient light; the overlay keeps even the brightest pixels quiet. */
+body{
+ background-color:var(--bg);
+ background-image:linear-gradient(rgba(25,27,25,.72),rgba(25,27,25,.88)),url('assets/bg-hero.webp'),url('assets/bg-hero-blur.webp');
+ background-size:cover;
+ background-position:center top;
+ background-repeat:no-repeat;
+ background-attachment:fixed;
+}
+.vendor,.catalog{background:color-mix(in srgb,var(--surface) 78%,transparent)}
+.header,.tonal-background .header,footer,.site-footer,.tonal-background .site-footer{background:color-mix(in srgb,var(--surface) 84%,transparent)}
+.tonal-background :is(.intro,.screen-heading,.result-top)::before{background:color-mix(in srgb,var(--intro-bg) 55%,transparent)}
+.outcome-banner{background:rgba(20,41,34,.82)}
+.outcome-banner[data-outcome="no_category_in_city"]{background:rgba(32,37,53,.82)}
+.outcome-banner[data-outcome="none_eligible"]{background:rgba(51,43,28,.82)}
+.outcome-banner[data-outcome="error"]{background:rgba(53,31,36,.82)}
+@media(min-width:761px){
+ .header{backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+}
+@media(max-width:760px){body{background-attachment:scroll}}

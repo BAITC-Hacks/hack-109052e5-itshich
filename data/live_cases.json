@@ -1,0 +1,3318 @@
+{
+  "generated_at": "2026-09-23T12:22:59.557297+00:00",
+  "git_sha": "1e69434",
+  "summary": {
+    "total": 17,
+    "passed": 17,
+    "failed": 0
+  },
+  "cases": [
+    {
+      "id": "case-01",
+      "title": "Корпоратив: три ведущих с запасом бюджета",
+      "request": {
+        "city": "Алматы",
+        "event_date": "2026-10-04",
+        "event_format": "корпоратив",
+        "category": "Ведущий",
+        "budget_kzt": 2000000,
+        "duration_hours": 4
+      },
+      "expect": {
+        "outcome": "matched",
+        "min_cards": 3,
+        "max_cards": 3
+      },
+      "status": "passed",
+      "checks": [
+        {
+          "name": "status_code",
+          "ok": true,
+          "detail": "Ожидалось: 200. Получено: 200."
+        },
+        {
+          "name": "outcome",
+          "ok": true,
+          "detail": "Ожидалось: \"matched\". Получено: \"matched\"."
+        },
+        {
+          "name": "min_cards",
+          "ok": true,
+          "detail": "Ожидалось: 3. Получено: 3."
+        },
+        {
+          "name": "max_cards",
+          "ok": true,
+          "detail": "Ожидалось: 3. Получено: 3."
+        }
+      ],
+      "response": {
+        "outcome": "matched",
+        "outcome_title_ru": "Подобрали",
+        "shortfall_note": "Условиям соответствуют 5 из 10; показаны 3 с лучшим баллом (не вошли: Аня Форджер, Софи Хаттер). Не прошли условия: 5 заняты на 04.10.2026 (Эмилия, Буллма, Мицури Канроджи, Хаул, Куррапика); 1 не поддерживает формат «корпоратив» (Эмилия). Причины могут пересекаться.",
+        "cards": [
+          {
+            "id": "HK-75012",
+            "name": "Джинбей",
+            "category": "Ведущий",
+            "city": "Алматы",
+            "price_from_kzt": 1300000,
+            "price_imputed": false,
+            "city_imputed": false,
+            "synthetic": false,
+            "explanation": "Джинбей в Алматы: опыт бизнес-форумов и конференций для корпоратива 04.10.2026. В эту дату свободны 5 из 10, а цена от 1 300 000 ₸ при бюджете 2 000 000 ₸ оставляет запас 35 %.",
+            "explanation_source": "llm",
+            "facts": {
+              "budget_headroom_pct": 35,
+              "format_matched": "корпоратив",
+              "languages_matched": [
+                "русский",
+                "английский"
+              ],
+              "requested_language": null,
+              "requested_hours": 4,
+              "max_hours": 6,
+              "duration_note": "fits",
+              "semantic_snippet": "Амбассадор Digital Sakura Almaty, участник медиапрограмм Formula 1, партнёр глобальных компаний — от PearTech до GateCard",
+              "semantic_score": 0.761,
+              "free_on_date": "2026-10-04",
+              "caveats": [],
+              "score": {
+                "budget_fit": 0.35,
+                "semantic": 0.761,
+                "language_fit": 0.6666666666666666,
+                "duration_fit": 0.33333333333333337,
+                "data_quality": 1.0,
+                "total": 0.6394
+              }
+            }
+          },
+          {
+            "id": "HK-35215",
+            "name": "Кики",
+            "category": "Ведущий",
+            "city": "Алматы",
+            "price_from_kzt": 900000,
+            "price_imputed": false,
+            "city_imputed": false,
+            "synthetic": false,
+            "explanation": "Кики укладывается в бюджет: цена от 900 000 ₸ при бюджете 2 000 000 ₸ даёт запас 55 %. Дополнительно есть ведение на нескольких языках, что полезно для корпоративного формата.",
+            "explanation_source": "llm",
+            "facts": {
+              "budget_headroom_pct": 55,
+              "format_matched": "корпоратив",
+              "languages_matched": [
+                "казахский",
+                "русский",
+                "английский"
+              ],
+              "requested_language": null,
+              "requested_hours": 4,
+              "max_hours": 10,
+              "duration_note": "fits",
+              "semantic_snippet": "Работает на казахском, русском и английском языках",
+              "semantic_score": 0.538,
+              "free_on_date": "2026-10-04",
+              "caveats": [],
+              "score": {
+                "budget_fit": 0.55,
+                "semantic": 0.538,
+                "language_fit": 1.0,
+                "duration_fit": 0.6,
+                "data_quality": 1.0,
+                "total": 0.5934
+              }
+            }
+          },
+          {
+            "id": "HK-27222",
+            "name": "Сон Гоку",
+            "category": "Ведущий",
+            "city": "Алматы",
+            "price_from_kzt": 1000000,
+            "price_imputed": false,
+            "city_imputed": false,
+            "synthetic": false,
+            "explanation": "Сон Гоку в тройке, потому что более привлекательный вариант на эту дату занят (Хаул). Цена от 1 000 000 ₸ при бюджете 2 000 000 ₸ оставляет запас 50 %, а лимит 10 ч закрывает 4 ч с запасом.",
+            "explanation_source": "llm",
+            "facts": {
+              "budget_headroom_pct": 50,
+              "format_matched": "корпоратив",
+              "languages_matched": [
+                "казахский",
+                "русский"
+              ],
+              "requested_language": null,
+              "requested_hours": 4,
+              "max_hours": 10,
+              "duration_note": "fits",
+              "semantic_snippet": "Начав карьеру на телевидении, Гоку стал голосом крупнейших медиа Казахстана и постоянным ведущим масштабных событий",
+              "semantic_score": 0.438,
+              "free_on_date": "2026-10-04",
+              "caveats": [],
+              "score": {
+                "budget_fit": 0.5,
+                "semantic": 0.438,
+                "language_fit": 0.6666666666666666,
+                "duration_fit": 0.6,
+                "data_quality": 1.0,
+                "total": 0.5259
+              }
+            }
+          }
+        ],
+        "rejections": [
+          {
+            "id": "HK-42352",
+            "name": "Эмилия",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              },
+              {
+                "code": "format_not_supported",
+                "label": "не берёт этот формат"
+              }
+            ]
+          },
+          {
+            "id": "HK-44733",
+            "name": "Буллма",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              }
+            ]
+          },
+          {
+            "id": "HK-44923",
+            "name": "Мицури Канроджи",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              }
+            ]
+          },
+          {
+            "id": "HK-77838",
+            "name": "Хаул",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              }
+            ]
+          },
+          {
+            "id": "HK-88430",
+            "name": "Куррапика",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              }
+            ]
+          }
+        ],
+        "pool_size": 10,
+        "eligible_count": 5,
+        "semantic_backend": "embeddings",
+        "timing_ms": 215.02
+      },
+      "card_reasons": {
+        "HK-75012": [
+          {
+            "code": "DESCRIPTION_ASPECT",
+            "family": "description_semantic",
+            "evidence": {
+              "aspect": "опыт бизнес-форумов и конференций",
+              "tag": "business_forum"
+            },
+            "contribution": 0.1551,
+            "primary": true
+          },
+          {
+            "code": "AVAILABILITY_SCARCE",
+            "family": "availability_contrast",
+            "evidence": {
+              "scarcity": "в эту дату свободны 5 из 10"
+            },
+            "contribution": 0.0,
+            "primary": false
+          },
+          {
+            "code": "BUDGET_HEADROOM",
+            "family": "budget",
+            "evidence": {
+              "price": "1 300 000 ₸",
+              "budget": "2 000 000 ₸",
+              "headroom_pct": "35"
+            },
+            "contribution": -0.015,
+            "primary": false
+          }
+        ],
+        "HK-35215": [
+          {
+            "code": "BUDGET_HEADROOM",
+            "family": "budget",
+            "evidence": {
+              "price": "900 000 ₸",
+              "budget": "2 000 000 ₸",
+              "headroom_pct": "55"
+            },
+            "contribution": 0.035,
+            "primary": true
+          },
+          {
+            "code": "AVAILABILITY_SCARCE",
+            "family": "availability_contrast",
+            "evidence": {
+              "scarcity": "в эту дату свободны 5 из 10"
+            },
+            "contribution": 0.0,
+            "primary": false
+          },
+          {
+            "code": "DESCRIPTION_ASPECT",
+            "family": "description_semantic",
+            "evidence": {
+              "aspect": "ведение на нескольких языках",
+              "tag": "multilingual_hosting"
+            },
+            "contribution": 0.0325,
+            "primary": false
+          }
+        ],
+        "HK-27222": [
+          {
+            "code": "AVAILABILITY_REPLACEMENT",
+            "family": "availability_contrast",
+            "evidence": {
+              "competitor": "Хаул",
+              "date": "04.10.2026",
+              "scarcity": "в эту дату свободны 5 из 10"
+            },
+            "contribution": 0.0,
+            "primary": true
+          },
+          {
+            "code": "BUDGET_HEADROOM",
+            "family": "budget",
+            "evidence": {
+              "price": "1 000 000 ₸",
+              "budget": "2 000 000 ₸",
+              "headroom_pct": "50"
+            },
+            "contribution": 0.0225,
+            "primary": false
+          },
+          {
+            "code": "DURATION_HEADROOM",
+            "family": "duration",
+            "evidence": {
+              "requested_hours": "4",
+              "max_hours": "10"
+            },
+            "contribution": 0.0127,
+            "primary": false
+          }
+        ]
+      },
+      "timing_ms": 424.31,
+      "explanation_source": [
+        "llm"
+      ],
+      "semantic_backend": "embeddings"
+    },
+    {
+      "id": "case-02",
+      "title": "Флористы: в городе только два профиля",
+      "request": {
+        "city": "Алматы",
+        "event_date": "2026-10-04",
+        "event_format": "свадьба",
+        "category": "Флорист",
+        "budget_kzt": 250000
+      },
+      "expect": {
+        "outcome": "matched",
+        "min_cards": 2,
+        "max_cards": 2
+      },
+      "status": "passed",
+      "checks": [
+        {
+          "name": "status_code",
+          "ok": true,
+          "detail": "Ожидалось: 200. Получено: 200."
+        },
+        {
+          "name": "outcome",
+          "ok": true,
+          "detail": "Ожидалось: \"matched\". Получено: \"matched\"."
+        },
+        {
+          "name": "min_cards",
+          "ok": true,
+          "detail": "Ожидалось: 2. Получено: 2."
+        },
+        {
+          "name": "max_cards",
+          "ok": true,
+          "detail": "Ожидалось: 2. Получено: 2."
+        }
+      ],
+      "response": {
+        "outcome": "matched",
+        "outcome_title_ru": "Подобрали",
+        "shortfall_note": "Показано 2 из 3: в городе всего 2 профиля этой категории.",
+        "cards": [
+          {
+            "id": "HK-39372",
+            "name": "Тони Тони Чоппер",
+            "category": "Флорист",
+            "city": "Алматы",
+            "price_from_kzt": 200000,
+            "price_imputed": true,
+            "city_imputed": false,
+            "synthetic": false,
+            "explanation": "Тони Тони Чоппер: цена от 200 000 ₸ при бюджете 250 000 ₸, запас 20 %. Работа не привязана к присутствию на площадке, а цена проставлена при подготовке датасета, уточняйте.",
+            "explanation_source": "llm",
+            "facts": {
+              "budget_headroom_pct": 20,
+              "format_matched": "свадьба",
+              "languages_matched": [
+                "русский"
+              ],
+              "requested_language": null,
+              "requested_hours": null,
+              "max_hours": null,
+              "duration_note": "not_requested",
+              "semantic_snippet": "Мы специализируемся на авторском цветочном оформлении и флористике для мероприятий в Алматы",
+              "semantic_score": 1.0,
+              "free_on_date": "2026-10-04",
+              "caveats": [
+                "price_imputed"
+              ],
+              "score": {
+                "budget_fit": 0.19999999999999996,
+                "semantic": 1.0,
+                "language_fit": 0.3333333333333333,
+                "duration_fit": 0.5,
+                "data_quality": 0.5,
+                "total": 0.725
+              }
+            }
+          },
+          {
+            "id": "HK-90001",
+            "name": "Тихиро Огино",
+            "category": "Флорист",
+            "city": "Алматы",
+            "price_from_kzt": 250000,
+            "price_imputed": false,
+            "city_imputed": false,
+            "synthetic": true,
+            "explanation": "Тихиро Огино: среди показанных только здесь заявлен казахский язык. Цена от 250 000 ₸ укладывается в бюджет 250 000 ₸, плюс есть опыт свадебных церемоний.",
+            "explanation_source": "llm",
+            "facts": {
+              "budget_headroom_pct": 0,
+              "format_matched": "свадьба",
+              "languages_matched": [
+                "русский",
+                "казахский"
+              ],
+              "requested_language": null,
+              "requested_hours": null,
+              "max_hours": null,
+              "duration_note": "not_requested",
+              "semantic_snippet": "White Sakura Studio — авторская флористика для свадеб и юбилеев",
+              "semantic_score": 1.0,
+              "free_on_date": "2026-10-04",
+              "caveats": [
+                "synthetic"
+              ],
+              "score": {
+                "budget_fit": 0.0,
+                "semantic": 1.0,
+                "language_fit": 0.6666666666666666,
+                "duration_fit": 0.5,
+                "data_quality": 0.75,
+                "total": 0.7125
+              }
+            }
+          }
+        ],
+        "rejections": [],
+        "pool_size": 2,
+        "eligible_count": 2,
+        "semantic_backend": "embeddings",
+        "timing_ms": 191.4
+      },
+      "card_reasons": {
+        "HK-39372": [
+          {
+            "code": "BUDGET_HEADROOM",
+            "family": "budget",
+            "evidence": {
+              "price": "200 000 ₸",
+              "budget": "250 000 ₸",
+              "headroom_pct": "20"
+            },
+            "contribution": 0.025,
+            "primary": true
+          },
+          {
+            "code": "DURATION_NOT_APPLICABLE",
+            "family": "duration",
+            "evidence": {},
+            "contribution": 0.0,
+            "primary": false
+          },
+          {
+            "code": "PRICE_IMPUTED",
+            "family": "data_quality_caveat",
+            "evidence": {},
+            "contribution": 0.0,
+            "primary": false
+          }
+        ],
+        "HK-90001": [
+          {
+            "code": "LANGUAGE_UNIQUE_IN_SHOWN",
+            "family": "language",
+            "evidence": {
+              "language": "казахский"
+            },
+            "contribution": 0.0,
+            "primary": true
+          },
+          {
+            "code": "BUDGET_FITS",
+            "family": "budget",
+            "evidence": {
+              "price": "250 000 ₸",
+              "budget": "250 000 ₸"
+            },
+            "contribution": -0.025,
+            "primary": false
+          },
+          {
+            "code": "DESCRIPTION_ASPECT",
+            "family": "description_semantic",
+            "evidence": {
+              "aspect": "опыт свадебных церемоний",
+              "tag": "wedding_ceremony"
+            },
+            "contribution": 0.0,
+            "primary": false
+          },
+          {
+            "code": "SYNTHETIC",
+            "family": "data_quality_caveat",
+            "evidence": {},
+            "contribution": 0.0,
+            "primary": false
+          }
+        ]
+      },
+      "timing_ms": 389.68,
+      "explanation_source": [
+        "llm"
+      ],
+      "semantic_backend": "embeddings"
+    },
+    {
+      "id": "case-03",
+      "title": "Декоратор: категории нет в Астане",
+      "request": {
+        "city": "Астана",
+        "event_date": "2026-10-04",
+        "event_format": "свадьба",
+        "category": "Декоратор",
+        "budget_kzt": 250000
+      },
+      "expect": {
+        "outcome": "no_category_in_city",
+        "min_cards": 0,
+        "max_cards": 0
+      },
+      "status": "passed",
+      "checks": [
+        {
+          "name": "status_code",
+          "ok": true,
+          "detail": "Ожидалось: 200. Получено: 200."
+        },
+        {
+          "name": "outcome",
+          "ok": true,
+          "detail": "Ожидалось: \"no_category_in_city\". Получено: \"no_category_in_city\"."
+        },
+        {
+          "name": "min_cards",
+          "ok": true,
+          "detail": "Ожидалось: 0. Получено: 0."
+        },
+        {
+          "name": "max_cards",
+          "ok": true,
+          "detail": "Ожидалось: 0. Получено: 0."
+        }
+      ],
+      "response": {
+        "outcome": "no_category_in_city",
+        "outcome_title_ru": "В этом городе такой категории нет",
+        "shortfall_note": "В городе Астана нет подрядчиков категории «Декоратор». Ближайшие варианты: категории с похожим назначением в этом городе: Подарки и сувениры, Флорист. Категория есть в Алматы: 3 профиля.",
+        "cards": [],
+        "rejections": [],
+        "pool_size": 0,
+        "eligible_count": 0,
+        "semantic_backend": "embeddings",
+        "timing_ms": 189.61
+      },
+      "card_reasons": {},
+      "timing_ms": 193.84,
+      "explanation_source": [],
+      "semantic_backend": "embeddings"
+    },
+    {
+      "id": "case-04",
+      "title": "Ведущие: занятость и низкий бюджет",
+      "request": {
+        "city": "Алматы",
+        "event_date": "2026-10-02",
+        "event_format": "корпоратив",
+        "category": "Ведущий",
+        "budget_kzt": 500000,
+        "duration_hours": 4
+      },
+      "expect": {
+        "outcome": "none_eligible",
+        "min_cards": 0,
+        "max_cards": 0
+      },
+      "status": "passed",
+      "checks": [
+        {
+          "name": "status_code",
+          "ok": true,
+          "detail": "Ожидалось: 200. Получено: 200."
+        },
+        {
+          "name": "outcome",
+          "ok": true,
+          "detail": "Ожидалось: \"none_eligible\". Получено: \"none_eligible\"."
+        },
+        {
+          "name": "min_cards",
+          "ok": true,
+          "detail": "Ожидалось: 0. Получено: 0."
+        },
+        {
+          "name": "max_cards",
+          "ok": true,
+          "detail": "Ожидалось: 0. Получено: 0."
+        }
+      ],
+      "response": {
+        "outcome": "none_eligible",
+        "outcome_title_ru": "Кандидаты есть, но ни один не проходит по условиям",
+        "shortfall_note": "Кандидаты в категории есть (10), но ни один не проходит: 8 заняты на 02.10.2026 (Сон Гоку, Аня Форджер, Эмилия, Мицури Канроджи, Софи Хаттер, Джинбей, Хаул, Куррапика); 9 дороже бюджета (Сон Гоку, Аня Форджер, Кики, Эмилия, Буллма, Мицури Канроджи, Софи Хаттер, Джинбей, Хаул; цены от: 650 000 ₸, 700 000 ₸, 900 000 ₸, 1 000 000 ₸, 1 300 000 ₸, 2 000 000 ₸; бюджет 500 000 ₸); 1 не поддерживает формат «корпоратив» (Эмилия). Причины могут пересекаться.",
+        "cards": [],
+        "rejections": [
+          {
+            "id": "HK-27222",
+            "name": "Сон Гоку",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              },
+              {
+                "code": "over_budget",
+                "label": "цена от выше бюджета"
+              }
+            ]
+          },
+          {
+            "id": "HK-29829",
+            "name": "Аня Форджер",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              },
+              {
+                "code": "over_budget",
+                "label": "цена от выше бюджета"
+              }
+            ]
+          },
+          {
+            "id": "HK-35215",
+            "name": "Кики",
+            "reasons": [
+              {
+                "code": "over_budget",
+                "label": "цена от выше бюджета"
+              }
+            ]
+          },
+          {
+            "id": "HK-42352",
+            "name": "Эмилия",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              },
+              {
+                "code": "over_budget",
+                "label": "цена от выше бюджета"
+              },
+              {
+                "code": "format_not_supported",
+                "label": "не берёт этот формат"
+              }
+            ]
+          },
+          {
+            "id": "HK-44733",
+            "name": "Буллма",
+            "reasons": [
+              {
+                "code": "over_budget",
+                "label": "цена от выше бюджета"
+              }
+            ]
+          },
+          {
+            "id": "HK-44923",
+            "name": "Мицури Канроджи",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              },
+              {
+                "code": "over_budget",
+                "label": "цена от выше бюджета"
+              }
+            ]
+          },
+          {
+            "id": "HK-72938",
+            "name": "Софи Хаттер",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              },
+              {
+                "code": "over_budget",
+                "label": "цена от выше бюджета"
+              }
+            ]
+          },
+          {
+            "id": "HK-75012",
+            "name": "Джинбей",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              },
+              {
+                "code": "over_budget",
+                "label": "цена от выше бюджета"
+              }
+            ]
+          },
+          {
+            "id": "HK-77838",
+            "name": "Хаул",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              },
+              {
+                "code": "over_budget",
+                "label": "цена от выше бюджета"
+              }
+            ]
+          },
+          {
+            "id": "HK-88430",
+            "name": "Куррапика",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              }
+            ]
+          }
+        ],
+        "pool_size": 10,
+        "eligible_count": 0,
+        "semantic_backend": "embeddings",
+        "timing_ms": 190.07
+      },
+      "card_reasons": {},
+      "timing_ms": 194.28,
+      "explanation_source": [],
+      "semantic_backend": "embeddings"
+    },
+    {
+      "id": "case-05",
+      "title": "Смена даты, 4 октября: Хаул занят",
+      "request": {
+        "city": "Алматы",
+        "event_date": "2026-10-04",
+        "event_format": "корпоратив",
+        "category": "Ведущий",
+        "budget_kzt": 2000000,
+        "duration_hours": 4
+      },
+      "expect": {
+        "outcome": "matched",
+        "min_cards": 3,
+        "max_cards": 3,
+        "must_exclude_ids": [
+          "HK-77838"
+        ]
+      },
+      "status": "passed",
+      "checks": [
+        {
+          "name": "status_code",
+          "ok": true,
+          "detail": "Ожидалось: 200. Получено: 200."
+        },
+        {
+          "name": "outcome",
+          "ok": true,
+          "detail": "Ожидалось: \"matched\". Получено: \"matched\"."
+        },
+        {
+          "name": "min_cards",
+          "ok": true,
+          "detail": "Ожидалось: 3. Получено: 3."
+        },
+        {
+          "name": "max_cards",
+          "ok": true,
+          "detail": "Ожидалось: 3. Получено: 3."
+        },
+        {
+          "name": "must_exclude_ids",
+          "ok": true,
+          "detail": "Ожидалось: [\"HK-77838\"]. Получено: [\"HK-75012\", \"HK-35215\", \"HK-27222\"]."
+        }
+      ],
+      "response": {
+        "outcome": "matched",
+        "outcome_title_ru": "Подобрали",
+        "shortfall_note": "Условиям соответствуют 5 из 10; показаны 3 с лучшим баллом (не вошли: Аня Форджер, Софи Хаттер). Не прошли условия: 5 заняты на 04.10.2026 (Эмилия, Буллма, Мицури Канроджи, Хаул, Куррапика); 1 не поддерживает формат «корпоратив» (Эмилия). Причины могут пересекаться.",
+        "cards": [
+          {
+            "id": "HK-75012",
+            "name": "Джинбей",
+            "category": "Ведущий",
+            "city": "Алматы",
+            "price_from_kzt": 1300000,
+            "price_imputed": false,
+            "city_imputed": false,
+            "synthetic": false,
+            "explanation": "Джинбей в Алматы: опыт бизнес-форумов и конференций для корпоратива 04.10.2026. В эту дату свободны 5 из 10, а цена от 1 300 000 ₸ при бюджете 2 000 000 ₸ оставляет запас 35 %.",
+            "explanation_source": "llm",
+            "facts": {
+              "budget_headroom_pct": 35,
+              "format_matched": "корпоратив",
+              "languages_matched": [
+                "русский",
+                "английский"
+              ],
+              "requested_language": null,
+              "requested_hours": 4,
+              "max_hours": 6,
+              "duration_note": "fits",
+              "semantic_snippet": "Амбассадор Digital Sakura Almaty, участник медиапрограмм Formula 1, партнёр глобальных компаний — от PearTech до GateCard",
+              "semantic_score": 0.761,
+              "free_on_date": "2026-10-04",
+              "caveats": [],
+              "score": {
+                "budget_fit": 0.35,
+                "semantic": 0.761,
+                "language_fit": 0.6666666666666666,
+                "duration_fit": 0.33333333333333337,
+                "data_quality": 1.0,
+                "total": 0.6394
+              }
+            }
+          },
+          {
+            "id": "HK-35215",
+            "name": "Кики",
+            "category": "Ведущий",
+            "city": "Алматы",
+            "price_from_kzt": 900000,
+            "price_imputed": false,
+            "city_imputed": false,
+            "synthetic": false,
+            "explanation": "Кики укладывается в бюджет: цена от 900 000 ₸ при бюджете 2 000 000 ₸ даёт запас 55 %. Дополнительно есть ведение на нескольких языках, что полезно для корпоративного формата.",
+            "explanation_source": "llm",
+            "facts": {
+              "budget_headroom_pct": 55,
+              "format_matched": "корпоратив",
+              "languages_matched": [
+                "казахский",
+                "русский",
+                "английский"
+              ],
+              "requested_language": null,
+              "requested_hours": 4,
+              "max_hours": 10,
+              "duration_note": "fits",
+              "semantic_snippet": "Работает на казахском, русском и английском языках",
+              "semantic_score": 0.538,
+              "free_on_date": "2026-10-04",
+              "caveats": [],
+              "score": {
+                "budget_fit": 0.55,
+                "semantic": 0.538,
+                "language_fit": 1.0,
+                "duration_fit": 0.6,
+                "data_quality": 1.0,
+                "total": 0.5934
+              }
+            }
+          },
+          {
+            "id": "HK-27222",
+            "name": "Сон Гоку",
+            "category": "Ведущий",
+            "city": "Алматы",
+            "price_from_kzt": 1000000,
+            "price_imputed": false,
+            "city_imputed": false,
+            "synthetic": false,
+            "explanation": "Сон Гоку в тройке, потому что более привлекательный вариант на эту дату занят (Хаул). Цена от 1 000 000 ₸ при бюджете 2 000 000 ₸ оставляет запас 50 %, а лимит 10 ч закрывает 4 ч с запасом.",
+            "explanation_source": "llm",
+            "facts": {
+              "budget_headroom_pct": 50,
+              "format_matched": "корпоратив",
+              "languages_matched": [
+                "казахский",
+                "русский"
+              ],
+              "requested_language": null,
+              "requested_hours": 4,
+              "max_hours": 10,
+              "duration_note": "fits",
+              "semantic_snippet": "Начав карьеру на телевидении, Гоку стал голосом крупнейших медиа Казахстана и постоянным ведущим масштабных событий",
+              "semantic_score": 0.438,
+              "free_on_date": "2026-10-04",
+              "caveats": [],
+              "score": {
+                "budget_fit": 0.5,
+                "semantic": 0.438,
+                "language_fit": 0.6666666666666666,
+                "duration_fit": 0.6,
+                "data_quality": 1.0,
+                "total": 0.5259
+              }
+            }
+          }
+        ],
+        "rejections": [
+          {
+            "id": "HK-42352",
+            "name": "Эмилия",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              },
+              {
+                "code": "format_not_supported",
+                "label": "не берёт этот формат"
+              }
+            ]
+          },
+          {
+            "id": "HK-44733",
+            "name": "Буллма",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              }
+            ]
+          },
+          {
+            "id": "HK-44923",
+            "name": "Мицури Канроджи",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              }
+            ]
+          },
+          {
+            "id": "HK-77838",
+            "name": "Хаул",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              }
+            ]
+          },
+          {
+            "id": "HK-88430",
+            "name": "Куррапика",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              }
+            ]
+          }
+        ],
+        "pool_size": 10,
+        "eligible_count": 5,
+        "semantic_backend": "embeddings",
+        "timing_ms": 194.41
+      },
+      "card_reasons": {
+        "HK-75012": [
+          {
+            "code": "DESCRIPTION_ASPECT",
+            "family": "description_semantic",
+            "evidence": {
+              "aspect": "опыт бизнес-форумов и конференций",
+              "tag": "business_forum"
+            },
+            "contribution": 0.1551,
+            "primary": true
+          },
+          {
+            "code": "AVAILABILITY_SCARCE",
+            "family": "availability_contrast",
+            "evidence": {
+              "scarcity": "в эту дату свободны 5 из 10"
+            },
+            "contribution": 0.0,
+            "primary": false
+          },
+          {
+            "code": "BUDGET_HEADROOM",
+            "family": "budget",
+            "evidence": {
+              "price": "1 300 000 ₸",
+              "budget": "2 000 000 ₸",
+              "headroom_pct": "35"
+            },
+            "contribution": -0.015,
+            "primary": false
+          }
+        ],
+        "HK-35215": [
+          {
+            "code": "BUDGET_HEADROOM",
+            "family": "budget",
+            "evidence": {
+              "price": "900 000 ₸",
+              "budget": "2 000 000 ₸",
+              "headroom_pct": "55"
+            },
+            "contribution": 0.035,
+            "primary": true
+          },
+          {
+            "code": "AVAILABILITY_SCARCE",
+            "family": "availability_contrast",
+            "evidence": {
+              "scarcity": "в эту дату свободны 5 из 10"
+            },
+            "contribution": 0.0,
+            "primary": false
+          },
+          {
+            "code": "DESCRIPTION_ASPECT",
+            "family": "description_semantic",
+            "evidence": {
+              "aspect": "ведение на нескольких языках",
+              "tag": "multilingual_hosting"
+            },
+            "contribution": 0.0325,
+            "primary": false
+          }
+        ],
+        "HK-27222": [
+          {
+            "code": "AVAILABILITY_REPLACEMENT",
+            "family": "availability_contrast",
+            "evidence": {
+              "competitor": "Хаул",
+              "date": "04.10.2026",
+              "scarcity": "в эту дату свободны 5 из 10"
+            },
+            "contribution": 0.0,
+            "primary": true
+          },
+          {
+            "code": "BUDGET_HEADROOM",
+            "family": "budget",
+            "evidence": {
+              "price": "1 000 000 ₸",
+              "budget": "2 000 000 ₸",
+              "headroom_pct": "50"
+            },
+            "contribution": 0.0225,
+            "primary": false
+          },
+          {
+            "code": "DURATION_HEADROOM",
+            "family": "duration",
+            "evidence": {
+              "requested_hours": "4",
+              "max_hours": "10"
+            },
+            "contribution": 0.0127,
+            "primary": false
+          }
+        ]
+      },
+      "timing_ms": 394.69,
+      "explanation_source": [
+        "llm"
+      ],
+      "semantic_backend": "embeddings"
+    },
+    {
+      "id": "case-06",
+      "title": "Смена даты, 5 октября: замена занятого Джинбея",
+      "request": {
+        "city": "Алматы",
+        "event_date": "2026-10-05",
+        "event_format": "корпоратив",
+        "category": "Ведущий",
+        "budget_kzt": 2000000,
+        "duration_hours": 4
+      },
+      "expect": {
+        "outcome": "matched",
+        "min_cards": 3,
+        "max_cards": 3,
+        "must_exclude_ids": [
+          "HK-75012"
+        ],
+        "primary_codes_any": [
+          "AVAILABILITY_REPLACEMENT"
+        ]
+      },
+      "status": "passed",
+      "checks": [
+        {
+          "name": "status_code",
+          "ok": true,
+          "detail": "Ожидалось: 200. Получено: 200."
+        },
+        {
+          "name": "outcome",
+          "ok": true,
+          "detail": "Ожидалось: \"matched\". Получено: \"matched\"."
+        },
+        {
+          "name": "min_cards",
+          "ok": true,
+          "detail": "Ожидалось: 3. Получено: 3."
+        },
+        {
+          "name": "max_cards",
+          "ok": true,
+          "detail": "Ожидалось: 3. Получено: 3."
+        },
+        {
+          "name": "must_exclude_ids",
+          "ok": true,
+          "detail": "Ожидалось: [\"HK-75012\"]. Получено: [\"HK-77838\", \"HK-44733\", \"HK-88430\"]."
+        },
+        {
+          "name": "primary_codes_any",
+          "ok": true,
+          "detail": "Ожидалось: [\"AVAILABILITY_REPLACEMENT\"]. Получено: [\"DESCRIPTION_ASPECT\", \"LANGUAGE_UNIQUE_IN_SHOWN\", \"AVAILABILITY_REPLACEMENT\"]."
+        }
+      ],
+      "response": {
+        "outcome": "matched",
+        "outcome_title_ru": "Подобрали",
+        "shortfall_note": "Условиям соответствуют 4 из 10; показаны 3 с лучшим баллом (не вошли: Софи Хаттер). Не прошли условия: 5 заняты на 05.10.2026 (Сон Гоку, Аня Форджер, Кики, Мицури Канроджи, Джинбей); 1 не поддерживает формат «корпоратив» (Эмилия).",
+        "cards": [
+          {
+            "id": "HK-77838",
+            "name": "Хаул",
+            "category": "Ведущий",
+            "city": "Алматы",
+            "price_from_kzt": 1000000,
+            "price_imputed": false,
+            "city_imputed": false,
+            "synthetic": false,
+            "explanation": "Хаул в тройке за импровизацию и живое общение с залом для корпоратива в Алматы. В эту дату свободны 5 из 10, а лимит по длительности — до 8 ч.",
+            "explanation_source": "llm",
+            "facts": {
+              "budget_headroom_pct": 50,
+              "format_matched": "корпоратив",
+              "languages_matched": [
+                "русский",
+                "казахский"
+              ],
+              "requested_language": null,
+              "requested_hours": 4,
+              "max_hours": 8,
+              "duration_note": "fits",
+              "semantic_snippet": "Язык проведения: казахский",
+              "semantic_score": 0.839,
+              "free_on_date": "2026-10-05",
+              "caveats": [],
+              "score": {
+                "budget_fit": 0.5,
+                "semantic": 0.839,
+                "language_fit": 0.6666666666666666,
+                "duration_fit": 0.5,
+                "data_quality": 1.0,
+                "total": 0.7365
+              }
+            }
+          },
+          {
+            "id": "HK-44733",
+            "name": "Буллма",
+            "category": "Ведущий",
+            "city": "Алматы",
+            "price_from_kzt": 1000000,
+            "price_imputed": false,
+            "city_imputed": false,
+            "synthetic": false,
+            "explanation": "Буллма выделяется тем, что среди показанных только здесь заявлен английский. Для корпоративного формата дополнительно подходит опыт бизнес-форумов и конференций.",
+            "explanation_source": "llm",
+            "facts": {
+              "budget_headroom_pct": 50,
+              "format_matched": "корпоратив",
+              "languages_matched": [
+                "русский",
+                "английский"
+              ],
+              "requested_language": null,
+              "requested_hours": 4,
+              "max_hours": 6,
+              "duration_note": "fits",
+              "semantic_snippet": "Ведущий мероприятий с опытом работы более 10 лет",
+              "semantic_score": 0.687,
+              "free_on_date": "2026-10-05",
+              "caveats": [],
+              "score": {
+                "budget_fit": 0.5,
+                "semantic": 0.687,
+                "language_fit": 0.6666666666666666,
+                "duration_fit": 0.33333333333333337,
+                "data_quality": 1.0,
+                "total": 0.6362
+              }
+            }
+          },
+          {
+            "id": "HK-88430",
+            "name": "Куррапика",
+            "category": "Ведущий",
+            "city": "Алматы",
+            "price_from_kzt": 500000,
+            "price_imputed": false,
+            "city_imputed": false,
+            "synthetic": false,
+            "explanation": "Куррапика в тройке, потому что более привлекательный вариант на 05.10.2026 занят (Джинбей). Цена от 500 000 ₸ при бюджете 2 000 000 ₸, запас 75 %.",
+            "explanation_source": "llm",
+            "facts": {
+              "budget_headroom_pct": 75,
+              "format_matched": "корпоратив",
+              "languages_matched": [
+                "русский"
+              ],
+              "requested_language": null,
+              "requested_hours": 4,
+              "max_hours": 6,
+              "duration_note": "fits",
+              "semantic_snippet": "Специализируюсь на проведении корпоративных мероприятий, торжеств и деловых встреч",
+              "semantic_score": 0.357,
+              "free_on_date": "2026-10-05",
+              "caveats": [],
+              "score": {
+                "budget_fit": 0.75,
+                "semantic": 0.357,
+                "language_fit": 0.3333333333333333,
+                "duration_fit": 0.33333333333333337,
+                "data_quality": 1.0,
+                "total": 0.5172
+              }
+            }
+          }
+        ],
+        "rejections": [
+          {
+            "id": "HK-27222",
+            "name": "Сон Гоку",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              }
+            ]
+          },
+          {
+            "id": "HK-29829",
+            "name": "Аня Форджер",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              }
+            ]
+          },
+          {
+            "id": "HK-35215",
+            "name": "Кики",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              }
+            ]
+          },
+          {
+            "id": "HK-42352",
+            "name": "Эмилия",
+            "reasons": [
+              {
+                "code": "format_not_supported",
+                "label": "не берёт этот формат"
+              }
+            ]
+          },
+          {
+            "id": "HK-44923",
+            "name": "Мицури Канроджи",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              }
+            ]
+          },
+          {
+            "id": "HK-75012",
+            "name": "Джинбей",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              }
+            ]
+          }
+        ],
+        "pool_size": 10,
+        "eligible_count": 4,
+        "semantic_backend": "embeddings",
+        "timing_ms": 190.37
+      },
+      "card_reasons": {
+        "HK-77838": [
+          {
+            "code": "DESCRIPTION_ASPECT",
+            "family": "description_semantic",
+            "evidence": {
+              "aspect": "импровизация и живое общение с залом",
+              "tag": "improvisation"
+            },
+            "contribution": 0.1255,
+            "primary": true
+          },
+          {
+            "code": "AVAILABILITY_SCARCE",
+            "family": "availability_contrast",
+            "evidence": {
+              "scarcity": "в эту дату свободны 5 из 10"
+            },
+            "contribution": 0.0,
+            "primary": false
+          },
+          {
+            "code": "DURATION_MAX_IN_SHOWN",
+            "family": "duration",
+            "evidence": {
+              "max_hours": "8"
+            },
+            "contribution": 0.0083,
+            "primary": false
+          }
+        ],
+        "HK-44733": [
+          {
+            "code": "LANGUAGE_UNIQUE_IN_SHOWN",
+            "family": "language",
+            "evidence": {
+              "language": "английский"
+            },
+            "contribution": 0.0,
+            "primary": true
+          },
+          {
+            "code": "AVAILABILITY_SCARCE",
+            "family": "availability_contrast",
+            "evidence": {
+              "scarcity": "в эту дату свободны 5 из 10"
+            },
+            "contribution": 0.0,
+            "primary": false
+          },
+          {
+            "code": "DESCRIPTION_ASPECT",
+            "family": "description_semantic",
+            "evidence": {
+              "aspect": "опыт бизнес-форумов и конференций",
+              "tag": "business_forum"
+            },
+            "contribution": 0.0419,
+            "primary": false
+          }
+        ],
+        "HK-88430": [
+          {
+            "code": "AVAILABILITY_REPLACEMENT",
+            "family": "availability_contrast",
+            "evidence": {
+              "competitor": "Джинбей",
+              "date": "05.10.2026",
+              "scarcity": "в эту дату свободны 5 из 10"
+            },
+            "contribution": 0.0,
+            "primary": true
+          },
+          {
+            "code": "BUDGET_HEADROOM",
+            "family": "budget",
+            "evidence": {
+              "price": "500 000 ₸",
+              "budget": "2 000 000 ₸",
+              "headroom_pct": "75"
+            },
+            "contribution": 0.0781,
+            "primary": false
+          }
+        ]
+      },
+      "timing_ms": 388.12,
+      "explanation_source": [
+        "llm"
+      ],
+      "semantic_backend": "embeddings"
+    },
+    {
+      "id": "case-07",
+      "title": "Декабрьский корпоратив: английский язык, пять часов",
+      "request": {
+        "city": "Алматы",
+        "event_date": "2026-12-19",
+        "event_format": "корпоратив",
+        "category": "Ведущий",
+        "budget_kzt": 1500000,
+        "duration_hours": 5,
+        "language": "английский"
+      },
+      "expect": {
+        "outcome": "matched",
+        "min_cards": 1,
+        "max_cards": 1,
+        "primary_codes_any": [
+          "LANGUAGE_REQUEST_MATCH"
+        ]
+      },
+      "status": "passed",
+      "checks": [
+        {
+          "name": "status_code",
+          "ok": true,
+          "detail": "Ожидалось: 200. Получено: 200."
+        },
+        {
+          "name": "outcome",
+          "ok": true,
+          "detail": "Ожидалось: \"matched\". Получено: \"matched\"."
+        },
+        {
+          "name": "min_cards",
+          "ok": true,
+          "detail": "Ожидалось: 1. Получено: 1."
+        },
+        {
+          "name": "max_cards",
+          "ok": true,
+          "detail": "Ожидалось: 1. Получено: 1."
+        },
+        {
+          "name": "primary_codes_any",
+          "ok": true,
+          "detail": "Ожидалось: [\"LANGUAGE_REQUEST_MATCH\"]. Получено: [\"LANGUAGE_REQUEST_MATCH\"]."
+        }
+      ],
+      "response": {
+        "outcome": "matched",
+        "outcome_title_ru": "Подобрали",
+        "shortfall_note": "Показано 1 из 3: в категории 10 профилей, 9 заняты на 19.12.2026 (Сон Гоку, Аня Форджер, Эмилия, Буллма, Мицури Канроджи, Софи Хаттер, Джинбей, Хаул, Куррапика); 1 дороже бюджета (Софи Хаттер; цена от 2 000 000 ₸ при бюджете 1 500 000 ₸); 1 не поддерживает формат «корпоратив» (Эмилия); 7 не поддерживают язык «английский» (Сон Гоку, Аня Форджер, Эмилия, Мицури Канроджи, Софи Хаттер, Хаул, Куррапика). Причины могут пересекаться.",
+        "cards": [
+          {
+            "id": "HK-35215",
+            "name": "Кики",
+            "category": "Ведущий",
+            "city": "Алматы",
+            "price_from_kzt": 900000,
+            "price_imputed": false,
+            "city_imputed": false,
+            "synthetic": false,
+            "explanation": "Кики работает на английском, как и требуется для корпоратива в Алматы. На 19.12.2026 это единственный подходящий вариант: свободны 1 из 10; цена от 900 000 ₸ при бюджете 1 500 000 ₸.",
+            "explanation_source": "llm",
+            "facts": {
+              "budget_headroom_pct": 40,
+              "format_matched": "корпоратив",
+              "languages_matched": [
+                "английский"
+              ],
+              "requested_language": "английский",
+              "requested_hours": 5,
+              "max_hours": 10,
+              "duration_note": "fits",
+              "semantic_snippet": "Работает на казахском, русском и английском языках",
+              "semantic_score": 0.547,
+              "free_on_date": "2026-12-19",
+              "caveats": [],
+              "score": {
+                "budget_fit": 0.4,
+                "semantic": 0.547,
+                "language_fit": 1.0,
+                "duration_fit": 0.5,
+                "data_quality": 1.0,
+                "total": 0.5509
+              }
+            }
+          }
+        ],
+        "rejections": [
+          {
+            "id": "HK-27222",
+            "name": "Сон Гоку",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              },
+              {
+                "code": "language_not_supported",
+                "label": "не работает на этом языке"
+              }
+            ]
+          },
+          {
+            "id": "HK-29829",
+            "name": "Аня Форджер",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              },
+              {
+                "code": "language_not_supported",
+                "label": "не работает на этом языке"
+              }
+            ]
+          },
+          {
+            "id": "HK-42352",
+            "name": "Эмилия",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              },
+              {
+                "code": "format_not_supported",
+                "label": "не берёт этот формат"
+              },
+              {
+                "code": "language_not_supported",
+                "label": "не работает на этом языке"
+              }
+            ]
+          },
+          {
+            "id": "HK-44733",
+            "name": "Буллма",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              }
+            ]
+          },
+          {
+            "id": "HK-44923",
+            "name": "Мицури Канроджи",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              },
+              {
+                "code": "language_not_supported",
+                "label": "не работает на этом языке"
+              }
+            ]
+          },
+          {
+            "id": "HK-72938",
+            "name": "Софи Хаттер",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              },
+              {
+                "code": "over_budget",
+                "label": "цена от выше бюджета"
+              },
+              {
+                "code": "language_not_supported",
+                "label": "не работает на этом языке"
+              }
+            ]
+          },
+          {
+            "id": "HK-75012",
+            "name": "Джинбей",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              }
+            ]
+          },
+          {
+            "id": "HK-77838",
+            "name": "Хаул",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              },
+              {
+                "code": "language_not_supported",
+                "label": "не работает на этом языке"
+              }
+            ]
+          },
+          {
+            "id": "HK-88430",
+            "name": "Куррапика",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              },
+              {
+                "code": "language_not_supported",
+                "label": "не работает на этом языке"
+              }
+            ]
+          }
+        ],
+        "pool_size": 10,
+        "eligible_count": 1,
+        "semantic_backend": "embeddings",
+        "timing_ms": 188.6
+      },
+      "card_reasons": {
+        "HK-35215": [
+          {
+            "code": "LANGUAGE_REQUEST_MATCH",
+            "family": "language",
+            "evidence": {
+              "language": "английский"
+            },
+            "contribution": 0.0,
+            "primary": true
+          },
+          {
+            "code": "AVAILABILITY_ONLY_FREE",
+            "family": "availability_contrast",
+            "evidence": {
+              "date": "19.12.2026",
+              "scarcity": "в эту дату свободны 1 из 10"
+            },
+            "contribution": 0.0,
+            "primary": false
+          },
+          {
+            "code": "BUDGET_HEADROOM",
+            "family": "budget",
+            "evidence": {
+              "price": "900 000 ₸",
+              "budget": "1 500 000 ₸",
+              "headroom_pct": "40"
+            },
+            "contribution": 0.0,
+            "primary": false
+          }
+        ]
+      },
+      "timing_ms": 384.89,
+      "explanation_source": [
+        "llm"
+      ],
+      "semantic_backend": "embeddings"
+    },
+    {
+      "id": "case-08",
+      "title": "Банкетный зал в Астане: три варианта для свадьбы",
+      "request": {
+        "city": "Астана",
+        "event_date": "2026-10-17",
+        "event_format": "свадьба",
+        "category": "Банкетный зал",
+        "budget_kzt": 6000000
+      },
+      "expect": {
+        "outcome": "matched",
+        "min_cards": 3,
+        "max_cards": 3
+      },
+      "status": "passed",
+      "checks": [
+        {
+          "name": "status_code",
+          "ok": true,
+          "detail": "Ожидалось: 200. Получено: 200."
+        },
+        {
+          "name": "outcome",
+          "ok": true,
+          "detail": "Ожидалось: \"matched\". Получено: \"matched\"."
+        },
+        {
+          "name": "min_cards",
+          "ok": true,
+          "detail": "Ожидалось: 3. Получено: 3."
+        },
+        {
+          "name": "max_cards",
+          "ok": true,
+          "detail": "Ожидалось: 3. Получено: 3."
+        }
+      ],
+      "response": {
+        "outcome": "matched",
+        "outcome_title_ru": "Подобрали",
+        "shortfall_note": "Условиям соответствуют 3 из 4; показаны 3 с лучшим баллом. Не прошли условия: 1 не поддерживает формат «свадьба» (Рэн Хосикава).",
+        "cards": [
+          {
+            "id": "SYN-00001",
+            "name": "Аой Мидзуно",
+            "category": "Банкетный зал",
+            "city": "Астана",
+            "price_from_kzt": 2400000,
+            "price_imputed": false,
+            "city_imputed": false,
+            "synthetic": true,
+            "explanation": "Аой Мидзуно: цена от 2 400 000 ₸ ниже следующей 2 800 000 ₸ на 14 %. К формату свадьбы подходит ведение на нескольких языках; профиль синтетический.",
+            "explanation_source": "llm",
+            "facts": {
+              "budget_headroom_pct": 60,
+              "format_matched": "свадьба",
+              "languages_matched": [
+                "казахский",
+                "русский"
+              ],
+              "requested_language": null,
+              "requested_hours": null,
+              "max_hours": 8,
+              "duration_note": "not_requested",
+              "semantic_snippet": "Банкетный координатор согласует рассадку и подачу блюд на казахском или русском языке",
+              "semantic_score": 1.0,
+              "free_on_date": "2026-10-17",
+              "caveats": [
+                "synthetic"
+              ],
+              "score": {
+                "budget_fit": 0.6,
+                "semantic": 1.0,
+                "language_fit": 0.6666666666666666,
+                "duration_fit": 0.5,
+                "data_quality": 0.75,
+                "total": 0.8684
+              }
+            }
+          },
+          {
+            "id": "SYN-00007",
+            "name": "Нацуми Сирокава",
+            "category": "Банкетный зал",
+            "city": "Астана",
+            "price_from_kzt": 3600000,
+            "price_imputed": false,
+            "city_imputed": false,
+            "synthetic": true,
+            "explanation": "Нацуми Сирокава: есть выбор языка проведения — английский, казахский, русский. Цена от 3 600 000 ₸ оставляет запас 40 % от бюджета 6 000 000 ₸; ведение на нескольких языках тоже есть.",
+            "explanation_source": "llm",
+            "facts": {
+              "budget_headroom_pct": 40,
+              "format_matched": "свадьба",
+              "languages_matched": [
+                "русский",
+                "английский",
+                "казахский"
+              ],
+              "requested_language": null,
+              "requested_hours": null,
+              "max_hours": 10,
+              "duration_note": "not_requested",
+              "semantic_snippet": "Отель «Сирокава» в Астане располагает залом на 180 участников конференции или 120 гостей банкета",
+              "semantic_score": 1.0,
+              "free_on_date": "2026-10-17",
+              "caveats": [
+                "synthetic"
+              ],
+              "score": {
+                "budget_fit": 0.4,
+                "semantic": 1.0,
+                "language_fit": 1.0,
+                "duration_fit": 0.5,
+                "data_quality": 0.75,
+                "total": 0.8158
+              }
+            }
+          },
+          {
+            "id": "HK-90012",
+            "name": "Веджита",
+            "category": "Банкетный зал",
+            "city": "Астана",
+            "price_from_kzt": 2800000,
+            "price_imputed": true,
+            "city_imputed": false,
+            "synthetic": true,
+            "explanation": "Веджита: цена от 2 800 000 ₸ при бюджете 6 000 000 ₸ даёт запас 53 %. Есть опыт свадебных церемоний; цену стоит уточнить, профиль синтетический.",
+            "explanation_source": "llm",
+            "facts": {
+              "budget_headroom_pct": 53,
+              "format_matched": "свадьба",
+              "languages_matched": [
+                "русский",
+                "английский"
+              ],
+              "requested_language": null,
+              "requested_hours": null,
+              "max_hours": 10,
+              "duration_note": "not_requested",
+              "semantic_snippet": "Подходит для корпоративных конференций, свадеб и юбилеев, есть техническое оснащение для презентаций",
+              "semantic_score": 1.0,
+              "free_on_date": "2026-10-17",
+              "caveats": [
+                "price_imputed",
+                "synthetic"
+              ],
+              "score": {
+                "budget_fit": 0.5333333333333333,
+                "semantic": 1.0,
+                "language_fit": 0.6666666666666666,
+                "duration_fit": 0.5,
+                "data_quality": 0.25,
+                "total": 0.7982
+              }
+            }
+          }
+        ],
+        "rejections": [
+          {
+            "id": "SYN-00002",
+            "name": "Рэн Хосикава",
+            "reasons": [
+              {
+                "code": "format_not_supported",
+                "label": "не берёт этот формат"
+              }
+            ]
+          }
+        ],
+        "pool_size": 4,
+        "eligible_count": 3,
+        "semantic_backend": "embeddings",
+        "timing_ms": 186.08
+      },
+      "card_reasons": {
+        "SYN-00001": [
+          {
+            "code": "BUDGET_LOWER_THAN_SHOWN",
+            "family": "budget",
+            "evidence": {
+              "price": "2 400 000 ₸",
+              "next_price": "2 800 000 ₸",
+              "diff_pct": "14"
+            },
+            "contribution": 0.0234,
+            "primary": true
+          },
+          {
+            "code": "DESCRIPTION_ASPECT",
+            "family": "description_semantic",
+            "evidence": {
+              "aspect": "ведение на нескольких языках",
+              "tag": "multilingual_hosting"
+            },
+            "contribution": 0.0,
+            "primary": false
+          },
+          {
+            "code": "SYNTHETIC",
+            "family": "data_quality_caveat",
+            "evidence": {},
+            "contribution": 0.0,
+            "primary": false
+          }
+        ],
+        "SYN-00007": [
+          {
+            "code": "LANGUAGE_OPTIONS",
+            "family": "language",
+            "evidence": {
+              "languages": "английский, казахский, русский"
+            },
+            "contribution": 0.0,
+            "primary": true
+          },
+          {
+            "code": "BUDGET_HEADROOM",
+            "family": "budget",
+            "evidence": {
+              "price": "3 600 000 ₸",
+              "budget": "6 000 000 ₸",
+              "headroom_pct": "40"
+            },
+            "contribution": -0.0292,
+            "primary": false
+          },
+          {
+            "code": "DESCRIPTION_ASPECT",
+            "family": "description_semantic",
+            "evidence": {
+              "aspect": "ведение на нескольких языках",
+              "tag": "multilingual_hosting"
+            },
+            "contribution": 0.0,
+            "primary": false
+          },
+          {
+            "code": "SYNTHETIC",
+            "family": "data_quality_caveat",
+            "evidence": {},
+            "contribution": 0.0,
+            "primary": false
+          }
+        ],
+        "HK-90012": [
+          {
+            "code": "BUDGET_HEADROOM",
+            "family": "budget",
+            "evidence": {
+              "price": "2 800 000 ₸",
+              "budget": "6 000 000 ₸",
+              "headroom_pct": "53"
+            },
+            "contribution": 0.0058,
+            "primary": true
+          },
+          {
+            "code": "DESCRIPTION_ASPECT",
+            "family": "description_semantic",
+            "evidence": {
+              "aspect": "опыт свадебных церемоний",
+              "tag": "wedding_ceremony"
+            },
+            "contribution": 0.0,
+            "primary": false
+          },
+          {
+            "code": "PRICE_IMPUTED",
+            "family": "data_quality_caveat",
+            "evidence": {},
+            "contribution": 0.0,
+            "primary": false
+          },
+          {
+            "code": "SYNTHETIC",
+            "family": "data_quality_caveat",
+            "evidence": {},
+            "contribution": 0.0,
+            "primary": false
+          }
+        ]
+      },
+      "timing_ms": 380.81,
+      "explanation_source": [
+        "llm"
+      ],
+      "semantic_backend": "embeddings"
+    },
+    {
+      "id": "case-09",
+      "title": "Фотограф: восемь часов в пределах бюджета",
+      "request": {
+        "city": "Алматы",
+        "event_date": "2026-11-14",
+        "event_format": "свадьба",
+        "category": "Фотограф",
+        "budget_kzt": 350000,
+        "duration_hours": 8
+      },
+      "expect": {
+        "outcome": "matched",
+        "min_cards": 3,
+        "max_cards": 3
+      },
+      "status": "passed",
+      "checks": [
+        {
+          "name": "status_code",
+          "ok": true,
+          "detail": "Ожидалось: 200. Получено: 200."
+        },
+        {
+          "name": "outcome",
+          "ok": true,
+          "detail": "Ожидалось: \"matched\". Получено: \"matched\"."
+        },
+        {
+          "name": "min_cards",
+          "ok": true,
+          "detail": "Ожидалось: 3. Получено: 3."
+        },
+        {
+          "name": "max_cards",
+          "ok": true,
+          "detail": "Ожидалось: 3. Получено: 3."
+        }
+      ],
+      "response": {
+        "outcome": "matched",
+        "outcome_title_ru": "Подобрали",
+        "shortfall_note": "Условиям соответствуют 3 из 9; показаны 3 с лучшим баллом. Не прошли условия: 6 заняты на 14.11.2026 (Нобара Кугисаки, Шикамару Нара, Леорио Паради, Тохру, Альфонс Элрик, Рика Нагахара); 2 дороже бюджета (Нобара Кугисаки, Тохру; цены от: 400 000 ₸, 600 000 ₸; бюджет 350 000 ₸); 2 не поддерживают формат «свадьба» (Шикамару Нара, Тохру); 2 не подходят по длительности (Шикамару Нара, Альфонс Элрик; запрошено 8 ч). Причины могут пересекаться.",
+        "cards": [
+          {
+            "id": "HK-68220",
+            "name": "Рок Ли",
+            "category": "Фотограф",
+            "city": "Алматы",
+            "price_from_kzt": 190000,
+            "price_imputed": false,
+            "city_imputed": false,
+            "synthetic": false,
+            "explanation": "Рок Ли — до 12 ч, это самый большой лимит среди показанных. В категории на 14.11.2026 свободны 3 из 9, а цена от 190 000 ₸ оставляет запас к бюджету 350 000 ₸.",
+            "explanation_source": "llm",
+            "facts": {
+              "budget_headroom_pct": 46,
+              "format_matched": "свадьба",
+              "languages_matched": [
+                "русский",
+                "казахский"
+              ],
+              "requested_language": null,
+              "requested_hours": 8,
+              "max_hours": 12,
+              "duration_note": "fits",
+              "semantic_snippet": "Рок Ли — один из лучших свадебных и репортажных фотографов в городе Алматы",
+              "semantic_score": 1.0,
+              "free_on_date": "2026-11-14",
+              "caveats": [],
+              "score": {
+                "budget_fit": 0.4571428571428572,
+                "semantic": 1.0,
+                "language_fit": 0.6666666666666666,
+                "duration_fit": 0.33333333333333337,
+                "data_quality": 1.0,
+                "total": 0.831
+              }
+            }
+          },
+          {
+            "id": "HK-76268",
+            "name": "Сацуки Кусакабэ",
+            "category": "Фотограф",
+            "city": "Алматы",
+            "price_from_kzt": 200000,
+            "price_imputed": false,
+            "city_imputed": false,
+            "synthetic": false,
+            "explanation": "Сацуки Кусакабэ — цена от 200 000 ₸ при бюджете 350 000 ₸, запас 43 %. Подходит репортажная съёмка без постановки, что хорошо сочетается со свадебным форматом.",
+            "explanation_source": "llm",
+            "facts": {
+              "budget_headroom_pct": 43,
+              "format_matched": "свадьба",
+              "languages_matched": [
+                "русский"
+              ],
+              "requested_language": null,
+              "requested_hours": 8,
+              "max_hours": 10,
+              "duration_note": "fits",
+              "semantic_snippet": "Я Сацуки Кусакабэ — свадебный фотограф",
+              "semantic_score": 1.0,
+              "free_on_date": "2026-11-14",
+              "caveats": [],
+              "score": {
+                "budget_fit": 0.4285714285714286,
+                "semantic": 1.0,
+                "language_fit": 0.3333333333333333,
+                "duration_fit": 0.19999999999999996,
+                "data_quality": 1.0,
+                "total": 0.8171
+              }
+            }
+          },
+          {
+            "id": "HK-91112",
+            "name": "Мэгуми Фушигуро",
+            "category": "Фотограф",
+            "city": "Алматы",
+            "price_from_kzt": 300000,
+            "price_imputed": false,
+            "city_imputed": false,
+            "synthetic": false,
+            "explanation": "Мэгуми Фушигуро — цена от 300 000 ₸ укладывается в бюджет 350 000 ₸, поэтому это впритык. Есть опыт свадебных церемоний, что напрямую связано с вашим форматом.",
+            "explanation_source": "llm",
+            "facts": {
+              "budget_headroom_pct": 14,
+              "format_matched": "свадьба",
+              "languages_matched": [
+                "русский"
+              ],
+              "requested_language": null,
+              "requested_hours": 8,
+              "max_hours": 10,
+              "duration_note": "fits",
+              "semantic_snippet": "Я — свадебный фотограф с тонким чувством эстетики и эмоций",
+              "semantic_score": 1.0,
+              "free_on_date": "2026-11-14",
+              "caveats": [],
+              "score": {
+                "budget_fit": 0.1428571428571429,
+                "semantic": 1.0,
+                "language_fit": 0.3333333333333333,
+                "duration_fit": 0.19999999999999996,
+                "data_quality": 1.0,
+                "total": 0.7457
+              }
+            }
+          }
+        ],
+        "rejections": [
+          {
+            "id": "HK-16628",
+            "name": "Нобара Кугисаки",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              },
+              {
+                "code": "over_budget",
+                "label": "цена от выше бюджета"
+              }
+            ]
+          },
+          {
+            "id": "HK-20640",
+            "name": "Шикамару Нара",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              },
+              {
+                "code": "format_not_supported",
+                "label": "не берёт этот формат"
+              },
+              {
+                "code": "duration_exceeds_max",
+                "label": "максимум часов меньше запрошенной длительности"
+              }
+            ]
+          },
+          {
+            "id": "HK-30583",
+            "name": "Леорио Паради",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              }
+            ]
+          },
+          {
+            "id": "HK-35913",
+            "name": "Тохру",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              },
+              {
+                "code": "over_budget",
+                "label": "цена от выше бюджета"
+              },
+              {
+                "code": "format_not_supported",
+                "label": "не берёт этот формат"
+              }
+            ]
+          },
+          {
+            "id": "HK-53108",
+            "name": "Альфонс Элрик",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              },
+              {
+                "code": "duration_exceeds_max",
+                "label": "максимум часов меньше запрошенной длительности"
+              }
+            ]
+          },
+          {
+            "id": "SYN-00010",
+            "name": "Рика Нагахара",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              }
+            ]
+          }
+        ],
+        "pool_size": 9,
+        "eligible_count": 3,
+        "semantic_backend": "embeddings",
+        "timing_ms": 188.3
+      },
+      "card_reasons": {
+        "HK-68220": [
+          {
+            "code": "DURATION_MAX_IN_SHOWN",
+            "family": "duration",
+            "evidence": {
+              "max_hours": "12"
+            },
+            "contribution": 0.0044,
+            "primary": true
+          },
+          {
+            "code": "AVAILABILITY_SCARCE",
+            "family": "availability_contrast",
+            "evidence": {
+              "scarcity": "в эту дату свободны 3 из 9"
+            },
+            "contribution": 0.0,
+            "primary": false
+          },
+          {
+            "code": "BUDGET_HEADROOM",
+            "family": "budget",
+            "evidence": {
+              "price": "190 000 ₸",
+              "budget": "350 000 ₸",
+              "headroom_pct": "46"
+            },
+            "contribution": 0.0286,
+            "primary": false
+          }
+        ],
+        "HK-76268": [
+          {
+            "code": "BUDGET_HEADROOM",
+            "family": "budget",
+            "evidence": {
+              "price": "200 000 ₸",
+              "budget": "350 000 ₸",
+              "headroom_pct": "43"
+            },
+            "contribution": 0.0214,
+            "primary": true
+          },
+          {
+            "code": "AVAILABILITY_SCARCE",
+            "family": "availability_contrast",
+            "evidence": {
+              "scarcity": "в эту дату свободны 3 из 9"
+            },
+            "contribution": 0.0,
+            "primary": false
+          },
+          {
+            "code": "DESCRIPTION_ASPECT",
+            "family": "description_semantic",
+            "evidence": {
+              "aspect": "репортажная съёмка без постановки",
+              "tag": "documentary_photo"
+            },
+            "contribution": 0.0,
+            "primary": false
+          }
+        ],
+        "HK-91112": [
+          {
+            "code": "BUDGET_FITS",
+            "family": "budget",
+            "evidence": {
+              "price": "300 000 ₸",
+              "budget": "350 000 ₸"
+            },
+            "contribution": -0.05,
+            "primary": true
+          },
+          {
+            "code": "AVAILABILITY_SCARCE",
+            "family": "availability_contrast",
+            "evidence": {
+              "scarcity": "в эту дату свободны 3 из 9"
+            },
+            "contribution": 0.0,
+            "primary": false
+          },
+          {
+            "code": "DESCRIPTION_ASPECT",
+            "family": "description_semantic",
+            "evidence": {
+              "aspect": "опыт свадебных церемоний",
+              "tag": "wedding_ceremony"
+            },
+            "contribution": 0.0,
+            "primary": false
+          }
+        ]
+      },
+      "timing_ms": 383.78,
+      "explanation_source": [
+        "llm"
+      ],
+      "semantic_backend": "embeddings"
+    },
+    {
+      "id": "case-10",
+      "title": "Лайв-бэнд: той на казахском языке",
+      "request": {
+        "city": "Алматы",
+        "event_date": "2026-10-24",
+        "event_format": "той",
+        "category": "Лайв-бэнд",
+        "budget_kzt": 2500000,
+        "language": "казахский"
+      },
+      "expect": {
+        "outcome": "matched",
+        "min_cards": 1,
+        "max_cards": 1
+      },
+      "status": "passed",
+      "checks": [
+        {
+          "name": "status_code",
+          "ok": true,
+          "detail": "Ожидалось: 200. Получено: 200."
+        },
+        {
+          "name": "outcome",
+          "ok": true,
+          "detail": "Ожидалось: \"matched\". Получено: \"matched\"."
+        },
+        {
+          "name": "min_cards",
+          "ok": true,
+          "detail": "Ожидалось: 1. Получено: 1."
+        },
+        {
+          "name": "max_cards",
+          "ok": true,
+          "detail": "Ожидалось: 1. Получено: 1."
+        }
+      ],
+      "response": {
+        "outcome": "matched",
+        "outcome_title_ru": "Подобрали",
+        "shortfall_note": "Показано 1 из 3: в категории 5 профилей, 3 заняты на 24.10.2026 (Мегумин, Каору Камия, Рей Аянами); 3 не поддерживают формат «той» (Мегумин, Каору Камия, Кобаяши); 3 не поддерживают язык «казахский» (Мегумин, Каору Камия, Кобаяши). Причины могут пересекаться.",
+        "cards": [
+          {
+            "id": "HK-23752",
+            "name": "Дзэнъицу Агацума",
+            "category": "Лайв-бэнд",
+            "city": "Алматы",
+            "price_from_kzt": 1150000,
+            "price_imputed": false,
+            "city_imputed": false,
+            "synthetic": false,
+            "explanation": "Дзэнъицу Агацума работает на казахском, как и нужно для этого тоя. На 24.10.2026 это единственный подходящий вариант: свободны 2 из 5, цена от 1 150 000 ₸ при бюджете 2 500 000 ₸.",
+            "explanation_source": "llm",
+            "facts": {
+              "budget_headroom_pct": 54,
+              "format_matched": "той",
+              "languages_matched": [
+                "казахский"
+              ],
+              "requested_language": "казахский",
+              "requested_hours": null,
+              "max_hours": 6,
+              "duration_note": "not_requested",
+              "semantic_snippet": "Расширенный состав Thunder Breath Band: 🎤 два вокалиста 🎤 вокалистка 🥁 барабанщик 🎸 бас-гитарист 🎸 соло-гитарист 🎺 труба 🎷 саксофон 🎵 тромбон Репертуар включает ретро-хиты, треки из нулевых, современн",
+              "semantic_score": 1.0,
+              "free_on_date": "2026-10-24",
+              "caveats": [],
+              "score": {
+                "budget_fit": 0.54,
+                "semantic": 1.0,
+                "language_fit": 1.0,
+                "duration_fit": 0.5,
+                "data_quality": 1.0,
+                "total": 0.8789
+              }
+            }
+          }
+        ],
+        "rejections": [
+          {
+            "id": "HK-25279",
+            "name": "Мегумин",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              },
+              {
+                "code": "format_not_supported",
+                "label": "не берёт этот формат"
+              },
+              {
+                "code": "language_not_supported",
+                "label": "не работает на этом языке"
+              }
+            ]
+          },
+          {
+            "id": "HK-31819",
+            "name": "Каору Камия",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              },
+              {
+                "code": "format_not_supported",
+                "label": "не берёт этот формат"
+              },
+              {
+                "code": "language_not_supported",
+                "label": "не работает на этом языке"
+              }
+            ]
+          },
+          {
+            "id": "HK-57480",
+            "name": "Кобаяши",
+            "reasons": [
+              {
+                "code": "format_not_supported",
+                "label": "не берёт этот формат"
+              },
+              {
+                "code": "language_not_supported",
+                "label": "не работает на этом языке"
+              }
+            ]
+          },
+          {
+            "id": "HK-83709",
+            "name": "Рей Аянами",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              }
+            ]
+          }
+        ],
+        "pool_size": 5,
+        "eligible_count": 1,
+        "semantic_backend": "embeddings",
+        "timing_ms": 188.24
+      },
+      "card_reasons": {
+        "HK-23752": [
+          {
+            "code": "LANGUAGE_REQUEST_MATCH",
+            "family": "language",
+            "evidence": {
+              "language": "казахский"
+            },
+            "contribution": 0.0,
+            "primary": true
+          },
+          {
+            "code": "AVAILABILITY_ONLY_FREE",
+            "family": "availability_contrast",
+            "evidence": {
+              "date": "24.10.2026",
+              "scarcity": "в эту дату свободны 2 из 5"
+            },
+            "contribution": 0.0,
+            "primary": false
+          },
+          {
+            "code": "BUDGET_HEADROOM",
+            "family": "budget",
+            "evidence": {
+              "price": "1 150 000 ₸",
+              "budget": "2 500 000 ₸",
+              "headroom_pct": "54"
+            },
+            "contribution": 0.0,
+            "primary": false
+          }
+        ]
+      },
+      "timing_ms": 382.87,
+      "explanation_source": [
+        "llm"
+      ],
+      "semantic_backend": "embeddings"
+    },
+    {
+      "id": "case-11",
+      "title": "Дата за пределами календаря: ошибка 422",
+      "request": {
+        "city": "Алматы",
+        "event_date": "2027-01-10",
+        "event_format": "корпоратив",
+        "category": "Ведущий",
+        "budget_kzt": 2000000
+      },
+      "expect": {
+        "outcome": "request_error",
+        "min_cards": 0,
+        "max_cards": 0,
+        "status_code": 422,
+        "text_must_contain": [
+          "Календарь"
+        ]
+      },
+      "status": "passed",
+      "checks": [
+        {
+          "name": "status_code",
+          "ok": true,
+          "detail": "Ожидалось: 422. Получено: 422."
+        },
+        {
+          "name": "outcome",
+          "ok": true,
+          "detail": "Ожидалось: \"request_error\". Получено: \"request_error\"."
+        },
+        {
+          "name": "min_cards",
+          "ok": true,
+          "detail": "Ожидалось: 0. Получено: 0."
+        },
+        {
+          "name": "max_cards",
+          "ok": true,
+          "detail": "Ожидалось: 0. Получено: 0."
+        },
+        {
+          "name": "text_must_contain",
+          "ok": true,
+          "detail": "Ожидалось: [\"Календарь\"]. Получено: [\"\", \"Календарь занятости известен только на 23.09.2026 — 31.12.2026, подбор на 10.01.2027 невозможен.\"]."
+        }
+      ],
+      "response": {
+        "status_code": 422,
+        "detail": "Календарь занятости известен только на 23.09.2026 — 31.12.2026, подбор на 10.01.2027 невозможен."
+      },
+      "card_reasons": {},
+      "timing_ms": 189.0,
+      "explanation_source": [],
+      "semantic_backend": null
+    },
+    {
+      "id": "case-12",
+      "title": "Банкетный зал: декабрьская суббота",
+      "request": {
+        "city": "Алматы",
+        "event_date": "2026-12-19",
+        "event_format": "свадьба",
+        "category": "Банкетный зал",
+        "budget_kzt": 6000000
+      },
+      "expect": {
+        "outcome": [
+          "matched",
+          "none_eligible"
+        ],
+        "min_cards": 0,
+        "max_cards": 0
+      },
+      "status": "passed",
+      "checks": [
+        {
+          "name": "status_code",
+          "ok": true,
+          "detail": "Ожидалось: 200. Получено: 200."
+        },
+        {
+          "name": "outcome",
+          "ok": true,
+          "detail": "Ожидалось: [\"matched\", \"none_eligible\"]. Получено: \"none_eligible\"."
+        },
+        {
+          "name": "min_cards",
+          "ok": true,
+          "detail": "Ожидалось: 0. Получено: 0."
+        },
+        {
+          "name": "max_cards",
+          "ok": true,
+          "detail": "Ожидалось: 0. Получено: 0."
+        }
+      ],
+      "response": {
+        "outcome": "none_eligible",
+        "outcome_title_ru": "Кандидаты есть, но ни один не проходит по условиям",
+        "shortfall_note": "Кандидаты в категории есть (7), но ни один не проходит: 7 заняты на 19.12.2026 (Хината Хьюга, Шинобу Кочо, Иноскэ Хашибира, Дарквнесс, Асуна Юки, Гохан, Сосукэ); 1 не поддерживает формат «свадьба» (Сосукэ). Причины могут пересекаться.",
+        "cards": [],
+        "rejections": [
+          {
+            "id": "HK-50695",
+            "name": "Хината Хьюга",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              }
+            ]
+          },
+          {
+            "id": "HK-58236",
+            "name": "Шинобу Кочо",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              }
+            ]
+          },
+          {
+            "id": "HK-64395",
+            "name": "Иноскэ Хашибира",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              }
+            ]
+          },
+          {
+            "id": "HK-69010",
+            "name": "Дарквнесс",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              }
+            ]
+          },
+          {
+            "id": "HK-72785",
+            "name": "Асуна Юки",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              }
+            ]
+          },
+          {
+            "id": "HK-90011",
+            "name": "Гохан",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              }
+            ]
+          },
+          {
+            "id": "HK-99701",
+            "name": "Сосукэ",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              },
+              {
+                "code": "format_not_supported",
+                "label": "не берёт этот формат"
+              }
+            ]
+          }
+        ],
+        "pool_size": 7,
+        "eligible_count": 0,
+        "semantic_backend": "embeddings",
+        "timing_ms": 190.73
+      },
+      "card_reasons": {},
+      "timing_ms": 194.34,
+      "explanation_source": [],
+      "semantic_backend": "embeddings"
+    },
+    {
+      "id": "case-13",
+      "title": "Фотограф за рубежом: свадьба",
+      "request": {
+        "city": "Зарубежье",
+        "event_date": "2026-10-10",
+        "event_format": "свадьба",
+        "category": "Фотограф",
+        "budget_kzt": 1000000
+      },
+      "expect": {
+        "outcome": "matched",
+        "min_cards": 1,
+        "max_cards": 1
+      },
+      "status": "passed",
+      "checks": [
+        {
+          "name": "status_code",
+          "ok": true,
+          "detail": "Ожидалось: 200. Получено: 200."
+        },
+        {
+          "name": "outcome",
+          "ok": true,
+          "detail": "Ожидалось: \"matched\". Получено: \"matched\"."
+        },
+        {
+          "name": "min_cards",
+          "ok": true,
+          "detail": "Ожидалось: 1. Получено: 1."
+        },
+        {
+          "name": "max_cards",
+          "ok": true,
+          "detail": "Ожидалось: 1. Получено: 1."
+        }
+      ],
+      "response": {
+        "outcome": "matched",
+        "outcome_title_ru": "Подобрали",
+        "shortfall_note": "Показано 1 из 3: в городе всего 1 профиль этой категории.",
+        "cards": [
+          {
+            "id": "HK-76335",
+            "name": "Йор Форджер",
+            "category": "Фотограф",
+            "city": "Зарубежье",
+            "price_from_kzt": 600000,
+            "price_imputed": false,
+            "city_imputed": false,
+            "synthetic": false,
+            "explanation": "Йор Форджер: цена от 600 000 ₸ при бюджете 1 000 000 ₸, запас 40 %. К свадьбе подходит репортажная съёмка без постановки; итоговую стоимость заранее не обещает.",
+            "explanation_source": "llm",
+            "facts": {
+              "budget_headroom_pct": 40,
+              "format_matched": "свадьба",
+              "languages_matched": [
+                "русский",
+                "английский"
+              ],
+              "requested_language": null,
+              "requested_hours": null,
+              "max_hours": 8,
+              "duration_note": "not_requested",
+              "semantic_snippet": "Йор Форджер — профессиональный фотограф, работающий с событиями и частными мероприятиями",
+              "semantic_score": 0.873,
+              "free_on_date": "2026-10-10",
+              "caveats": [],
+              "score": {
+                "budget_fit": 0.4,
+                "semantic": 0.873,
+                "language_fit": 0.6666666666666666,
+                "duration_fit": 0.5,
+                "data_quality": 1.0,
+                "total": 0.7686
+              }
+            }
+          }
+        ],
+        "rejections": [],
+        "pool_size": 1,
+        "eligible_count": 1,
+        "semantic_backend": "embeddings",
+        "timing_ms": 186.75
+      },
+      "card_reasons": {
+        "HK-76335": [
+          {
+            "code": "BUDGET_HEADROOM",
+            "family": "budget",
+            "evidence": {
+              "price": "600 000 ₸",
+              "budget": "1 000 000 ₸",
+              "headroom_pct": "40"
+            },
+            "contribution": 0.0,
+            "primary": true
+          },
+          {
+            "code": "DESCRIPTION_ASPECT",
+            "family": "description_semantic",
+            "evidence": {
+              "aspect": "репортажная съёмка без постановки",
+              "tag": "documentary_photo"
+            },
+            "contribution": 0.0,
+            "primary": false
+          }
+        ]
+      },
+      "timing_ms": 380.37,
+      "explanation_source": [
+        "llm"
+      ],
+      "semantic_backend": "embeddings"
+    },
+    {
+      "id": "case-14",
+      "title": "Отель в Астане: конференция",
+      "request": {
+        "city": "Астана",
+        "event_date": "2026-11-05",
+        "event_format": "конференция",
+        "category": "Отель",
+        "budget_kzt": 5000000
+      },
+      "expect": {
+        "outcome": "matched",
+        "min_cards": 1,
+        "max_cards": 1
+      },
+      "status": "passed",
+      "checks": [
+        {
+          "name": "status_code",
+          "ok": true,
+          "detail": "Ожидалось: 200. Получено: 200."
+        },
+        {
+          "name": "outcome",
+          "ok": true,
+          "detail": "Ожидалось: \"matched\". Получено: \"matched\"."
+        },
+        {
+          "name": "min_cards",
+          "ok": true,
+          "detail": "Ожидалось: 1. Получено: 1."
+        },
+        {
+          "name": "max_cards",
+          "ok": true,
+          "detail": "Ожидалось: 1. Получено: 1."
+        }
+      ],
+      "response": {
+        "outcome": "matched",
+        "outcome_title_ru": "Подобрали",
+        "shortfall_note": "Показано 1 из 3: в городе всего 2 профиля этой категории, 1 занят на 05.11.2026 (Нацуми Сирокава).",
+        "cards": [
+          {
+            "id": "HK-90012",
+            "name": "Веджита",
+            "category": "Отель",
+            "city": "Астана",
+            "price_from_kzt": 2800000,
+            "price_imputed": true,
+            "city_imputed": false,
+            "synthetic": true,
+            "explanation": "Веджита — единственный подходящий вариант на 05.11.2026, и в эту дату свободны 1 из 2. Цена от 2 800 000 ₸ укладывается в бюджет 5 000 000 ₸ с запасом 44 %; есть оборудование для презентаций и сцены.",
+            "explanation_source": "llm",
+            "facts": {
+              "budget_headroom_pct": 44,
+              "format_matched": "конференция",
+              "languages_matched": [
+                "русский",
+                "английский"
+              ],
+              "requested_language": null,
+              "requested_hours": null,
+              "max_hours": 10,
+              "duration_note": "not_requested",
+              "semantic_snippet": "Skyline Crown Hotel – отель делового класса с двумя банкетными залами разной вместимости",
+              "semantic_score": 0.932,
+              "free_on_date": "2026-11-05",
+              "caveats": [
+                "price_imputed",
+                "synthetic"
+              ],
+              "score": {
+                "budget_fit": 0.43999999999999995,
+                "semantic": 0.932,
+                "language_fit": 0.6666666666666666,
+                "duration_fit": 0.5,
+                "data_quality": 0.25,
+                "total": 0.7307
+              }
+            }
+          }
+        ],
+        "rejections": [
+          {
+            "id": "SYN-00007",
+            "name": "Нацуми Сирокава",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              }
+            ]
+          }
+        ],
+        "pool_size": 2,
+        "eligible_count": 1,
+        "semantic_backend": "embeddings",
+        "timing_ms": 186.37
+      },
+      "card_reasons": {
+        "HK-90012": [
+          {
+            "code": "AVAILABILITY_ONLY_FREE",
+            "family": "availability_contrast",
+            "evidence": {
+              "date": "05.11.2026",
+              "scarcity": "в эту дату свободны 1 из 2"
+            },
+            "contribution": 0.0,
+            "primary": true
+          },
+          {
+            "code": "BUDGET_HEADROOM",
+            "family": "budget",
+            "evidence": {
+              "price": "2 800 000 ₸",
+              "budget": "5 000 000 ₸",
+              "headroom_pct": "44"
+            },
+            "contribution": 0.0,
+            "primary": false
+          },
+          {
+            "code": "DESCRIPTION_ASPECT",
+            "family": "description_semantic",
+            "evidence": {
+              "aspect": "оборудование для презентаций и сцены",
+              "tag": "presentation_equipment"
+            },
+            "contribution": 0.0,
+            "primary": false
+          },
+          {
+            "code": "PRICE_IMPUTED",
+            "family": "data_quality_caveat",
+            "evidence": {},
+            "contribution": 0.0,
+            "primary": false
+          },
+          {
+            "code": "SYNTHETIC",
+            "family": "data_quality_caveat",
+            "evidence": {},
+            "contribution": 0.0,
+            "primary": false
+          }
+        ]
+      },
+      "timing_ms": 379.59,
+      "explanation_source": [
+        "llm"
+      ],
+      "semantic_backend": "embeddings"
+    },
+    {
+      "id": "case-15",
+      "title": "Ведущий в Астане: бюджет ниже всех цен",
+      "request": {
+        "city": "Астана",
+        "event_date": "2026-10-10",
+        "event_format": "корпоратив",
+        "category": "Ведущий",
+        "budget_kzt": 100000
+      },
+      "expect": {
+        "outcome": "none_eligible",
+        "min_cards": 0,
+        "max_cards": 0,
+        "text_must_contain": [
+          "дороже бюджета"
+        ]
+      },
+      "status": "passed",
+      "checks": [
+        {
+          "name": "status_code",
+          "ok": true,
+          "detail": "Ожидалось: 200. Получено: 200."
+        },
+        {
+          "name": "outcome",
+          "ok": true,
+          "detail": "Ожидалось: \"none_eligible\". Получено: \"none_eligible\"."
+        },
+        {
+          "name": "min_cards",
+          "ok": true,
+          "detail": "Ожидалось: 0. Получено: 0."
+        },
+        {
+          "name": "max_cards",
+          "ok": true,
+          "detail": "Ожидалось: 0. Получено: 0."
+        },
+        {
+          "name": "text_must_contain",
+          "ok": true,
+          "detail": "Ожидалось: [\"дороже бюджета\"]. Получено: [\"Кандидаты в категории есть (5), но ни один не проходит: 4 заняты на 10.10.2026 (Нами, Крилин, Санджи Виндсмок, Тэнъя Иида); 5 дороже бюджета (Идзуку Мидория, Нами, Крилин, Санджи Виндсмок, Тэнъя Иида; цены от: 600 000 ₸, 700 000 ₸, 800 000 ₸, 1 000 000 ₸; бюджет 100 000 ₸); 1 не поддерживает формат «корпоратив» (Идзуку Мидория). Причины могут пересекаться.\", \"\"]."
+        }
+      ],
+      "response": {
+        "outcome": "none_eligible",
+        "outcome_title_ru": "Кандидаты есть, но ни один не проходит по условиям",
+        "shortfall_note": "Кандидаты в категории есть (5), но ни один не проходит: 4 заняты на 10.10.2026 (Нами, Крилин, Санджи Виндсмок, Тэнъя Иида); 5 дороже бюджета (Идзуку Мидория, Нами, Крилин, Санджи Виндсмок, Тэнъя Иида; цены от: 600 000 ₸, 700 000 ₸, 800 000 ₸, 1 000 000 ₸; бюджет 100 000 ₸); 1 не поддерживает формат «корпоратив» (Идзуку Мидория). Причины могут пересекаться.",
+        "cards": [],
+        "rejections": [
+          {
+            "id": "HK-26808",
+            "name": "Идзуку Мидория",
+            "reasons": [
+              {
+                "code": "over_budget",
+                "label": "цена от выше бюджета"
+              },
+              {
+                "code": "format_not_supported",
+                "label": "не берёт этот формат"
+              }
+            ]
+          },
+          {
+            "id": "HK-37181",
+            "name": "Нами",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              },
+              {
+                "code": "over_budget",
+                "label": "цена от выше бюджета"
+              }
+            ]
+          },
+          {
+            "id": "HK-58385",
+            "name": "Крилин",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              },
+              {
+                "code": "over_budget",
+                "label": "цена от выше бюджета"
+              }
+            ]
+          },
+          {
+            "id": "HK-80581",
+            "name": "Санджи Виндсмок",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              },
+              {
+                "code": "over_budget",
+                "label": "цена от выше бюджета"
+              }
+            ]
+          },
+          {
+            "id": "HK-97041",
+            "name": "Тэнъя Иида",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              },
+              {
+                "code": "over_budget",
+                "label": "цена от выше бюджета"
+              }
+            ]
+          }
+        ],
+        "pool_size": 5,
+        "eligible_count": 0,
+        "semantic_backend": "embeddings",
+        "timing_ms": 185.77
+      },
+      "card_reasons": {},
+      "timing_ms": 189.43,
+      "explanation_source": [],
+      "semantic_backend": "embeddings"
+    },
+    {
+      "id": "case-16",
+      "title": "Инструменталист: казахский язык и три часа",
+      "request": {
+        "city": "Алматы",
+        "event_date": "2026-11-20",
+        "event_format": "той",
+        "category": "Инструменталист",
+        "budget_kzt": 600000,
+        "duration_hours": 3,
+        "language": "казахский"
+      },
+      "expect": {
+        "outcome": "matched",
+        "min_cards": 1,
+        "max_cards": 1
+      },
+      "status": "passed",
+      "checks": [
+        {
+          "name": "status_code",
+          "ok": true,
+          "detail": "Ожидалось: 200. Получено: 200."
+        },
+        {
+          "name": "outcome",
+          "ok": true,
+          "detail": "Ожидалось: \"matched\". Получено: \"matched\"."
+        },
+        {
+          "name": "min_cards",
+          "ok": true,
+          "detail": "Ожидалось: 1. Получено: 1."
+        },
+        {
+          "name": "max_cards",
+          "ok": true,
+          "detail": "Ожидалось: 1. Получено: 1."
+        }
+      ],
+      "response": {
+        "outcome": "matched",
+        "outcome_title_ru": "Подобрали",
+        "shortfall_note": "Показано 1 из 3: в категории 3 профиля, 1 занят на 20.11.2026 (Джет Блэк); 2 не поддерживают формат «той» (Джет Блэк, Ямча); 2 не поддерживают язык «казахский» (Джет Блэк, Ямча). Причины могут пересекаться.",
+        "cards": [
+          {
+            "id": "HK-46450",
+            "name": "Сакура Харуно",
+            "category": "Инструменталист",
+            "city": "Алматы",
+            "price_from_kzt": 350000,
+            "price_imputed": false,
+            "city_imputed": false,
+            "synthetic": false,
+            "explanation": "Сакура Харуно работает на казахском, поэтому совпадает с запросом. На 20.11.2026 это единственный подходящий вариант; цена от 350 000 ₸ при бюджете 600 000 ₸, запас 42 %.",
+            "explanation_source": "llm",
+            "facts": {
+              "budget_headroom_pct": 42,
+              "format_matched": "той",
+              "languages_matched": [
+                "казахский"
+              ],
+              "requested_language": "казахский",
+              "requested_hours": 3,
+              "max_hours": 4,
+              "duration_note": "fits",
+              "semantic_snippet": "Bebop Jazz Collective — джазовый проект с шестилетней историей на сцене Казахстана",
+              "semantic_score": 0.859,
+              "free_on_date": "2026-11-20",
+              "caveats": [],
+              "score": {
+                "budget_fit": 0.41666666666666663,
+                "semantic": 0.859,
+                "language_fit": 1.0,
+                "duration_fit": 0.25,
+                "data_quality": 1.0,
+                "total": 0.7391
+              }
+            }
+          }
+        ],
+        "rejections": [
+          {
+            "id": "HK-74147",
+            "name": "Джет Блэк",
+            "reasons": [
+              {
+                "code": "busy_on_date",
+                "label": "занят на эту дату"
+              },
+              {
+                "code": "format_not_supported",
+                "label": "не берёт этот формат"
+              },
+              {
+                "code": "language_not_supported",
+                "label": "не работает на этом языке"
+              }
+            ]
+          },
+          {
+            "id": "HK-90013",
+            "name": "Ямча",
+            "reasons": [
+              {
+                "code": "format_not_supported",
+                "label": "не берёт этот формат"
+              },
+              {
+                "code": "language_not_supported",
+                "label": "не работает на этом языке"
+              }
+            ]
+          }
+        ],
+        "pool_size": 3,
+        "eligible_count": 1,
+        "semantic_backend": "embeddings",
+        "timing_ms": 186.68
+      },
+      "card_reasons": {
+        "HK-46450": [
+          {
+            "code": "LANGUAGE_REQUEST_MATCH",
+            "family": "language",
+            "evidence": {
+              "language": "казахский"
+            },
+            "contribution": 0.0,
+            "primary": true
+          },
+          {
+            "code": "AVAILABILITY_ONLY_FREE",
+            "family": "availability_contrast",
+            "evidence": {
+              "date": "20.11.2026"
+            },
+            "contribution": 0.0,
+            "primary": false
+          },
+          {
+            "code": "BUDGET_HEADROOM",
+            "family": "budget",
+            "evidence": {
+              "price": "350 000 ₸",
+              "budget": "600 000 ₸",
+              "headroom_pct": "42"
+            },
+            "contribution": 0.0,
+            "primary": false
+          }
+        ]
+      },
+      "timing_ms": 380.24,
+      "explanation_source": [
+        "llm"
+      ],
+      "semantic_backend": "embeddings"
+    },
+    {
+      "id": "case-17",
+      "title": "Неизвестная категория: фокусник в Алматы",
+      "request": {
+        "city": "Алматы",
+        "event_date": "2026-10-10",
+        "event_format": "свадьба",
+        "category": "Фокусник",
+        "budget_kzt": 1000000
+      },
+      "expect": {
+        "outcome": "no_category_in_city",
+        "min_cards": 0,
+        "max_cards": 0
+      },
+      "status": "passed",
+      "checks": [
+        {
+          "name": "status_code",
+          "ok": true,
+          "detail": "Ожидалось: 200. Получено: 200."
+        },
+        {
+          "name": "outcome",
+          "ok": true,
+          "detail": "Ожидалось: \"no_category_in_city\". Получено: \"no_category_in_city\"."
+        },
+        {
+          "name": "min_cards",
+          "ok": true,
+          "detail": "Ожидалось: 0. Получено: 0."
+        },
+        {
+          "name": "max_cards",
+          "ok": true,
+          "detail": "Ожидалось: 0. Получено: 0."
+        }
+      ],
+      "response": {
+        "outcome": "no_category_in_city",
+        "outcome_title_ru": "В этом городе такой категории нет",
+        "shortfall_note": "В городе Алматы нет подрядчиков категории «Фокусник». Другие категории в этом городе: Банкетный зал, Ведущий, Ведущий церемонии.",
+        "cards": [],
+        "rejections": [],
+        "pool_size": 0,
+        "eligible_count": 0,
+        "semantic_backend": "embeddings",
+        "timing_ms": 186.26
+      },
+      "card_reasons": {},
+      "timing_ms": 190.15,
+      "explanation_source": [],
+      "semantic_backend": "embeddings"
+    }
+  ]
+}

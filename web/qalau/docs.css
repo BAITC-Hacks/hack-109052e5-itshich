@@ -28,3 +28,21 @@
 :root[data-palette="openai"] .editor-controls button:hover{background:#dedede;border-color:#dedede}
 :root[data-palette="openai"] #format-status.error{color:#ffb5ac}
 :root[data-palette="openai"] .skip{background:#1f1f1f}
+
+/* Shared QALAU ambient backdrop; retain the existing text and palette tokens. */
+body{
+ background-color:#191b19;
+ background-image:linear-gradient(rgba(25,27,25,.72),rgba(25,27,25,.88)),url('assets/bg-hero.webp'),url('assets/bg-hero-blur.webp');
+ background-size:cover;
+ background-position:center top;
+ background-repeat:no-repeat;
+ background-attachment:fixed;
+}
+:root[data-palette="openai"] .docs-header{background:rgba(25,27,25,.88)}
+:root[data-palette="openai"] .docs-footer{background:rgba(25,27,25,.72)}
+:root[data-palette="openai"] .note{background:rgba(24,24,24,.82)}
+:root[data-palette="openai"] .code-block{background:rgba(31,31,31,.88)}
+@media(min-width:761px){
+ .docs-header{backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+}
+@media(max-width:760px){body{background-attachment:scroll}}

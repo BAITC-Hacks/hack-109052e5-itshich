@@ -47,6 +47,20 @@ def tests_report():
         return {"runs": [], "note": "отчёт ещё не сформирован"}
 
 
+@app.get("/api/cases")
+def cases_report():
+    try:
+        return json.loads((ROOT / "data" / "live_cases.json").read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        return {"cases": [], "note": "Живые тест-кейсы ещё не запущены. Нажмите «Прогнать сейчас»."}
+
+
+@app.post("/api/cases/run")
+def run_live_cases():
+    from scripts.run_cases import run_cases
+    return run_cases(ROOT / "demo" / "cases.json", ROOT / "data" / "live_cases.json")
+
+
 @app.post("/api/match", response_model=MatchResponseDTO)
 def match(request: MatchRequestDTO):
     try:
