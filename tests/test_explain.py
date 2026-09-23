@@ -385,7 +385,8 @@ def test_llm_returns_valid_ordered_explanations_and_uses_compact_grounded_prompt
     assert [c["id"] for c in payload["карточки"]] == ["c1", "c2", "c3"]
     for c, facts in zip(payload["карточки"], match.cards):
         assert set(c) == {"id", "имя", "позиция", "главная_причина", "поддерживающие", "оговорки"}
-        assert c["главная_причина"] == {"код": facts.reasons[0].code, "факты": facts.reasons[0].evidence}
+        assert {k: v for k, v in c["главная_причина"].items() if k != "смысл"} == {"код": facts.reasons[0].code, "факты": facts.reasons[0].evidence}
+        assert c["главная_причина"]["смысл"]
     assert payload["карточки"][2]["оговорки"] == [{
         "код": "PRICE_IMPUTED", "формулировка": "цена проставлена при подготовке датасета, уточняйте",
     }]
