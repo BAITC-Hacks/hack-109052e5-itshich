@@ -390,7 +390,7 @@ def test_llm_returns_valid_ordered_explanations_and_uses_compact_grounded_prompt
     assert payload["карточки"][2]["оговорки"] == [{
         "код": "PRICE_IMPUTED", "формулировка": "цена проставлена при подготовке датасета, уточняйте",
     }]
-    assert payload["карточки"][2]["поддерживающие"] == [{
+    assert [{k: v for k, v in r.items() if k != "смысл"} for r in payload["карточки"][2]["поддерживающие"]] == [{
         "код": "DESCRIPTION_ASPECT", "факты": {"quote": match.cards[2].contractor.description},
     }]
     serialized = json.dumps(payload, ensure_ascii=False)
