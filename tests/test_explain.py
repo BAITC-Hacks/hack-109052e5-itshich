@@ -6,7 +6,7 @@ from types import SimpleNamespace
 import pytest
 
 from matcher.model import (
-    CardFacts, Contractor, MatchRequest, MatchResult, Outcome, ScoreBreakdown,
+    CardFacts, Contractor, MatchRequest, MatchResult, Outcome, Reason, ReasonFamily, ScoreBreakdown,
 )
 
 
@@ -38,6 +38,204 @@ def result(*cards):
         cards=cards, rejections=(), pool_size=len(cards), eligible_count=len(cards),
         shortfall_note=None, semantic_backend="embeddings",
     )
+
+
+def reason(code, family, *, primary=False, **evidence):
+    return Reason(code, family, evidence, primary=primary)
+
+
+def reason_cards():
+    first, second, third = (card(rank) for rank in range(1, 4))
+    return (
+        replace(first, reasons=(
+            reason("AVAILABILITY_REPLACEMENT", ReasonFamily.AVAILABILITY, primary=True,
+                   competitor="Кики", date="14.11.2026"),
+            reason("BUDGET_HEADROOM", ReasonFamily.BUDGET,
+                   price="600\u2009000 ₸", budget="800\u2009000 ₸", headroom_pct="25"),
+            reason("DURATION_HEADROOM", ReasonFamily.DURATION, requested_hours="5", max_hours="8"),
+        )),
+        replace(second, contractor=replace(second.contractor, price_from_kzt=500_000),
+                budget_headroom_pct=38, reasons=(
+            reason("BUDGET_LOWER_THAN_SHOWN", ReasonFamily.BUDGET, primary=True,
+                   price="500\u2009000 ₸", next_price="600\u2009000 ₸", diff_pct="17"),
+            reason("BUDGET_HEADROOM", ReasonFamily.BUDGET,
+                   price="500\u2009000 ₸", budget="800\u2009000 ₸", headroom_pct="38"),
+            reason("LANGUAGE_REQUEST_MATCH", ReasonFamily.LANGUAGE, language="английский"),
+            reason("DURATION_HEADROOM", ReasonFamily.DURATION, requested_hours="5", max_hours="8"),
+        )),
+        replace(third, contractor=replace(third.contractor, price_imputed=True,
+                languages=("русский", "английский", "казахский")), caveats=("price_imputed",), reasons=(
+            reason("LANGUAGE_UNIQUE_IN_SHOWN", ReasonFamily.LANGUAGE, primary=True, language="казахский"),
+            reason("DESCRIPTION_ASPECT", ReasonFamily.DESCRIPTION, quote=third.contractor.description,
+                   semantic_score="0.9"),
+            reason("PRICE_IMPUTED", ReasonFamily.DATA_QUALITY),
+        )),
+    )
+
+
+def test_template_starts_with_primary_reason_and_adds_only_one_other_family():
+    from matcher.explain import TemplateExplainer
+
+    match = result(*reason_cards())
+    explanations = TemplateExplainer().explain(match)
+    first, second, third = (e.text for e in explanations)
+
+    assert first.startswith("Попал в тройку потому, что Кики занят 14.11.2026")
+    assert "без этой брони" in first and "25 %" in first
+    assert "500\u2009000 ₸" in second and "600\u2009000 ₸" in second and "17 %" in second
+    assert "английский" in second and "38 %" not in second
+    assert "казахский" in third and f"«{match.cards[2].contractor.description}»" in third
+    assert "цена проставлена при подготовке датасета, уточняйте" in third
+    assert all("8 ч" not in e.text and "800\u2009000 ₸" not in e.text for e in explanations[1:])
+    assert all(60 <= len(e.text) <= 350 and e.source == "template" for e in explanations)
+    assert [e.contractor_id for e in explanations] == ["c1", "c2", "c3"]
+    assert TemplateExplainer().explain(match) == explanations
+
+
+@pytest.mark.parametrize("missing", ["500000", "720000", "31"])
+def test_validator_requires_every_primary_number_even_when_other_facts_are_grounded(missing):
+    from matcher.explain import validate_explanations
+
+    facts = card(reasons=(reason("BUDGET_LOWER_THAN_SHOWN", ReasonFamily.BUDGET, primary=True,
+                 price="500\u2009000 ₸", next_price="720 000 ₸", diff_pct="31"),))
+    text = ("Стартовая цена 500000 ₸ на 31 % ниже следующей — 720000 ₸; "
+            "формат — корпоратив, свободен 14.11.2026.")
+    assert validate_explanations(result(facts), [text]) == []
+    problems = validate_explanations(result(facts), [text.replace(missing, "уточняется")])
+    assert any("primary" in problem and missing in problem for problem in problems)
+
+
+def test_validator_requires_named_busy_competitor_and_all_date_numbers():
+    from matcher.explain import validate_explanations
+
+    facts = reason_cards()[0]
+    valid = ("Попал в тройку, потому что Кики занят 14.11.2026; "
+             "без этой брони его место было бы ниже, цена от 600000 ₸.")
+    assert validate_explanations(result(facts), [valid]) == []
+    for bad in (valid.replace("Кики", "другой кандидат"), valid.replace("14.11.2026", "14.11")):
+        assert validate_explanations(result(facts), [bad])
+
+
+def test_validator_grounds_all_reason_evidence_and_the_template_triple():
+    from matcher.explain import TemplateExplainer, validate_explanations
+
+    match = result(*reason_cards())
+    texts = [e.text for e in TemplateExplainer().explain(match)]
+    assert validate_explanations(match, texts) == []
+
+
+@pytest.mark.parametrize("quote,valid", [
+    ("ВЕДЁТ  деловые\nвстречи с живой импровизацией", True),
+    ("деловые встречи с живой импровизацией", True),
+    ("Проводит яркие вечеринки для гостей", False),
+    ("Ведёт деловые встречи с живой импровизацией…", False),
+    ("цена от", True),
+])
+def test_validator_checks_long_quotes_against_full_description(quote, valid):
+    from matcher.explain import validate_explanations
+
+    facts = card(reasons=(reason("BUDGET_HEADROOM", ReasonFamily.BUDGET, primary=True,
+                 price="600 000 ₸", budget="800 000 ₸", headroom_pct="25"),))
+    text = f"Цена от 600000 ₸ при бюджете 800000 ₸ оставляет запас 25 %; в анкете: «{quote}»."
+    problems = validate_explanations(result(facts), [text])
+    assert (not problems) == valid
+    if not valid:
+        assert any("quote" in problem for problem in problems)
+        # Legacy callers retain the original grounding rules.
+        assert validate_explanations(result(replace(facts, reasons=())), [text]) == []
+
+
+@pytest.mark.parametrize("code,family,evidence", [
+    ("BUDGET_HEADROOM", ReasonFamily.BUDGET, {"price": "600 000 ₸", "budget": "800 000 ₸", "headroom_pct": "25"}),
+    ("BUDGET_LOWER_THAN_SHOWN", ReasonFamily.BUDGET, {"price": "600 000 ₸", "next_price": "750 000 ₸", "diff_pct": "20"}),
+    ("BUDGET_FITS", ReasonFamily.BUDGET, {"price": "600 000 ₸", "budget": "800 000 ₸"}),
+    ("FORMAT_SUPPORTED", ReasonFamily.FORMAT, {"format": "корпоратив"}),
+    ("LANGUAGE_REQUEST_MATCH", ReasonFamily.LANGUAGE, {"language": "английский"}),
+    ("LANGUAGE_UNIQUE_IN_SHOWN", ReasonFamily.LANGUAGE, {"language": "английский"}),
+    ("LANGUAGE_OPTIONS", ReasonFamily.LANGUAGE, {"languages": "русский, казахский, английский"}),
+    ("DURATION_HEADROOM", ReasonFamily.DURATION, {"requested_hours": "5", "max_hours": "8"}),
+    ("DURATION_MAX_IN_SHOWN", ReasonFamily.DURATION, {"max_hours": "8"}),
+    ("DURATION_NOT_APPLICABLE", ReasonFamily.DURATION, {}),
+    ("DESCRIPTION_ASPECT", ReasonFamily.DESCRIPTION, {"quote": "Ведёт деловые встречи с живой импровизацией", "semantic_score": "0.913"}),
+    ("DESCRIPTION_CLOSEST_IN_SHOWN", ReasonFamily.DESCRIPTION, {"quote": "Ведёт деловые встречи с живой импровизацией"}),
+    ("AVAILABILITY_REPLACEMENT", ReasonFamily.AVAILABILITY, {"competitor": "Кики", "date": "14.11.2026"}),
+    ("AVAILABILITY_ONLY_FREE", ReasonFamily.AVAILABILITY, {"date": "14.11.2026", "busy_count": "7"}),
+])
+def test_template_renders_each_reason_at_all_ranks_with_caveats(code, family, evidence):
+    from matcher.explain import TemplateExplainer, validate_explanations
+
+    texts = []
+    for rank in range(1, 4):
+        facts = card(rank)
+        support = (reason("DURATION_HEADROOM", ReasonFamily.DURATION, requested_hours="5", max_hours="8")
+                   if family == ReasonFamily.BUDGET else
+                   reason("BUDGET_FITS", ReasonFamily.BUDGET, price="600 000 ₸", budget="800 000 ₸"))
+        facts = replace(facts, contractor=replace(facts.contractor, description=card().contractor.description,
+                        max_hours=None if code == "DURATION_NOT_APPLICABLE" else 8), reasons=(
+            reason(code, family, primary=True, **evidence), support,
+            reason("PRICE_IMPUTED", ReasonFamily.DATA_QUALITY),
+            reason("CITY_IMPUTED", ReasonFamily.DATA_QUALITY),
+            reason("SYNTHETIC", ReasonFamily.DATA_QUALITY),
+        ))
+        match = result(facts)
+        text, = [e.text for e in TemplateExplainer().explain(match)]
+        assert validate_explanations(match, [text]) == []
+        assert 60 <= len(text) <= 350
+        assert "цена проставлена при подготовке датасета, уточняйте" in text
+        assert "город проставлен при подготовке датасета" in text
+        assert "синтетический профиль" in text
+        for key, value in evidence.items():
+            if key != "semantic_score":
+                assert value in text
+        assert "0.913" not in text
+        if code == "DURATION_NOT_APPLICABLE":
+            assert "работа не привязана к присутствию на площадке" in text.casefold()
+        texts.append(text)
+    assert len(set(texts)) == 3
+
+
+def test_template_validator_accepts_description_duration_and_offsite_triple():
+    from matcher.explain import TemplateExplainer, validate_explanations
+
+    first, second, third = (card(rank) for rank in range(1, 4))
+    match = result(
+        replace(first, reasons=(reason("DESCRIPTION_ASPECT", ReasonFamily.DESCRIPTION, primary=True,
+                quote=first.contractor.description, semantic_score="0.9"),
+                reason("LANGUAGE_REQUEST_MATCH", ReasonFamily.LANGUAGE, language="английский"))),
+        replace(second, reasons=(reason("DURATION_HEADROOM", ReasonFamily.DURATION, primary=True,
+                requested_hours="5", max_hours="8"),
+                reason("FORMAT_SUPPORTED", ReasonFamily.FORMAT, format="корпоратив"))),
+        replace(third, contractor=replace(third.contractor, max_hours=None), reasons=(
+                reason("BUDGET_FITS", ReasonFamily.BUDGET, primary=True, price="600 000 ₸", budget="800 000 ₸"),
+                reason("DURATION_NOT_APPLICABLE", ReasonFamily.DURATION),
+                reason("SYNTHETIC", ReasonFamily.DATA_QUALITY))),
+    )
+    texts = [e.text for e in TemplateExplainer().explain(match)]
+    assert validate_explanations(match, texts) == []
+    assert "работа не привязана к присутствию на площадке" in texts[2].casefold()
+
+
+@pytest.mark.parametrize("quote", [
+    "Проводит деловые встречи с живой импровизацией. Индивидуальный подход и высокое качество.",
+    "Индивидуальный подход, проводит деловые встречи с живой импровизацией",
+    "Проводит деловые встречи! Модерирует дискуссии? Помогает с награждением.",
+    "Индивидуальный подход",
+])
+def test_reason_template_keeps_quotes_verbatim_without_banned_phrases_or_extra_sentences(quote):
+    import re
+    from matcher.explain import BANNED_PHRASES, TemplateExplainer, validate_explanations
+
+    for rank in range(1, 4):
+        facts = card(rank)
+        facts = replace(facts, contractor=replace(facts.contractor, description=quote), semantic_snippet=quote,
+                        reasons=(reason("DESCRIPTION_ASPECT", ReasonFamily.DESCRIPTION, primary=True, quote=quote),
+                                 reason("BUDGET_FITS", ReasonFamily.BUDGET, price="600 000 ₸", budget="800 000 ₸")))
+        match = result(facts)
+        text, = [e.text for e in TemplateExplainer().explain(match)]
+        assert validate_explanations(match, [text]) == []
+        assert not any(phrase in text.casefold() for phrase in BANNED_PHRASES)
+        for fragment in re.findall("«([^»]+)»", text):
+            assert fragment in quote
 
 
 def test_template_explains_this_contractor_with_exact_money_date_and_details():
@@ -143,9 +341,9 @@ def test_template_uses_only_safe_short_quotes(snippet):
 
 
 LLM_TEXTS = [
-    "Хикару: цена от 600\u2009000 ₸, бюджет 800\u2009000 ₸; корпоратив, свободен 14.11.2026.",
-    "Микаса проводит музыкальные игры для команд: корпоратив, до 8 ч при запрошенных 5 ч; резерв 25 %.",
-    "Рен модерирует дискуссии и церемонии награждения; стартовая стоимость 600000 ₸, доступен 14 ноября.",
+    "Попал в тройку, потому что Кики занят 14.11.2026: без этой брони остался бы за её пределами. Цена от 600\u2009000 ₸ оставляет запас 25 % при бюджете 800\u2009000 ₸.",
+    "Самая низкая цена «от» среди показанных: 500\u2009000 ₸, на 17 % ниже следующей — 600\u2009000 ₸. Работает на запрошенном языке: английский.",
+    "Среди показанных только этот подрядчик работает на языке казахский. В описании: «Модерирует дискуссии и церемонии награждения».",
 ]
 
 
@@ -166,9 +364,9 @@ def llm_json(texts=LLM_TEXTS):
 
 
 def test_llm_returns_valid_ordered_explanations_and_uses_compact_grounded_prompt():
-    from matcher.explain import LLMExplainer
+    from matcher.explain import LLMExplainer, build_prompt_payload
 
-    match = result(card(), card(2), card(3))
+    match = result(*reason_cards())
     client = FakeChatClient(llm_json())
     explanations = LLMExplainer(client=client).explain(match)
 
@@ -178,16 +376,29 @@ def test_llm_returns_valid_ordered_explanations_and_uses_compact_grounded_prompt
     assert (call["temperature"], call["seed"], call["timeout"]) == (0, 42, 8)
     assert call["response_format"] == {"type": "json_object"}
     payload = json.loads(call["messages"][1]["content"])
-    assert set(payload) == {"запрос", "карточки", "отсеяно из категории"}
+    assert payload == build_prompt_payload(match)
+    assert set(payload) == {"запрос", "карточки"}
+    assert payload["запрос"] == {
+        "город": "Алматы", "дата": "14.11.2026", "формат": "корпоратив", "категория": "Ведущий",
+        "бюджет": "800\u2009000 ₸", "длительность": "5 ч", "язык": "английский",
+    }
     assert [c["id"] for c in payload["карточки"]] == ["c1", "c2", "c3"]
-    # Only pre-formatted facts reach the model: no raw description, no raw flags.
-    for c in payload["карточки"]:
-        assert "description" not in json.dumps(c, ensure_ascii=False)
-        assert "цена от" in c["факты"] and "запас по бюджету" in c["факты"]
-        assert isinstance(c["чем отличается"], list) and c["чем отличается"]
+    for c, facts in zip(payload["карточки"], match.cards):
+        assert set(c) == {"id", "имя", "позиция", "главная_причина", "поддерживающие", "оговорки"}
+        assert c["главная_причина"] == {"код": facts.reasons[0].code, "факты": facts.reasons[0].evidence}
+    assert payload["карточки"][2]["оговорки"] == [{
+        "код": "PRICE_IMPUTED", "формулировка": "цена проставлена при подготовке датасета, уточняйте",
+    }]
+    assert payload["карточки"][2]["поддерживающие"] == [{
+        "код": "DESCRIPTION_ASPECT", "факты": {"quote": match.cards[2].contractor.description},
+    }]
+    serialized = json.dumps(payload, ensure_ascii=False)
+    for forbidden in ("description", "score", "contribution", "price_imputed", "city_imputed", "synthetic", "0.9"):
+        assert forbidden not in serialized
 
 
-@pytest.mark.parametrize("failure", ["json", "shape", "banned", "digits", "timeout", "api", "count", "order", "type"])
+@pytest.mark.parametrize("failure", ["json", "shape", "banned", "digits", "timeout", "api", "count", "order", "type",
+                                     "primary_number", "competitor", "quote"])
 def test_llm_falls_back_for_the_entire_result_when_any_response_is_invalid(failure):
     from matcher.explain import LLMExplainer, TemplateExplainer
 
@@ -203,7 +414,14 @@ def test_llm_falls_back_for_the_entire_result_when_any_response_is_invalid(failu
         content = llm_json(LLM_TEXTS[:2])
     if failure == "order":
         content = json.dumps({"explanations": list(reversed(json.loads(content)["explanations"]))})
-    match = result(card(), card(2), card(3))
+    if failure == "primary_number":
+        content = llm_json([LLM_TEXTS[0], LLM_TEXTS[1].replace("600\u2009000 ₸", "другого кандидата"), LLM_TEXTS[2]])
+    if failure == "competitor":
+        content = llm_json([LLM_TEXTS[0].replace("Кики", "конкурент"), *LLM_TEXTS[1:]])
+    if failure == "quote":
+        content = llm_json([*LLM_TEXTS[:2], LLM_TEXTS[2].replace(
+            "Модерирует дискуссии и церемонии награждения", "Проводит яркие вечеринки для гостей")])
+    match = result(*reason_cards())
 
     explanations = LLMExplainer(client=FakeChatClient(content, error)).explain(match)
 
@@ -217,7 +435,7 @@ def test_llm_caches_success_and_fallback_by_request_and_ordered_card_ids(content
 
     client = FakeChatClient(content)
     explainer = LLMExplainer(client=client, model="configured-chat-model")
-    match = result(card(), card(2), card(3))
+    match = result(*reason_cards())
     first = explainer.explain(match)
     client.content = "changed response"
 
@@ -226,7 +444,7 @@ def test_llm_caches_success_and_fallback_by_request_and_ordered_card_ids(content
     assert client.calls[0]["model"] == "configured-chat-model"
     explainer.explain(replace(match, request=replace(match.request, budget_kzt=900_000)))
     assert len(client.calls) == 2
-    explainer.explain(result(card(), card(2)))
+    explainer.explain(result(*reason_cards()[:2]))
     assert len(client.calls) == 3
 
 
@@ -245,26 +463,10 @@ def test_template_distinguishes_imputed_offsite_cards_even_without_optional_fact
     assert validate_explanations(match, texts) == []
 
 
-def test_distinctions_are_code_derived_and_verifiable():
-    from matcher.explain import _distinctions
-
-    match = result(card(), card(2), card(3))
-    distinct = _distinctions(match)
-    assert set(distinct) == {c.contractor.id for c in match.cards}
-    assert all(notes for notes in distinct.values())
-    prices = {c.contractor.id: c.contractor.price_from_kzt for c in match.cards}
-    cheapest = min(prices.values())
-    if list(prices.values()).count(cheapest) == 1:
-        cheapest_id = next(i for i, p in prices.items() if p == cheapest)
-        assert any("самая низкая цена" in n for n in distinct[cheapest_id])
-    single = result(card())
-    assert any("единственный" in n for n in _distinctions(single)[single.cards[0].contractor.id])
-
-
 def test_llm_file_cache_replays_without_a_client(tmp_path):
     from matcher.explain import LLMExplainer
 
-    match = result(card(), card(2), card(3))
+    match = result(*reason_cards())
     path = tmp_path / "cache.json"
     first = LLMExplainer(client=FakeChatClient(llm_json()), cache_path=path).explain(match)
     assert all(e.source == "llm" for e in first) and path.exists()
@@ -273,3 +475,37 @@ def test_llm_file_cache_replays_without_a_client(tmp_path):
     # A different model or prompt version must not reuse the cached text.
     other = LLMExplainer(client=None, api_key="", model="other-model", cache_path=path).explain(match)
     assert all(e.source == "template" for e in other)
+
+
+@pytest.mark.parametrize("restart", [False, True])
+def test_llm_cache_refreshes_when_primary_code_changes(tmp_path, restart):
+    from matcher.explain import LLMExplainer
+
+    facts = card(reasons=(reason("DESCRIPTION_ASPECT", ReasonFamily.DESCRIPTION, primary=True,
+                 quote=card().contractor.description),))
+    original = "С запросом перекликается описание: «Ведёт деловые встречи с живой импровизацией»."
+    changed = "Ближе всего к запросу описание: «Ведёт деловые встречи с живой импровизацией»."
+    client = FakeChatClient(llm_json([original]))
+    path = tmp_path / "reason-cache.json"
+    explainer = LLMExplainer(client=client, cache_path=path)
+    first, = explainer.explain(result(facts))
+    assert first.text == original and first.source == "llm"
+
+    client.content = llm_json([changed])
+    if restart:
+        explainer = LLMExplainer(client=client, cache_path=path)
+    facts = replace(facts, reasons=(replace(facts.reasons[0], code="DESCRIPTION_CLOSEST_IN_SHOWN"),))
+    refreshed, = explainer.explain(result(facts))
+
+    assert refreshed.text == changed and refreshed.source == "llm"
+    assert len(client.calls) == 2
+    assert LLMExplainer(api_key="", cache_path=path).explain(result(facts)) == (refreshed,)
+
+
+def test_llm_uses_legacy_template_when_no_reason_codes_are_available():
+    from matcher.explain import LLMExplainer, TemplateExplainer
+
+    match = result(card(), card(2), card(3))
+    client = FakeChatClient("no code-derived facts to phrase")
+    assert LLMExplainer(client=client).explain(match) == TemplateExplainer().explain(match)
+    assert client.calls == []
