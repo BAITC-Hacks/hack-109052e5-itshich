@@ -188,3 +188,8 @@ body{
 .catalog,#groups,.service-content{background:transparent}
 .vendor,.comparison{background:color-mix(in srgb,var(--surface) 82%,transparent)}
 .service[aria-pressed=true]{background:color-mix(in srgb,var(--tint) 85%,transparent)}
+
+/* Full-bleed transparent chrome: the backdrop shows through, no boxed bands. */
+.selection-bar,.tonal-background .selection-bar{background:transparent!important;backdrop-filter:none;-webkit-backdrop-filter:none;border-top:1px solid rgba(255,255,255,.08)}
+.selection-bar::before{content:"";position:absolute;inset:0;left:50%;width:100vw;transform:translateX(-50%);background:rgba(20,21,22,.55);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);z-index:-1;border-top:1px solid rgba(255,255,255,.08)}
+.selection-bar{position:sticky;isolation:isolate}
