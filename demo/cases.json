@@ -1,0 +1,306 @@
+[
+  {
+    "id": "case-01",
+    "title": "Корпоратив: три ведущих с запасом бюджета",
+    "request": {
+      "city": "Алматы",
+      "event_date": "2026-10-04",
+      "event_format": "корпоратив",
+      "category": "Ведущий",
+      "budget_kzt": 2000000,
+      "duration_hours": 4
+    },
+    "expect": {
+      "outcome": "matched",
+      "min_cards": 3,
+      "max_cards": 3
+    }
+  },
+  {
+    "id": "case-02",
+    "title": "Флористы: в городе только два профиля",
+    "request": {
+      "city": "Алматы",
+      "event_date": "2026-10-04",
+      "event_format": "свадьба",
+      "category": "Флорист",
+      "budget_kzt": 250000
+    },
+    "expect": {
+      "outcome": "matched",
+      "min_cards": 2,
+      "max_cards": 2
+    }
+  },
+  {
+    "id": "case-03",
+    "title": "Декоратор: категории нет в Астане",
+    "request": {
+      "city": "Астана",
+      "event_date": "2026-10-04",
+      "event_format": "свадьба",
+      "category": "Декоратор",
+      "budget_kzt": 250000
+    },
+    "expect": {
+      "outcome": "no_category_in_city",
+      "min_cards": 0,
+      "max_cards": 0
+    }
+  },
+  {
+    "id": "case-04",
+    "title": "Ведущие: занятость и низкий бюджет",
+    "request": {
+      "city": "Алматы",
+      "event_date": "2026-10-02",
+      "event_format": "корпоратив",
+      "category": "Ведущий",
+      "budget_kzt": 500000,
+      "duration_hours": 4
+    },
+    "expect": {
+      "outcome": "none_eligible",
+      "min_cards": 0,
+      "max_cards": 0
+    }
+  },
+  {
+    "id": "case-05",
+    "title": "Смена даты, 4 октября: Хаул занят",
+    "request": {
+      "city": "Алматы",
+      "event_date": "2026-10-04",
+      "event_format": "корпоратив",
+      "category": "Ведущий",
+      "budget_kzt": 2000000,
+      "duration_hours": 4
+    },
+    "expect": {
+      "outcome": "matched",
+      "min_cards": 3,
+      "max_cards": 3,
+      "must_exclude_ids": [
+        "HK-77838"
+      ]
+    }
+  },
+  {
+    "id": "case-06",
+    "title": "Смена даты, 5 октября: замена занятого Джинбея",
+    "request": {
+      "city": "Алматы",
+      "event_date": "2026-10-05",
+      "event_format": "корпоратив",
+      "category": "Ведущий",
+      "budget_kzt": 2000000,
+      "duration_hours": 4
+    },
+    "expect": {
+      "outcome": "matched",
+      "min_cards": 3,
+      "max_cards": 3,
+      "must_exclude_ids": [
+        "HK-75012"
+      ],
+      "primary_codes_any": [
+        "AVAILABILITY_REPLACEMENT"
+      ]
+    }
+  },
+  {
+    "id": "case-07",
+    "title": "Декабрьский корпоратив: английский язык, пять часов",
+    "request": {
+      "city": "Алматы",
+      "event_date": "2026-12-19",
+      "event_format": "корпоратив",
+      "category": "Ведущий",
+      "budget_kzt": 1500000,
+      "duration_hours": 5,
+      "language": "английский"
+    },
+    "expect": {
+      "outcome": "matched",
+      "min_cards": 1,
+      "max_cards": 1,
+      "primary_codes_any": [
+        "LANGUAGE_REQUEST_MATCH"
+      ]
+    }
+  },
+  {
+    "id": "case-08",
+    "title": "Банкетный зал в Астане: три варианта для свадьбы",
+    "request": {
+      "city": "Астана",
+      "event_date": "2026-10-17",
+      "event_format": "свадьба",
+      "category": "Банкетный зал",
+      "budget_kzt": 6000000
+    },
+    "expect": {
+      "outcome": "matched",
+      "min_cards": 3,
+      "max_cards": 3
+    }
+  },
+  {
+    "id": "case-09",
+    "title": "Фотограф: восемь часов в пределах бюджета",
+    "request": {
+      "city": "Алматы",
+      "event_date": "2026-11-14",
+      "event_format": "свадьба",
+      "category": "Фотограф",
+      "budget_kzt": 350000,
+      "duration_hours": 8
+    },
+    "expect": {
+      "outcome": "matched",
+      "min_cards": 3,
+      "max_cards": 3
+    }
+  },
+  {
+    "id": "case-10",
+    "title": "Лайв-бэнд: той на казахском языке",
+    "request": {
+      "city": "Алматы",
+      "event_date": "2026-10-24",
+      "event_format": "той",
+      "category": "Лайв-бэнд",
+      "budget_kzt": 2500000,
+      "language": "казахский"
+    },
+    "expect": {
+      "outcome": "matched",
+      "min_cards": 1,
+      "max_cards": 1
+    }
+  },
+  {
+    "id": "case-11",
+    "title": "Дата за пределами календаря: ошибка 422",
+    "request": {
+      "city": "Алматы",
+      "event_date": "2027-01-10",
+      "event_format": "корпоратив",
+      "category": "Ведущий",
+      "budget_kzt": 2000000
+    },
+    "expect": {
+      "outcome": "request_error",
+      "min_cards": 0,
+      "max_cards": 0,
+      "status_code": 422,
+      "text_must_contain": [
+        "Календарь"
+      ]
+    }
+  },
+  {
+    "id": "case-12",
+    "title": "Банкетный зал: декабрьская суббота",
+    "request": {
+      "city": "Алматы",
+      "event_date": "2026-12-19",
+      "event_format": "свадьба",
+      "category": "Банкетный зал",
+      "budget_kzt": 6000000
+    },
+    "expect": {
+      "outcome": [
+        "matched",
+        "none_eligible"
+      ],
+      "min_cards": 0,
+      "max_cards": 0
+    }
+  },
+  {
+    "id": "case-13",
+    "title": "Фотограф за рубежом: свадьба",
+    "request": {
+      "city": "Зарубежье",
+      "event_date": "2026-10-10",
+      "event_format": "свадьба",
+      "category": "Фотограф",
+      "budget_kzt": 1000000
+    },
+    "expect": {
+      "outcome": "matched",
+      "min_cards": 1,
+      "max_cards": 1
+    }
+  },
+  {
+    "id": "case-14",
+    "title": "Отель в Астане: конференция",
+    "request": {
+      "city": "Астана",
+      "event_date": "2026-11-05",
+      "event_format": "конференция",
+      "category": "Отель",
+      "budget_kzt": 5000000
+    },
+    "expect": {
+      "outcome": "matched",
+      "min_cards": 1,
+      "max_cards": 1
+    }
+  },
+  {
+    "id": "case-15",
+    "title": "Ведущий в Астане: бюджет ниже всех цен",
+    "request": {
+      "city": "Астана",
+      "event_date": "2026-10-10",
+      "event_format": "корпоратив",
+      "category": "Ведущий",
+      "budget_kzt": 100000
+    },
+    "expect": {
+      "outcome": "none_eligible",
+      "min_cards": 0,
+      "max_cards": 0,
+      "text_must_contain": [
+        "дороже бюджета"
+      ]
+    }
+  },
+  {
+    "id": "case-16",
+    "title": "Инструменталист: казахский язык и три часа",
+    "request": {
+      "city": "Алматы",
+      "event_date": "2026-11-20",
+      "event_format": "той",
+      "category": "Инструменталист",
+      "budget_kzt": 600000,
+      "duration_hours": 3,
+      "language": "казахский"
+    },
+    "expect": {
+      "outcome": "matched",
+      "min_cards": 1,
+      "max_cards": 1
+    }
+  },
+  {
+    "id": "case-17",
+    "title": "Неизвестная категория: фокусник в Алматы",
+    "request": {
+      "city": "Алматы",
+      "event_date": "2026-10-10",
+      "event_format": "свадьба",
+      "category": "Фокусник",
+      "budget_kzt": 1000000
+    },
+    "expect": {
+      "outcome": "no_category_in_city",
+      "min_cards": 0,
+      "max_cards": 0
+    }
+  }
+]
