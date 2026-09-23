@@ -17,6 +17,7 @@
 }
 /* Brand-inspired palette studies; UI-specific shades are adapted for contrast. */
 
+:root[data-palette="openai"]{color-scheme:dark;--bg:#000;--surface:#1f1f1f;--text:#fff;--muted:#aaa;--line:#424242;--accent:#fff;--tint:#292929;--error:#ffb5ac;--control:#777;--action:#fff;--on-action:#000;--action-hover:#dedede}
 :root{scrollbar-color:var(--control,#687260) var(--bg)}
 .primary{background:var(--action,var(--accent));border-color:var(--action,var(--accent));color:var(--on-action,#202719)}
 .primary:hover{background:var(--action-hover,#d8e3c8);border-color:var(--action-hover,#d8e3c8)}
@@ -71,3 +72,36 @@
 @media(max-width:400px){.header{padding-inline:19px}.footer-inner{padding-inline:19px}.footer-grid{column-gap:20px}.footer-brand .footer-message{font-size:22px}}
 
 /* Additional user reference studies, each with a fixed route. */
+/* A secondary service illustration, scoped to the Sky playground. */
+.chosen-heading{display:flex;align-items:center;justify-content:space-between;gap:20px;margin:10px 0}
+.chosen-heading h2{margin:0;min-width:0;overflow-wrap:anywhere}
+.chosen-illustration{display:block;width:112px;height:112px;object-fit:contain;flex:none}
+.chosen-illustration[data-kind="decor"]{padding:9px}
+.chosen-heading:has(.chosen-illustration[hidden]){min-height:0}
+@media(max-width:1000px) and (min-width:761px){.chosen-illustration{width:96px;height:96px}.chosen-heading{gap:16px}.chosen-heading h2{font-size:27px}}
+@media(max-width:760px){.chosen-illustration{width:64px;height:64px}.chosen-heading{gap:16px;margin:8px 0}.chosen-illustration[data-kind="decor"]{padding:5px}}
+
+.chosen-copy{min-width:0}.chosen-copy p{font-size:14px;line-height:1.6;color:var(--muted);margin-top:10px;max-width:30ch}
+
+/* Functional background zones for Sky and OpenAI playgrounds. */
+:root[data-palette="sky"] .tonal-background{--intro-bg:#edf4ff;--chrome-bg:#f8faff;--footer-bg:#f0f5fc;--zone-line:#d6e2f2}
+:root[data-palette="openai"] .tonal-background{--intro-bg:#181818;--chrome-bg:#0c0c0c;--footer-bg:#141414;--zone-line:#333333}
+.tonal-background{overflow-x:clip}
+.tonal-background .header{background:var(--chrome-bg);border-color:var(--zone-line)}
+.tonal-background :is(.intro,.screen-heading,.result-top){position:relative;isolation:isolate;padding-block:30px;margin-top:6px}
+.tonal-background :is(.intro,.screen-heading,.result-top)::before{content:"";position:absolute;z-index:-1;top:0;bottom:0;left:50%;width:100vw;transform:translateX(-50%);background:var(--intro-bg);border-block:1px solid var(--zone-line);pointer-events:none}
+.tonal-background .site-footer{background:var(--footer-bg);border-color:var(--zone-line)}
+.tonal-background .event-context{border-color:var(--zone-line)}
+.tonal-background .selection-bar{background:var(--bg)}
+@media(max-width:760px){.tonal-background :is(.intro,.screen-heading,.result-top){padding-block:24px}.tonal-background .intro{margin-bottom:30px}.tonal-background .event-context{margin-top:22px;padding-bottom:0;border-bottom:0}.tonal-background .screen-heading{margin-bottom:30px}}
+
+/* Working product name and explicit documentation entry. */
+.tonal-background .header-inner{gap:48px}
+.brand-lockup{display:flex;flex-direction:column;gap:3px;flex:none;padding-block:14px}
+.brand-lockup .brand{width:fit-content;line-height:1.05;font-size:29px;letter-spacing:-.035em}
+.brand-caption{font-size:11px;color:var(--muted);line-height:1.5}
+.tonal-background .header-nav{gap:26px}
+.tonal-background .header-nav a{white-space:nowrap}
+.tonal-background .header-nav .docs-nav-link{color:var(--text)}
+@media(max-width:1000px){.tonal-background .header-inner{gap:28px}.tonal-background .header-nav{gap:20px}.tonal-background .header-context>span:first-child{display:none}}
+@media(max-width:760px){.tonal-background .header-inner{gap:0;padding-top:15px}.brand-lockup{padding:0}.brand-lockup .brand{font-size:27px}.brand-caption{font-size:10px}.tonal-background .header-nav{gap:8px 22px;flex-wrap:wrap;padding-top:8px}.tonal-background .header-nav a,.tonal-background .header-nav button{font-size:12px}.tonal-background .header-context{align-self:start;margin-top:3px}}

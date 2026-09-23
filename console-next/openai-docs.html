@@ -1,0 +1,44 @@
+<!doctype html><html lang="ru" data-palette="openai"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#000000"><title>QALAU — документация для разработчиков</title><link rel="stylesheet" href="docs.css"></head><body>
+<a class="skip" href="#main">К содержимому</a>
+<header class="docs-header"><a class="brand" href="openai-docs.html">QALAU<span>.</span></a><span class="header-divider"></span><span class="docs-label">Для разработчиков</span><nav aria-label="Основная навигация"><a href="openai-docs.html" aria-current="page">Документация</a><a href="openai.html">Открыть демо <span aria-hidden="true">↗</span></a></nav></header>
+<div class="docs-layout"><aside class="sidebar"><div class="sidebar-top">Документация <span>Демо</span></div><nav aria-label="Разделы документации"><a href="#overview">Введение</a><a href="#quickstart">Быстрый старт</a><a href="#parameters">Параметры запроса</a><a href="#response">Результат подбора</a><a href="#states">Состояния</a><a href="#formatting">Форматирование кода</a></nav><div class="sidebar-bottom"><span>Интерактивный пример</span><p>Посмотрите, как условия превращаются в короткий список.</p><a href="openai.html">Перейти к подбору →</a></div></aside>
+<main id="main"><details class="mobile-nav"><summary>Разделы документации</summary><nav aria-label="Мобильное оглавление"><a href="#overview">Введение</a><a href="#quickstart">Быстрый старт</a><a href="#parameters">Параметры запроса</a><a href="#response">Результат подбора</a><a href="#states">Состояния</a><a href="#formatting">Форматирование кода</a></nav></details>
+<article><section id="overview"><h1>Подбор подрядчиков</h1><p class="lead">От условий мероприятия — к трём подходящим вариантам. Устройство локального подбора, параметры и примеры кода.</p><p>Движок отбирает свободных подрядчиков по городу, категории, бюджету и формату события. Одинаковый запрос возвращает одинаковый порядок: сначала по начальной цене, затем по идентификатору.</p><div class="note"><strong>Локальный прототип</strong><p>Примеры используют функции проекта. HTTP API и авторизация не реализованы. Датасет подключается отдельно и не публикуется в репозитории.</p></div></section>
+<section id="quickstart"><h2>Быстрый старт<a class="anchor" href="#quickstart" aria-label="Ссылка на быстрый старт">#</a></h2><p>Создайте модуль в корне проекта. Импортируйте каталог и передайте условия в <code>selectProfiles(data, query)</code>.</p><figure class="code-block"><figcaption><span>example.mjs</span><div><span class="language">JavaScript</span><button type="button" class="copy-code" aria-label="Копировать example.mjs">Копировать</button></div></figcaption><pre tabindex="0" aria-label="example.mjs"><code data-language="JavaScript">import { selectProfiles } from &#x27;./engine.mjs&#x27;;
+import { data } from &#x27;./catalog.mjs&#x27;;
+
+const query = {
+  city: &#x27;Алматы&#x27;,
+  category: &#x27;Ведущий&#x27;,
+  date: &#x27;2026-11-14&#x27;,
+  format: &#x27;Свадьба&#x27;,
+  budget: 1_000_000,
+  language: &#x27;&#x27;,
+  hours: 0
+};
+
+const result = selectProfiles(data, query);
+console.log(result.items); // До трёх подрядчиков</code></pre></figure><p class="caption">Для импорта <code>catalog.mjs</code> нужен локальный <code>source-data.mjs</code>. Путь импорта зависит от расположения вашего файла.</p><a class="demo-link" href="openai.html?example=1">Проверить подбор в интерактивном примере <span aria-hidden="true">→</span></a></section>
+<section id="parameters"><h2>Параметры запроса<a class="anchor" href="#parameters" aria-label="Ссылка на параметры">#</a></h2><p>Денежные значения передаются числами в тенге. Названия города, категории и формата должны совпадать со значениями каталога.</p><div class="table-scroll" tabindex="0" aria-label="Таблица параметров"><table><thead><tr><th>Параметр</th><th>Тип</th><th>Описание</th></tr></thead><tbody>
+<tr><td><code>city</code></td><td>string</td><td><strong>Обязательный.</strong> Город мероприятия.</td></tr><tr><td><code>category</code></td><td>string</td><td><strong>Обязательный.</strong> Категория подрядчика.</td></tr><tr><td><code>date</code></td><td>string</td><td><strong>Обязательный.</strong> Дата в формате YYYY-MM-DD.</td></tr><tr><td><code>format</code></td><td>string</td><td><strong>Обязательный.</strong> Например, «Свадьба».</td></tr><tr><td><code>budget</code></td><td>number</td><td><strong>Обязательный.</strong> Верхняя граница начальной цены.</td></tr><tr><td><code>language</code></td><td>string</td><td>Язык работы. Пустая строка снимает ограничение.</td></tr><tr><td><code>hours</code></td><td>number</td><td>Длительность. Ноль снимает ограничение.</td></tr></tbody></table></div><p class="caption">Движок ожидает подготовленные значения. Проверяйте корректность даты и чисел до вызова функции.</p></section>
+<section id="response"><h2>Результат подбора<a class="anchor" href="#response" aria-label="Ссылка на результат">#</a></h2><p><code>items</code> содержит до трёх профилей; <code>total</code> — число всех подходящих, а <code>pool</code> — число профилей выбранной категории в городе.</p><figure class="code-block"><figcaption><span>Структура результата</span><div><span class="language">JSON</span><button type="button" class="copy-code" aria-label="Копировать Структура результата">Копировать</button></div></figcaption><pre tabindex="0" aria-label="Структура результата"><code data-language="JSON">{
+  &quot;state&quot;: &quot;filtered&quot;,
+  &quot;items&quot;: [],
+  &quot;total&quot;: 0,
+  &quot;pool&quot;: 2,
+  &quot;reasons&quot;: {
+    &quot;busy&quot;: 2,
+    &quot;budget&quot;: 0,
+    &quot;format&quot;: 0,
+    &quot;language&quot;: 0,
+    &quot;hours&quot;: 0
+  }
+}</code></pre></figure><p class="caption">Условный пример: в городе есть два профиля категории, оба заняты. Это иллюстрация структуры, а не ответ из датасета.</p><p>Счётчики <code>reasons</code> показывают причины исключения. Один профиль может не пройти несколько условий, поэтому сумма счётчиков может превышать <code>pool</code>.</p></section>
+<section id="states"><h2>Состояния выдачи<a class="anchor" href="#states" aria-label="Ссылка на состояния">#</a></h2><dl class="states"><div><dt><code>success</code></dt><dd>Найден хотя бы один вариант. Покажите рекомендации и объяснения.</dd></div><div><dt><code>absent</code></dt><dd>В городе нет выбранной категории. Предложите изменить город или услугу.</dd></div><div><dt><code>filtered</code></dt><dd>Категория есть, но никто не прошёл условия. Используйте реальные счётчики причин.</dd></div></dl><div class="note"><strong>Цена «от» — ориентир</strong><p>Попадание в бюджет по начальной цене не гарантирует итоговую стоимость. Сохраняйте эту оговорку рядом с рекомендациями.</p></div></section>
+<section id="formatting"><h2>Форматирование кода<a class="anchor" href="#formatting" aria-label="Ссылка на форматирование">#</a></h2><p>Вставьте фрагмент, выберите язык и посмотрите оформление. JSON можно автоматически выровнять. JavaScript подсвечивается с сохранением ваших отступов. Код не выполняется.</p><div class="snippet-editor"><div class="editor-controls"><label for="snippet-language">Язык <select id="snippet-language"><option>JSON</option><option>JavaScript</option><option>Текст</option></select></label><button id="format-code" type="button">Применить форматирование</button></div><label class="input-label" for="snippet-input">Ваш фрагмент кода</label><textarea id="snippet-input" spellcheck="false" rows="5">{"city":"Алматы","category":"Ведущий","budget":1000000}</textarea><p id="format-status" role="status">JSON будет отформатирован с отступом в два пробела.</p></div><figure class="code-block"><figcaption><span>Предпросмотр фрагмента</span><div><span class="language">JSON</span><button type="button" class="copy-code" aria-label="Копировать Предпросмотр фрагмента">Копировать</button></div></figcaption><pre tabindex="0" aria-label="Предпросмотр фрагмента"><code data-language="JSON">{
+  &quot;city&quot;: &quot;Алматы&quot;,
+  &quot;category&quot;: &quot;Ведущий&quot;,
+  &quot;budget&quot;: 1000000
+}</code></pre></figure></section>
+<footer class="docs-footer"><span>QALAU · Документация прототипа</span><a href="#overview">К началу ↑</a></footer></article></main>
+<aside class="page-outline"><span>На этой странице</span><nav aria-label="На этой странице"><a href="#overview">Введение</a><a href="#quickstart">Быстрый старт</a><a href="#parameters">Параметры запроса</a><a href="#response">Результат подбора</a><a href="#states">Состояния</a><a href="#formatting">Форматирование кода</a></nav><p>JavaScript · Локальный движок</p></aside></div><div id="copy-status" class="sr-only" role="status"></div><script type="module" src="docs.mjs"></script></body></html>
