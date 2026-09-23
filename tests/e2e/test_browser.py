@@ -285,3 +285,43 @@ def test_qalau_loading_until_backend_response(page, live_server, fake_pipeline, 
         released.set()
     expect(page.locator("#banner")).to_have_attribute("data-outcome", "matched")
     expect(page.locator("#submit")).to_be_enabled()
+
+
+@pytest.mark.e2e
+@pytest.mark.parametrize('swapped', [False, True])
+def test_live_tests_rerun_compares_saved_and_fresh(page, live_server, fake_pipeline, monkeypatch, swapped):
+    from matcher.api_types import MatchRequestDTO
+    saved = fake_pipeline.answer(MatchRequestDTO(**test_api.REQUEST).to_domain())
+    page.route('**/api/live-tests', lambda route: route.fulfill(json={
+        'generated_at': '2026-09-23T00:00:00Z', 'git_sha': 'fake', 'model': 'fake',
+        'cases': [{'name': 'Проверка сравнения', 'request': test_api.REQUEST, **saved}]}))
+    if swapped:
+        original = fake_pipeline.answer
+        def reverse(request):
+            result = original(request)
+            result['cards'].reverse()
+            return result
+        monkeypatch.setattr(fake_pipeline, 'answer', reverse)
+    page.goto(live_server + '/tests#live-tests', wait_until='networkidle')
+    expect(page.get_by_role('heading', name='Лайв-тесты пайплайна')).to_be_visible()
+    page.get_by_role('button', name='Прогнать заново', exact=True).click()
+    expect(page.locator('.diff-order')).to_have_text('Порядок id: ' + ('изменилось' if swapped else 'совпало'))
+    expect(page.locator('.diff-primary')).to_have_text('Главные коды: совпало')
+    expect(page.locator('.diff-explanation')).to_have_text('Объяснения: совпало')
+    expect(page.locator('.fresh-result .card-name')).to_have_count(3)
+    expect(page.get_by_role('button', name='Прогнать заново', exact=True)).to_be_enabled()
+    screenshot(page, 'live-tests-swapped.png' if swapped else 'live-tests-matched.png')
+
+
+@pytest.mark.e2e
+def test_live_tests_api_error_and_run_all(page, live_server):
+    saved = dict(outcome='none_eligible', pool_size=1, eligible_count=0,
+                 cards=[], shortfall_note='Нет свободных', timing_ms=1)
+    page.route('**/api/live-tests', lambda route: route.fulfill(json={'cases': [
+        {'name': name, 'request': test_api.REQUEST, **saved} for name in ['Первый', 'Второй']]}))
+    page.route('**/api/match', lambda route: route.fulfill(status=422, json={'detail': 'Ошибка календаря'}))
+    page.goto(live_server + '/tests#live-tests', wait_until='networkidle')
+    page.get_by_role('button', name='Прогнать все', exact=True).click()
+    expect(page.locator('.run-status')).to_have_text(['Ошибка календаря', 'Ошибка календаря'])
+    expect(page.get_by_role('button', name='Прогнать все', exact=True)).to_be_enabled()
+    expect(page.locator('.saved-result .shortfall')).to_have_count(2)

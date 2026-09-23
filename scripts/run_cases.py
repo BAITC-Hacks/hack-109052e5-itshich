@@ -71,6 +71,8 @@ def card_reasons(request, response):
     Refuse to attach reasons if the replay produces a different card order.
     """
     cards = response.get("cards", [])
+    if all("reasons" in card for card in cards):
+        return {card["id"]: card["reasons"] for card in cards}
     if all("reasons" in card.get("facts", {}) for card in cards):
         return {card["id"]: card["facts"]["reasons"] for card in cards}
     if response["semantic_backend"] == "lexical":
@@ -146,6 +148,12 @@ def run_cases(cases_path=ROOT / "demo/cases.json", output_path=ROOT / "data/live
     passed = sum(case["status"] == "passed" for case in cases)
     report = dict(generated_at=datetime.now(timezone.utc).isoformat(), git_sha=sha,
                   summary=dict(total=len(cases), passed=passed, failed=len(cases) - passed), cases=cases)
+    write_json(output_path, report)
+    return report
+
+
+def write_json(output_path, report):
+    """Atomically publish reports for HTTP readers."""
     output = Path(output_path)
     output.parent.mkdir(parents=True, exist_ok=True)
     # HTTP readers always see a complete report, including during a fresh run.
@@ -157,7 +165,6 @@ def run_cases(cases_path=ROOT / "demo/cases.json", output_path=ROOT / "data/live
         temporary.replace(output)
     finally:
         temporary.unlink(missing_ok=True)
-    return report
 
 
 def main(argv=None):

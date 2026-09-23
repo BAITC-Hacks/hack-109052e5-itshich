@@ -185,6 +185,8 @@ def test_omitted_dto_reasons_are_replayed_without_changing_response(tmp_path, mo
         "BUDGET_HEADROOM", ReasonFamily.BUDGET, {"headroom_pct": "25"}, primary=True),))
         for card in result.cards))
     response = to_dto(result, fake_explain(result), 1, "lexical")
+    for card in response["cards"]:
+        card.pop("reasons", None)  # Exercise compatibility with older DTO responses.
     monkeypatch.setattr(pipeline, "lexical_scorer", lambda: scorer)
     monkeypatch.setattr(pipeline, "get_contractors", lambda: [])
     monkeypatch.setattr(pipeline, "run", lambda req, contractors, used_scorer: result)
@@ -196,3 +198,11 @@ def test_omitted_dto_reasons_are_replayed_without_changing_response(tmp_path, mo
     monkeypatch.setattr(pipeline, "run", lambda *args: replace(result, cards=result.cards[::-1]))
     with pytest.raises(ValueError, match="card order"):
         runner().card_reasons(request, response)
+
+
+def test_public_reasons_do_not_replay_pipeline(monkeypatch):
+    def unexpected(*args):
+        raise AssertionError("Public reasons must not replay matching")
+    monkeypatch.setattr(pipeline, "run", unexpected)
+    response = {"cards": [{"id": "one", "reasons": [{"code": "BUDGET_FITS", "primary": True}]}]}
+    assert runner().card_reasons(None, response) == {"one": [{"code": "BUDGET_FITS", "primary": True}]}
