@@ -8,6 +8,12 @@ const money = value => new Intl.NumberFormat('ru-RU').format(value);
 const date = value => new Date(value + 'T12:00:00').toLocaleDateString('ru-RU', {day:'numeric', month:'long', year:'numeric'});
 const check = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>';
 let options, services = [], scenarios = [], ready = false;
+const visited = new Set(['services']);
+const storageKey = 'qalau.conditions.v1';
+function save() {
+  if (!ready) return;
+  try { sessionStorage.setItem(storageKey, JSON.stringify({values:query(), screen, visited:[...visited]})); } catch {}
+}
 let group = 0, screen = 'services', lastQuery = null, ticket = 0;
 
 function query() {
@@ -44,6 +50,7 @@ function updateChosen() {
   }
   $('#context-summary').textContent = `${$('#city').value} · ${$('#format').value}`;
   $('#dirty').hidden = !lastQuery || JSON.stringify(lastQuery) === JSON.stringify(query());
+  save();
 }
 function renderServices() {
   const term = $('#service-search').value;
@@ -60,17 +67,20 @@ function renderServices() {
 function go(next, focus = true) {
   if (next === 'results' && !lastQuery) return;
   screen = next;
+  visited.add(next);
+  if (next === 'results') visited.add('conditions');
   for (const id of ['services', 'conditions', 'results']) $('#' + id + '-screen').hidden = id !== next;
   $$('[data-step]').forEach(button => {
     if (!button.closest('.journey')) return;
     button.removeAttribute('aria-current');
     if (button.dataset.step === next) button.setAttribute('aria-current', 'step');
-    if (button.dataset.step === 'results') button.disabled = !lastQuery;
+    button.disabled = !visited.has(button.dataset.step) || (button.dataset.step === 'results' && !lastQuery);
   });
   updateChosen();
   if (focus) {
-    $('#' + {services:'service-title', conditions:'conditions-title', results:'results-title'}[next]).focus({preventScroll:true});
-    window.scrollTo({top:0, behavior:'instant'});
+    const heading = $('#' + {services:'service-title', conditions:'conditions-title', results:'results-title'}[next]);
+    heading.focus({preventScroll:true});
+    heading.scrollIntoView({block:'start', behavior:'instant'});
   }
 }
 function validate() {
@@ -107,12 +117,12 @@ function edit(field) {
 }
 function card(profile, index) {
   const facts = profile.facts;
-  return `<article class="vendor card" data-profile-id="${esc(profile.id)}">
+  return `<article class="vendor card" tabindex="0" data-profile-id="${esc(profile.id)}">
     <div><span class="rank" aria-label="Место в подборе">${index + 1}</span><h3 class="vendor-name">${esc(profile.name)}</h3><p class="vendor-meta">${esc(profile.category)} · ${esc(profile.city)}</p></div>
+    <div class="why"><h4>Почему подходит</h4><p class="explanation">${esc(profile.explanation)}</p></div>
     <div class="badges">${profile.badges.map(badge => `<span>${esc(badge)}</span>`).join('')}</div>
     <div class="price"><small>от</small> ${money(profile.price)} ₸<p>Начальная цена</p></div>
     <div class="available">${check}<span>Свободен · ${date(facts.free_on_date)}<small>По данным календаря</small></span></div>
-    <div class="why"><h4>Почему подходит</h4><p class="explanation">${esc(profile.explanation)}</p></div>
     <dl class="facts"><div><dt>Запас бюджета</dt><dd>${facts.budget_headroom_pct} %</dd></div><div><dt>Формат</dt><dd>${esc(facts.format_matched)}</dd></div><div><dt>Языки</dt><dd>${esc(facts.languages_matched.join(', ')) || 'Не указаны'}</dd></div><div><dt>Длительность</dt><dd>${facts.max_hours === null ? 'Без привязки к часам' : 'До ' + facts.max_hours + ' часов'}</dd></div></dl>
     <p class="source">Источник объяснения: ${esc(explanationSources[profile.explanation_source] ?? profile.explanation_source)}</p>
   </article>`;
@@ -125,7 +135,7 @@ function renderResult(result) {
   let content = result.state === 'success' ? `<div class="comparison">${result.items.map(card).join('')}</div>` : '<div class="empty">';
   if (result.state === 'absent') content += `<div class="empty-actions">${editButton('category', 'Выбрать другую услугу')}${editButton('city', 'Изменить город')}</div></div>`;
   if (result.state === 'filtered') content += `<ul>${reasons.map(([key, count]) => `<li>${count} — ${reasonLabels[key]}</li>`).join('')}</ul><p>У одного профиля может быть несколько причин.</p><div class="empty-actions">${reasons.map(([key]) => editButton(...fields[key])).join('')}</div></div>`;
-  const rejected = result.rejections.length ? `<details class="rejections"><summary>Почему остальные не попали (${result.rejections.length})</summary><ul id="rejections-list">${result.rejections.map(item => `<li><strong>${esc(item.name)}</strong>: ${item.reasons.map(reason => esc(reason.label)).join('; ')}</li>`).join('')}</ul></details>` : '';
+  const rejected = result.rejections.length ? `<details class="rejections" ${result.rejections.length <= 3 ? 'open' : ''}><summary>Почему остальные не попали (${result.rejections.length})</summary><ul id="rejections-list">${result.rejections.map(item => `<li><strong>${esc(item.name)}</strong>: ${item.reasons.map(reason => esc(reason.label)).join('; ')}</li>`).join('')}</ul></details>` : '';
   const sources = [...new Set(result.items.map(item => item.explanation_source))];
   const footer = `<p id="result-footer" class="result-footer" data-semantic-backend="${esc(result.semantic_backend)}" data-explanation-source="${esc(sources.join(', '))}">Семантика: ${esc(semanticBackends[result.semantic_backend] ?? result.semantic_backend)} · ответ за ${money(Math.round(result.timing_ms))} мс · источник объяснений: ${sources.map(source => esc(explanationSources[source] ?? source)).join(', ') || 'нет карточек'}</p>`;
   $('#result-content').innerHTML = banner + content + rejected + footer;
@@ -137,12 +147,14 @@ async function run() {
   lastQuery = q;
   go('results');
   $('#submit').disabled = true;
+  $('#submit').textContent = 'Подбираем…';
+  $('#result-loading').hidden = false;
   $('#result-content').setAttribute('aria-busy', 'true');
   $('#results-title').textContent = 'Подбираем варианты…';
   $('#results-subtitle').textContent = 'Проверяем условия и доступность в каталоге.';
   $('#query-summary').innerHTML = [q.category, q.city, q.format, date(q.date), `до ${money(q.budget)} ₸`, q.language, q.hours ? q.hours + ' ч' : ''].filter(Boolean).map(text => `<span>${esc(text)}</span>`).join('');
   $('#price-note').hidden = true;
-  $('#result-content').innerHTML = '<div class="loading"><span class="spinner" aria-hidden="true"></span>Подбираем подрядчиков по вашим условиям</div>';
+
   try {
     const result = await selectProfiles(q);
     if (id !== ticket) return;
@@ -151,10 +163,16 @@ async function run() {
     if (id !== ticket) return;
     $('#results-title').textContent = 'Не получилось завершить подбор.';
     $('#results-subtitle').textContent = 'Параметры сохранены.';
-    $('#result-content').innerHTML = `<div id="banner" class="outcome-banner" data-outcome="error" role="alert"><h2 id="outcome-title">${esc(error.message)}</h2></div><div class="empty-actions"><button class="primary" data-action="retry">Повторить подбор</button></div>`;
+    $('#result-content').innerHTML = `<div id="banner" class="outcome-banner" data-outcome="error" role="alert"><h2 id="outcome-title">${esc(error.message)}</h2></div><div class="empty-actions"><button class="primary" data-action="retry">Повторить подбор</button><button class="secondary" data-step="conditions">Изменить условия</button></div>`;
   } finally {
     if (id === ticket) {
       $('#submit').disabled = false;
+      $('#submit').innerHTML = 'Подобрать подрядчиков <span aria-hidden="true">→</span>';
+      $('#result-loading').hidden = true;
+      if (screen === 'results') {
+        $('#results-title').focus({preventScroll:true});
+        $('#results-title').scrollIntoView({block:'start', behavior:'instant'});
+      }
       $('#result-content').removeAttribute('aria-busy');
       updateChosen();
     }
@@ -172,8 +190,14 @@ $('#service-search').addEventListener('keydown', event => {
     renderServices();
     updateChosen();
   }
+  run();
 });
-$('#search').addEventListener('submit', event => {event.preventDefault(); if (screen === 'services') go('conditions'); else run();});
+$('#search').addEventListener('submit', event => {event.preventDefault(); run();});
+$('#search').addEventListener('keydown', event => {
+  if (event.key === 'Enter' && event.target.matches('input:not(#service-search), select')) {
+    event.preventDefault(); run();
+  }
+});
 $('#search').addEventListener('input', updateChosen);
 $('#city').addEventListener('change', () => {renderServices(); updateChosen();});
 document.addEventListener('click', event => {
@@ -208,6 +232,11 @@ document.addEventListener('click', event => {
   if (event.target.closest('[data-action="reset"]')) {
     ticket++;
     lastQuery = null;
+    visited.clear(); visited.add('services');
+    $('#result-content').replaceChildren();
+    $('#result-loading').hidden = true;
+    $('#submit').innerHTML = 'Подобрать подрядчиков <span aria-hidden="true">→</span>';
+    $('#extra').open = false;
     $('#submit').disabled = false;
     $('#result-content').removeAttribute('aria-busy');
     if (scenarios.length) applyScenario(scenarios[0]);
@@ -231,12 +260,26 @@ async function init() {
     if (!services.length) throw new Error('В каталоге пока нет услуг. Попробуйте позже.');
     if (scenarios.length) applyScenario(scenarios[0]);
     else {$('#date').value = options.calendar_start; renderServices();}
-    const labels = {dense:'Три варианта', rare:'Редкая категория', empty_no_category:'Нет категории', empty_none_eligible:'Никто не подходит', date_pair_a:'Первая дата', date_pair_b:'Другая дата'};
-    $('#demos').innerHTML = scenarios.map((scenario, index) => `<button type="button" data-scenario="${index}" title="${esc(scenario.note ?? '')}">${esc(labels[scenario.name] ?? scenario.name)}</button>`).join('');
+    const labels = {dense:'Плотная категория', rare:'Редкая категория', empty_no_category:'Категории нет в городе', empty_none_eligible:'Никто не проходит', date_pair_a:'Первая дата', date_pair_b:'Другая дата'};
+    $('#demos').innerHTML = scenarios.map((scenario, index) => `<button type="button" data-scenario="${index}" title="${esc(scenario.note ?? '')}">${esc(scenario.title_ru ?? scenario.title ?? labels[scenario.name] ?? scenario.name)}</button>`).join('');
+    let saved;
+    try { saved = JSON.parse(sessionStorage.getItem(storageKey)); } catch {}
+    if (saved?.values && typeof saved.values === 'object') {
+      for (const id of ['category','city','format','date','budget','hours','language']) {
+        const input = $('#' + id), value = saved.values[id];
+        if (value == null || (input.tagName === 'SELECT' && ![...input.options].some(option => option.value === String(value)))) continue;
+        if (id === 'category' && !services.some(service => service.name === value)) continue;
+        input.value = id === 'hours' && value === 0 ? '' : value;
+      }
+      group = services.find(service => service.name === $('#category').value)?.group ?? 0;
+      renderServices();
+      if (saved.visited?.includes('conditions')) visited.add('conditions');
+      if ($('#hours').value || $('#language').value) $('#extra').open = true;
+    }
     ready = true;
     $('#search').inert = false;
     $('#init-status').hidden = true;
-    go('services', false);
+    go(saved?.screen === 'conditions' || saved?.screen === 'results' ? 'conditions' : 'services', false);
     const example = new URLSearchParams(location.search).get('example');
     if (example) {
       const scenario = scenarios.find(item => item.name === example) ?? scenarios[Number(example) - 1];

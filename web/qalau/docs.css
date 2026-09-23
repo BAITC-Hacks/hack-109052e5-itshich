@@ -28,3 +28,9 @@
 :root[data-palette="openai"] .editor-controls button:hover{background:#dedede;border-color:#dedede}
 :root[data-palette="openai"] #format-status.error{color:#ffb5ac}
 :root[data-palette="openai"] .skip{background:#1f1f1f}
+
+/* UX pass */
+.docs-layout main{max-width:none;margin:0;padding-inline:0}
+.docs-layout .sidebar,.docs-layout .page-outline{top:76px;height:calc(100vh - 76px)}
+.docs-layout footer{display:block}
+@media(max-width:760px){.docs-layout main{padding-top:16px}.docs-layout section{scroll-margin-top:128px}}

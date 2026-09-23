@@ -178,8 +178,7 @@ def test_qalau_preserves_backend_order_explanations_and_rejections(page, live_se
         expect(page.locator(".vendor").first).to_contain_text(label)
     expect(page.locator("#result-footer")).to_contain_text("лексическая")
     expect(page.locator("#result-footer")).to_contain_text("шаблон")
-    expect(page.locator("#rejections-list")).to_be_hidden()
-    page.get_by_text("Почему остальные не попали (1)", exact=True).click()
+    expect(page.locator("#rejections-list")).to_be_visible()
     expect(page.locator("#rejections-list")).to_contain_text("Занятый ведущий")
     for reason in ["занят на эту дату", "цена от выше бюджета", "не берёт этот формат",
                    "не работает на этом языке", "максимум часов меньше запрошенной длительности"]:
@@ -285,3 +284,122 @@ def test_qalau_loading_until_backend_response(page, live_server, fake_pipeline, 
         released.set()
     expect(page.locator("#banner")).to_have_attribute("data-outcome", "matched")
     expect(page.locator("#submit")).to_be_enabled()
+
+
+@pytest.mark.e2e
+@pytest.mark.parametrize("path", ["/", "/docs-ui", "/tests"])
+def test_shared_navigation(page, live_server, path):
+    page.set_viewport_size({"width": 400, "height": 900})
+    page.goto(live_server + path, wait_until="networkidle")
+    nav = page.get_by_role("navigation", name="Основная навигация", exact=True)
+    for label, href in [("Подбор", "/"), ("Документация", "/docs-ui"), ("Тесты", "/tests")]:
+        link = nav.get_by_role("link", name=label, exact=True)
+        expect(link).to_be_visible()
+        expect(link).to_have_attribute("href", href)
+        if href == path:
+            expect(link).to_have_attribute("aria-current", "page")
+    assert page.evaluate("document.documentElement.scrollWidth <= innerWidth")
+
+
+@pytest.mark.e2e
+def test_qalau_navigation_persistence_and_result_focus(page, live_server):
+    open_qalau(page, live_server)
+    expect(page.locator('#demos button')).to_have_text(["Три ведущих", "Нет категории", "Не проходят"])
+    expect(page.locator('.journey [data-step="conditions"]')).to_be_disabled()
+    page.locator('#continue').click()
+    page.locator('#budget').fill('765432')
+    page.locator('#date').fill('2026-11-15')
+    page.get_by_role('button', name='← Назад', exact=True).click()
+    page.locator('.journey [data-step="conditions"]').click()
+    expect(page.locator('#budget')).to_have_value('765432')
+    page.reload(wait_until='networkidle')
+    expect(page.locator('#conditions-screen')).to_be_visible()
+    expect(page.locator('#date')).to_have_value('2026-11-15')
+    expect(page.locator('#budget')).to_have_value('765432')
+    page.locator('#budget').press('Enter')
+    expect(page.locator('#banner')).to_have_attribute('data-outcome', 'matched')
+    expect(page.locator('#results-title')).to_be_focused()
+    bounds = page.locator('#results-title').bounding_box()
+    assert 0 <= bounds['y'] < 400
+    page.locator('#results-screen').get_by_role('button', name='Изменить условия').first.click()
+    expect(page.locator('#budget')).to_have_value('765432')
+    page.locator('.journey [data-step="results"]').click()
+    expect(page.locator('#results-screen')).to_be_visible()
+    page.get_by_role('button', name='← Назад', exact=True).click()
+    expect(page.locator('#conditions-screen')).to_be_visible()
+
+
+@pytest.mark.e2e
+def test_qalau_previous_result_survives_loading(page, live_server, fake_pipeline, monkeypatch):
+    open_qalau(page, live_server)
+    page.locator('#demos button').first.click()
+    expect(page.locator('.vendor')).to_have_count(3)
+    released = Event()
+    def delayed(*args):
+        assert released.wait(timeout=10)
+        return test_api.fake_run(*args)
+    monkeypatch.setattr(fake_pipeline, 'run', delayed)
+    try:
+        page.locator('#demos button').first.click()
+        expect(page.locator('.loading')).to_be_visible()
+        expect(page.locator('.vendor')).to_have_count(3)
+        page.wait_for_function("Number(getComputedStyle(document.querySelector('.comparison')).opacity) < 1")
+        expect(page.locator('#submit')).to_contain_text('Подбираем')
+    finally:
+        released.set()
+    expect(page.locator('#result-content')).not_to_have_attribute('aria-busy', 'true')
+
+
+@pytest.mark.e2e
+@pytest.mark.parametrize(('field', 'value'), [('date', '2027-01-01'), ('budget', '0'), ('hours', '25')])
+def test_qalau_invalid_fields_do_not_send_requests(page, live_server, field, value):
+    open_qalau(page, live_server)
+    requests = []
+    page.on('request', lambda request: requests.append(request.url) if '/api/match' in request.url else None)
+    page.locator('#continue').click()
+    if field == 'hours':
+        page.locator('#extra summary').click()
+    page.locator('#' + field).fill(value)
+    page.locator('#' + field).press('Enter')
+    expect(page.locator('#' + field)).to_have_attribute('aria-invalid', 'true')
+    expect(page.locator('#' + field + '-error')).to_be_visible()
+    assert requests == []
+
+
+@pytest.mark.e2e
+def test_qalau_network_error_keeps_edit_action(page, live_server):
+    open_qalau(page, live_server)
+    page.route('**/api/match', lambda route: route.abort())
+    page.locator('#demos button').first.click()
+    expect(page.locator('#outcome-title')).to_contain_text('Не удалось связаться с сервером')
+    page.locator('#result-content').get_by_role('button', name='Изменить условия').click()
+    expect(page.locator('#conditions-screen')).to_be_visible()
+    expect(page.locator('#budget')).to_have_value('800000')
+
+
+@pytest.mark.e2e
+def test_qalau_catalog_values_survive_reload(page, live_server):
+    open_qalau(page, live_server)
+    page.locator('#city').select_option('Астана')
+    page.locator('#format').select_option('свадьба')
+    page.locator('#service-search').fill('Флорист')
+    page.locator('[data-service="Флорист"]').click()
+    page.locator('#continue').click()
+    page.reload(wait_until='networkidle')
+    expect(page.locator('#category')).to_have_value('Флорист')
+    expect(page.locator('#city')).to_have_value('Астана')
+    expect(page.locator('#format')).to_have_value('свадьба')
+    expect(page.locator('#chosen-name')).to_have_text('Флорист')
+
+
+@pytest.mark.e2e
+def test_qalau_scenarios_use_titles_and_russian_fallback_labels(page, live_server):
+    names = ['dense', 'rare', 'empty_no_category', 'empty_none_eligible', 'date_pair_a', 'date_pair_b']
+    examples = [DEMOS[0] | {'name': name} for name in names]
+    examples.append(DEMOS[0] | {'name': 'custom', 'title_ru': 'Свадьба в Алматы'})
+    page.route('**/api/demo', lambda route: route.fulfill(json=examples))
+    page.goto(live_server, wait_until='networkidle')
+    expect(page.locator('#demos button')).to_have_text([
+        'Плотная категория', 'Редкая категория', 'Категории нет в городе',
+        'Никто не проходит', 'Первая дата', 'Другая дата', 'Свадьба в Алматы',
+    ])
